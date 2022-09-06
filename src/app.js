@@ -1,4 +1,5 @@
 export default function App() {
+  
   return(
     <html>
       <head>
@@ -11,22 +12,35 @@ export default function App() {
       <body>
         {/* <Navigation /> */}
         <div className="m-5">
-          nav
+          
         </div>
         <div className="section p-5">
           <div className="container">
             <div className="row">
-              <div className="col-md-2 text-start">
-                <p className="display-3"><strong>Sube tus archivos</strong></p>
+              <div className="col-md-5 text-md-start text-center">
+                <p className="display-2"><strong>Sube tus archivos</strong></p>
+                <button type="button" class="btn btn-primary btn-sm rounded-3 fw-bold">Subir archivo</button>
               </div>
-              <div className="col-md text-end">
-                <p className="display-1"><strong>Sube tus archivos</strong></p>
+              <div className="col-md text-md-end text-center">
+                <p className="display-1"><strong>Imagen</strong></p>
               </div>
             </div>
           </div>
         </div>
-        {/* Bootsrtap Js CDN */}
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+        <div className="section p-5">
+          <div className="container">
+            <div className="row">
+              <div className="col-md text-md-start text-center">
+                <p className="display-1"><strong>Imagen</strong></p>
+              </div>
+              <div className="col-md-5 text-md-end text-center">
+                <p className="display-2"><strong>Busca archivos</strong></p>
+                <button type="button" class="btn btn-primary btn-sm rounded-3 fw-bold">Subir archivo</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </body>
     </html>
   )
