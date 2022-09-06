@@ -1,5 +1,8 @@
+import Navbar from "./navbar"
+import useScript from "./jscdn"
+
 export default function App() {
-  
+  useScript()
   return(
     <html>
       <head>
@@ -12,7 +15,7 @@ export default function App() {
       <body>
         {/* <Navigation /> */}
         <div className="m-5">
-          
+          <Navbar />
         </div>
         <div className="section p-5">
           <div className="container">
