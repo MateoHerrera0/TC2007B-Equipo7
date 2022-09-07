@@ -24,9 +24,9 @@ export default function Home() {
         <div className="container p-5">
           <div className="row">
             <div className="col-md-5 text-md-end text-center order-md-5">
-              <p className="title"><strong>Busca archivos</strong></p>
+              <p className="title text-info"><strong>Busca archivos</strong></p>
               <Link to='/search'>
-                <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Buscar archivo</button>
+                <button type="button" className="btn btn-primary btn-sm rounded-3 bg-dark fw-bold">Buscar archivo</button>
               </Link>
             </div>
             <div className="col-md text-md-start text-center order-md-1 pt-md-0 pt-5">
