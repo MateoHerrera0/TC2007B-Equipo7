@@ -40,20 +40,20 @@ export default function Home() {
         <div className='container bg-white rounded-3 shadow'>
           <div className='row'>
             <div className="col-md-5 text-md-start text-center p-5">
-              <p className="fs-1"><strong>Consulta las instrucciones aqui</strong></p>
+              <p className="fs-1"><strong>Consulta las instrucciones aquí</strong></p>
               <p className="fw-bold">Subir archivos:</p>
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
                   <p className="fs-3"><strong>Paso 1</strong></p>
-                  <p className='fw-lighter'>Ingresa a la seccion de "subir archivos"</p>
+                  <p className='fw-lighter'>Ingresa a la sección de "subir archivos"</p>
                 </li>
                 <li className="list-group-item">
                   <p className="fs-3"><strong>Paso 2</strong></p>
-                  <p className='fw-lighter'>Ingresa los datos solicitados. Asegurate de llenar bien los espacios</p>
+                  <p className='fw-lighter'>Ingresa los datos solicitados. Asegúrate de llenar bien los espacios</p>
                 </li>
                 <li className="list-group-item">
                   <p className="fs-3"><strong>Paso 3</strong></p>
-                  <p className='fw-lighter'>Da click en "subir" y revisa la confirmacion de que tus datos fueron agregados correctamente</p>
+                  <p className='fw-lighter'>Da click en "subir" y revisa la confirmación de que tus datos fueron agregados correctamente</p>
                 </li>
               </ul>
             </div>
@@ -69,8 +69,8 @@ export default function Home() {
           <div className='row'>
             <div className="col-md-6 justify-content-start text-md-start text-center p-5 order-md-5">
               <p className="fw-bold">Subir archivos:</p>
-              <p className="fs-2"><strong>Ingresa a la seccion de busqueda</strong></p>
-              <p className='fw-lighter'>Utiliza los filtros para encontrar rapidamente los archivos que necesites, mediante folio, nombre, o categoria.</p>
+              <p className="fs-2"><strong>Ingresa a la sección de búsqueda</strong></p>
+              <p className='fw-lighter'>Utiliza los filtros para encontrar rápidamente los archivos que necesites, mediante folio, nombre, o categoría.</p>
             </div>
             <div className="col-md text-md-start text-center p-5 order-md-1">
               <p className="display-1"><strong>Imagen</strong></p>
@@ -82,7 +82,7 @@ export default function Home() {
       <div className='section px-5'>
         <div className='border-top'>
           <div className='text-center p-3'>
-            <p className='fw-lighter'>Credits</p>
+            <p className='fw-lighter'>Créditos</p>
           </div>
         </div>
 
