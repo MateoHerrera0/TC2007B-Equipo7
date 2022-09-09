@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   const[expand, setExpand] = useState("collapse navbar-collapse");
@@ -6,7 +7,7 @@ export default function Navbar() {
   return(
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
   <div className="container-fluid">
-    <a className="navbar-brand" href="#">Navbar</a>
+    <a className="navbar-brand" href="/">Alcaldía Álvaro obregón</a>
     <button className="navbar-toggler" type="button" onClick={() => { 
       if(expand === "collapse navbar-collapse") {
         setExpand("collapse navbar-collapse show")
@@ -19,15 +20,22 @@ export default function Navbar() {
     <div className={expand} id="navbarSupportedContent">
       <ul className="navbar-nav me-auto mb-2 mb-lg-0">
         <li className="nav-item">
-          <a className="nav-link active" aria-current="page" href="#">Home</a>
+          <a className="nav-link active" aria-current="page" href="/home">Inicio</a>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">Link</a>
+          <a className="nav-link" href="/newfile">Subir</a>
         </li>
         <li className="nav-item">
-          <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Buscar</a>
         </li>
       </ul>
+      <span>
+      <div className="col-md-5 text-md-start text-center">
+              <Link to='/profile'>
+                <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Perfil</button>
+              </Link>
+            </div>
+      </span>
     </div>
   </div>
 </nav>
