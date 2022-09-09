@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   const[expand, setExpand] = useState("collapse navbar-collapse");
@@ -28,6 +29,13 @@ export default function Navbar() {
           <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Buscar</a>
         </li>
       </ul>
+      <span>
+      <div className="col-md-5 text-md-start text-center">
+              <Link to='/profile'>
+                <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Perfil</button>
+              </Link>
+            </div>
+      </span>
     </div>
   </div>
 </nav>
