@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 
 // Import components
 import Home from "./components/home";
+import Newfile from "./components/newfile";
 
 export default function App() {
   useScript()
@@ -17,6 +18,7 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/newFile" element={<Newfile />} />
       </Routes>
     </div>
   )
