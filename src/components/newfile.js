@@ -1,5 +1,6 @@
 import { useState, useReducer } from "react";
 import { fields, Field } from "./fields"
+import addDocument from "../API/dbAPI";
 
 
 function reducer(state, event) {
@@ -20,8 +21,13 @@ export default function Newfile() {
       id: ev.target.name,
       value: ev.target.value
     })
-    console.log(formData);
   }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    console.log("FORM DATA: " + formData);
+    addDocument(formData, setFormData);
+}
   
   const nulidadFields = [
     fields.expediente, 
@@ -55,14 +61,14 @@ export default function Newfile() {
         <p className="text-center fs-5">Selecciona un tipo de documento.</p>
         <div className="row text-center p-5">
           <div className="col">
-            <button type="button" className="btn btn-primary" onClick={() => {setFields(nulidadFields); setFormData({reset: -1})}}>Juicio de Nulidad</button>
+            <button type="button" className="btn btn-primary" onClick={() => {setFields(nulidadFields); setFormData({reset: true})}}>Juicio de Nulidad</button>
           </div>
           <div className="col">
-            <button type="button" className="btn btn-primary" onClick={() => {setFields(carpetaFields); setFormData({reset: -1})}}>Carpeta de Investigacion</button>
+            <button type="button" className="btn btn-primary" onClick={() => {setFields(carpetaFields); setFormData({reset: true})}}>Carpeta de Investigacion</button>
           </div>
         </div>
       <div className="container p-5 shadow rounded-3">
-        <form>
+        <form onSubmit={handleSubmit}>
           {fieldsToUse.map((value, index) => {
             let id = value.id
             return(
