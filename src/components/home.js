@@ -1,5 +1,9 @@
 import { Link } from 'react-router-dom';
 import './home.css'
+import upload from '../Images/upload.png'
+import download from '../Images/download.png'
+import instructions1 from '../Images/instruct1.png'
+import instructions2 from '../Images/instruct2.png'
 
 export default function Home() {
   return(
@@ -14,7 +18,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="col-md text-md-end text-center pt-md-0 pt-5">
-              <p className="display-1"><strong>Imagen</strong></p>
+              <p className="display-1"><img src={upload} alt='upload image' width='60%'/></p>
             </div>
           </div>
         </div>
@@ -30,7 +34,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="col-md text-md-start text-center order-md-1 pt-md-0 pt-5">
-              <p className="display-1"><strong>Imagen</strong></p>
+              <p className="display-1"><img src={download} alt='search image' width='60%'/></p>
             </div>
           </div>
         </div>
@@ -58,7 +62,7 @@ export default function Home() {
               </ul>
             </div>
             <div className="col-md text-md-end text-center p-5">
-              <p className="display-1"><strong>Imagen</strong></p>
+              <p className="display-1"><img src={instructions2} alt='search image' width='80%'/></p>
             </div>
           </div>
         </div>
@@ -73,7 +77,7 @@ export default function Home() {
               <p className='fw-lighter'>Utiliza los filtros para encontrar rápidamente los archivos que necesites, mediante folio, nombre, o categoría.</p>
             </div>
             <div className="col-md text-md-start text-center p-5 order-md-1">
-              <p className="display-1"><strong>Imagen</strong></p>
+              <p className="display-1"><img src={instructions1} alt='search image' width='60%'/></p>
             </div>
           </div>
         </div>

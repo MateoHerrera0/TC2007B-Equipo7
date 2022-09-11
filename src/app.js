@@ -8,6 +8,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from "./components/home";
 import Newfile from "./components/newfile";
 import Login from "./components/Login";
+import Profile from "./components/profile";
 
 export default function App() {
   useScript()
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/newFile" element={<Newfile />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   )

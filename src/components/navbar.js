@@ -7,7 +7,7 @@ export default function Navbar() {
   return(
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
   <div className="container-fluid">
-    <a className="navbar-brand" href="/">Alcaldía Álvaro obregón</a>
+    <a className="navbar-brand" href="/">Alcaldía Álvaro Obregón</a>
     <button className="navbar-toggler" type="button" onClick={() => { 
       if(expand === "collapse navbar-collapse") {
         setExpand("collapse navbar-collapse show")
