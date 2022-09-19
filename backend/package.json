@@ -1,7 +1,7 @@
 {
-  "name": "obregonbackend",
+  "name": "nodereadfile",
   "version": "1.0.0",
-  "description": "Backend for file system",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.1.8",
     "express": "^4.18.1",
-    "mongodb": "^4.9.1"
+    "mongodb": "^4.9.1",
+    "multer": "^1.4.5-lts.1"
   }
 }

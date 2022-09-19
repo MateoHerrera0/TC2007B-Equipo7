@@ -1,112 +1,76 @@
-/*
- * Simple exampe to connect to a local Mongo Database
- * and provide an API to perform operations on it
- *
- * References:
- * https://attacomsian.com/blog/nodejs-mongodb-local-connection
- * https://expressjs.com/en/starter/hello-world.html
- * https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/read-operations/cursor/
- *
- * Gilberto Echeverria
- * 2022-09-01
- */
+const express = require("express")
+const fs = require("fs")
+const bodyparser = require("body-parser")
+const multer = require("multer")
+const crypto = require("crypto")
+const {MongoClient} = require("mongodb")
 
-const express = require('express');
 const app = express();
-const port = 5000;
-
-const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://127.0.0.1:27017';
+app.use(bodyparser.urlencoded({extended:true}))
+app.set("view-engine", "ejs")
+const uploads = multer({dest:".temp"})
 
 let db;
-let coll;
 
-app.use(express.json());
+function connectToDB() {
+  let client = new MongoClient("mongodb://127.0.0.1:27017/AOFILES")
+  client.connect()
+  console.log("Conectado mongo");
+  db = client.db()
+}
 
-app.listen(port, () => {
-    connectDB();
-    console.log(`App listening on port ${port}`)
-});
+// app.get("/descargar", async (req, res)=>{
+//   let array = await db.collection("AOFILES").find({}).project({_id: 0, nombre: 1}).toArray()
+//   res.render("descargar.ejs", {archivos: array})
+//   console.log(array);
+// })
 
-app.get('/api/docs', async (req, res) => {
-    try {
-        console.log("REQUEST FOR ALL DOCS");
-        // Filter to not receive the internal id
-        const cursor = coll.find({}, {projection: {_id: 0}});
-        const data = await cursor.toArray();
-        //console.log("RESULTS TO SEND: " + data);
-        res.json(data);
-    } catch(error) {
-        res.status(500);
-        res.json(error);
-        console.log(error);
-    }
-});
+// app.post("/descargar", (req, res) => {
+//   db.collection("AOFILES").findOne({nombre: req.body.documentos}, (err, result) =>{
 
-app.post('/api/getdocs', async (req, res) => {
-    try {
-        //console.log("REQUEST FOR FILTER: " + req.body);
-        console.log("REQUEST FOR FILTER: " + JSON.stringify(req.body));
-        // Filter to not receive the internal id
-        const cursor = coll.find(req.body, {projection: {_id: 0}});
-        const data = await cursor.toArray();
-        //console.log("RESULTS TO SEND: " + data);
-        res.json(data);
-    } catch(error) {
-        res.status(500);
-        res.json(error);
-        console.log(error);
-    }
-});
+//     let temporal = __dirname + "/.temp/" + req.body.documentos + ".pdf";
+//     let inputFS = fs.createReadStream(__dirname + result.archivo)
+//     let outputFS = fs.createWriteStream(temporal)
+//     let key="abcabcabcabcabcabcabcabcabcabc12"
+//     let iv= "abcabcabcabcabc1"
+//     let cipher = crypto.createDecipheriv("aes-256-cbc", key, iv)
+//     inputFS.pipe(cipher).pipe(outputFS)
+//     outputFS.on("finish", () => {
+//       res.download(temporal, (err) => {
+//         if (err) throw err;
+//         fs.unlinkSync(temporal)
+//       })
+//     })
+//   })
+// })
 
-app.post('/api/adddoc', (req, res) => {
-    try {
-        //console.log("REQUEST FOR NEW DOC: " + req.body);
-        console.log("REQUEST FOR NEW DOC: " + JSON.stringify(req.body));
-        add_document(req.body);
-        res.json({'message': "Data inserted correctly."});
-        console.log("ADDED NEW DOCUMENT");
-    } catch(error) {
-        res.status(500);
-        res.json(error);
-        console.log(error);
-    }
-});
-
-function connectDB() {
-    // Establish the connection
-    MongoClient.connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }, (err, client) => {
-        if(err) {
-            return console.log(err);
-        }
-
-        // Connect to a database
-        db = client.db('testAO');
-        console.log(`Connected to Mongo ${url}`);
-
-        // Define the collection to use
-        coll = db.collection('docs');
+app.post("/api/adddoc", uploads.single("file"), (req, res) => {
+  try {
+    let rutaDefinitiva = "/.storage/" + req.file.filename;
+    let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
+    let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
+    let key="abcabcabcabcabcabcabcabcabcabc12"
+    let iv= "abcabcabcabcabc1"
+    let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
+    inputFS.pipe(cipher).pipe(outputFS)
+    outputFS.on("finish", () => {
+      fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
+      let aInsertar = {...req.body, "file": rutaDefinitiva};
+      db.collection("docs").insertOne(aInsertar, (err,res) => {
+        if (err) throw err;
+        console.log("Guardado");
+      })
     })
-}
+    res.json({'message': "Data inserted correctly."});
+  } catch (error) {
+    res.status(500);
+    res.json(error);
+    console.log(error);
+  }
+  
+})
 
-
-// TODO: This function does not work yet
-async function get_data() {
-    // Retrieve data from the collection
-    const cursor = docs.find({});
-    const data = await cursor.toArray();
-    return data;
-}
-
-// Add a new document into the collection
-// The document must be in JSON format
-function add_document(doc) {
-    coll.insertOne(doc, (err, result) => {
-        if(err) {
-            return console.log(err);
-        }
-    });
-}
+app.listen(5000, ()=>{
+  connectToDB()
+  console.log("Server started on port 5000........")
+})

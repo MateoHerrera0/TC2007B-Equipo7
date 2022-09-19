@@ -15,6 +15,7 @@ function reducer(state, event) {
 
 export default function Newfile() {
   const [formData, setFormData] = useReducer(reducer, {})
+  const [file, setFile] = useState()
   
   function handleChange(ev) {
     setFormData({
@@ -23,10 +24,16 @@ export default function Newfile() {
     })
   }
 
+  function handleFileChange(event) {
+    setFile(event.target.files[0]);
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("FORM DATA: " + formData);
-    addDocument(formData, setFormData);
+    let formElem = document.querySelector("form")
+    console.log("FORM DATA: " + formElem);
+    addDocument(formElem, setFormData, file);
+    setFile(undefined)
 }
   
   const nulidadFields = [
@@ -83,7 +90,7 @@ export default function Newfile() {
 
           <div className="mb-3">
             <label htmlFor="file" className="form-label">Documento Escaneado</label>
-            <input className="form-control" type="file" accept="*.pdf" id="file" />
+            <input className="form-control" type="file" accept="*.pdf" id="file" name="file" onChange={handleFileChange} required/>
           </div>
           <input type="hidden" name="usuario" id="usuario" value={usuario}/>
           <button type="submit" className="btn btn-primary">Submit</button>

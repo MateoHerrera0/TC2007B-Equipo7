@@ -1,14 +1,21 @@
 // Send the data to Mongo using an API
-export default async function addDocument(formData, setFormData) {
-  console.log("'addDocument' QUERY: " + JSON.stringify(formData));
+export default async function addDocument(formData, setFormData, file) {
+  // console.log("'addDocument' QUERY: " + JSON.stringify(formData));
+  let formBody = new FormData(formData);
+  // let formFile = new FormData();
+  // formFile.append("file", file);
+  // formBody.append("file", file);
+  // console.log(formBody.get("fileName"));
+  // formBody.append("formData", JSON.stringify(formData));
+
   try {
     await fetch('/api/adddoc', {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "accept": "application/json"
-      },
-      body: JSON.stringify(formData)
+      // headers: {
+      //   "content-type": "application/json",
+      //   "accept": "application/json"
+      // },
+      body: formBody
     })
       .then(response => response.json())
       .then(response => {
