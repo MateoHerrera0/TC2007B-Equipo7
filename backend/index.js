@@ -68,6 +68,7 @@ app.post("/api/adddoc", uploads.single("file"), (req, res) => {
           if (err) throw err;
           console.log("Guardado");
         })
+        fs.unlinkSync(lugarGuardar);
       })
     })
       
