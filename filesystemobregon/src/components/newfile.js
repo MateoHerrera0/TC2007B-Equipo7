@@ -33,7 +33,8 @@ export default function Newfile() {
     let formElem = document.querySelector("form")
     console.log("FORM DATA: " + formElem);
     addDocument(formElem, setFormData, file);
-    setFile(undefined)
+    setFile(null)
+    document.querySelector("#file").value = null;
 }
   
   const nulidadFields = [
