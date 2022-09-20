@@ -63,7 +63,7 @@ app.post("/api/adddoc", uploads.single("file"), (req, res) => {
         pair.folio = folio;
         let fileToUpload = fs.readFileSync(lugarGuardar);
         pair.archivo = Binary(fileToUpload);
-        let aInsertar = {...body, "files": [pair]};
+        let aInsertar = {...body, "archivos": [pair]};
         db.collection("docs").insertOne(aInsertar, (err,res) => {
           if (err) throw err;
           console.log("Guardado");
@@ -72,6 +72,38 @@ app.post("/api/adddoc", uploads.single("file"), (req, res) => {
       })
     })
       
+    res.json({'message': "Data inserted correctly."});
+  } catch (error) {
+    res.status(500);
+    res.json(error);
+    console.log(error);
+  }
+  
+})
+
+app.post("/api/addpath", uploads.single("file"), (req, res) => {
+  try {
+    let body = req.body;
+    let folio = req.body.folio;
+    delete(body.folio)
+    let rutaDefinitiva = "/.storage/" + req.file.filename;
+    let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
+    let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
+    let key="abcabcabcabcabcabcabcabcabcabc12"
+    let iv= "abcabcabcabcabc1"
+    let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
+    inputFS.pipe(cipher).pipe(outputFS)
+    outputFS.on("finish", () => {
+      let pair = {};
+      pair.folio = folio;
+      pair.archivo = rutaDefinitiva;
+      fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
+      let aInsertar = {...req.body, "archivos": [pair] };
+      db.collection("docs").insertOne(aInsertar, (err,res) => {
+        if (err) throw err;
+        console.log("Guardado");
+      })
+    })
     res.json({'message': "Data inserted correctly."});
   } catch (error) {
     res.status(500);
