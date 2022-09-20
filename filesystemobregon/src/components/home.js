@@ -10,9 +10,11 @@ export default function Home() {
     <div className='home'>
       <div className="section p-5">
         <div className="container p-5">
-          <div className="row">
+          <div className="row align-items-center">
             <div className="col-md-5 text-md-start text-center">
               <p className="title"><strong>Sube tus archivos</strong></p>
+              <p className="lead fs-5">Haz click en el boton y guarda tus archivos
+              escaneados</p>
               <Link to='/newFile'>
                 <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Subir archivo</button>
               </Link>
@@ -26,9 +28,10 @@ export default function Home() {
 
       <div className="section p-5">
         <div className="container p-5">
-          <div className="row">
+          <div className="row align-items-center">
             <div className="col-md-5 text-md-end text-center order-md-5">
               <p className="title text-info"><strong>Busca archivos</strong></p>
+              <p className="lead fs-5">Haz click en el boton y busca los archivos que necesites</p>
               <Link to='/search'>
                 <button type="button" className="btn btn-primary btn-sm rounded-3 bg-dark fw-bold">Buscar archivo</button>
               </Link>
