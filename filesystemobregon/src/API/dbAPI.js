@@ -9,7 +9,7 @@ export default async function addDocument(formData, setFormData, file) {
   // formBody.append("formData", JSON.stringify(formData));
 
   try {
-    await fetch('/api/adddoc', {
+    await fetch('/api/addpath', {
       method: "POST",
       // headers: {
       //   "content-type": "application/json",
@@ -26,4 +26,21 @@ export default async function addDocument(formData, setFormData, file) {
     console.log("ERROR at 'addDocument'");
     console.log(error);
   }
+}
+
+async function getDocumentInfo(formData) {
+  let formBody = new formData(formData)
+  try {
+    await fetch('api/getDocInfo', {
+      method: "GET",
+      body: formBody
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log("GetDocInfo Response: " + response);
+      })  
+  } catch (error) {
+    console.log("ERROR at 'addDocument'");
+    console.log(error);
+  } 
 }
