@@ -57,7 +57,8 @@ export default function Newfile() {
     fields.delito,
     fields.lugar,
     fields.objeto,
-    fields.eGuarda
+    fields.eGuarda,
+    fields.folio
   ]
 
   const [fieldsToUse, setFields] = useState(nulidadFields)
