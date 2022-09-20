@@ -86,7 +86,7 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
     let body = req.body;
     let folio = req.body.folio;
     delete(body.folio)
-    let rutaDefinitiva = "/.storage/" + req.file.filename;
+    let rutaDefinitiva = "/.storage/" + folio;
     let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
     let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
     let key="abcabcabcabcabcabcabcabcabcabc12"
@@ -111,6 +111,45 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
     console.log(error);
   }
   
+})
+
+app.put("api/addfolio", uploads.single("file"), (req, res) => {
+  try {
+    let rutaDefinitiva = "/.storage/" + req.body.folio;
+    let inputFS = fs.createReadStream(__dirname + "/.temp" + req.file.filename)
+    let outputFS = fs.createReadStream(__dirname + rutaDefinitiva)
+    let key="abcabcabcabcabcabcabcabcabcabc12"
+    let iv= "abcabcabcabcabc1"
+    let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
+    inputFS.pipe(cipher).pipe(outputFS)
+    outputFS.on("finish", () => {
+      let pair = {};
+      pair.folio = req.body.folio;
+      pair.archivo = rutaDefinitiva;
+      fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
+      db.collection("docs").updateOne({_id: req.body.id}, {$push: { archivos: pair }}, (err, res) => {
+        if (err) throw err;
+        console.log("Agregado")
+      })
+    })
+    res.json({'message': "Data updated correctly"})
+  } catch (error) {
+    res.status(500);
+    res.json(error);
+    console.log(error);
+  }
+})
+
+app.get("api/getDocInfo", async (req, res) => {
+  try {
+    const cursor = db.collection("docs").find({}, {projection: {archivos: 0}});
+    const data = await cursor.toArray();
+    res.json(data);
+  } catch (error) {
+    res.status(500);
+    res.json(error);
+    console.log(error);
+  }
 })
 
 app.listen(5000, ()=>{
