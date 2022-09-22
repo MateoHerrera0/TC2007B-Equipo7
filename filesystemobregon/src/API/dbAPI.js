@@ -43,4 +43,4 @@ async function getDocumentInfo(formData) {
     console.log("ERROR at 'addDocument'");
     console.log(error);
   } 
-}
+} 
