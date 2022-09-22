@@ -142,7 +142,7 @@ app.put("api/addfolio", uploads.single("file"), (req, res) => {
 
 app.get("api/getDocInfo", async (req, res) => {
   try {
-    const cursor = db.collection("docs").find({}, {projection: {archivos: 0}});
+    const cursor = db.collection("docs").find();
     const data = await cursor.toArray();
     res.json(data);
   } catch (error) {
