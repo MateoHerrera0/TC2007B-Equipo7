@@ -33,10 +33,12 @@ async function getDocumentInfo(setData) {
     await fetch('api/getDocInfo', {
       method: "GET"
     })
-      console.log("GetDocInfo Response: " + response); 
-      const data = await response.json();
-      console.log("Data received: " + {data});
-      setData(data);
+      .then(response => response.json())
+      .then(response => {
+        console.log("GetDocInfo response: " + response);
+        setData(response);
+      })
+
   } catch (error) {
     console.log("ERROR at 'getDocumentInfo'");
     console.log(error);
