@@ -27,10 +27,12 @@ const tagsCarpeta = [
     fields.folio
 ]
 
-function Search() {
-    return(
-        <div>
-            
-        </div>
-    )
+function Search({setData}) {
+    const [filters, setFilters] = useState([
+        {category: 'Caso', value: '1'}
+    ]);
+
+    function handleSubmit(event) {
+        
+    }
 }
