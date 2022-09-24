@@ -1,6 +1,7 @@
 import { useState, useReducer } from "react";
 import { fields, Field } from "./fields"
 import {addDocument} from "../API/dbAPI";
+import Navbar from "./navbar";
 
 
 function reducer(state, event) {
@@ -65,7 +66,9 @@ export default function Newfile() {
   const usuario = 'getusuario'
 
   return(
-     <div className="section p-5">
+    <div className="newfile">
+      <Navbar />
+      <div className="section p-5">
         <p className="text-center fs-1"><strong>Para subir tus documentos, ingresa los datos necesarios</strong></p>
         <p className="text-center fs-5">Selecciona un tipo de documento.</p>
         <div className="row text-center p-5">
@@ -73,31 +76,32 @@ export default function Newfile() {
             <button type="button" className="btn btn-primary" onClick={() => {setFields(nulidadFields); setFormData({reset: true})}}>Juicio de Nulidad</button>
           </div>
           <div className="col">
-            <button type="button" className="btn btn-primary" onClick={() => {setFields(carpetaFields); setFormData({reset: true})}}>Carpeta de Investigacion</button>
+              <button type="button" className="btn btn-primary" onClick={() => {setFields(carpetaFields); setFormData({reset: true})}}>Carpeta de Investigacion</button>
           </div>
         </div>
-      <div className="container p-5 shadow rounded-3">
-        <form onSubmit={handleSubmit}>
-          {fieldsToUse.map((value, index) => {
-            let id = value.id
-            return(
-              <Field
-                field = {value}
-                onChange = {handleChange}
-                key = {index}
-                value = {formData[id] || ""}
-              />
-            )
-          })}
+        <div className="container p-5 shadow rounded-3">
+          <form onSubmit={handleSubmit}>
+            {fieldsToUse.map((value, index) => {
+              let id = value.id
+              return(
+                <Field
+                  field = {value}
+                  onChange = {handleChange}
+                  key = {index}
+                  value = {formData[id] || ""}
+                />
+              )
+            })}
 
-          <div className="mb-3">
-            <label htmlFor="file" className="form-label">Documento Escaneado</label>
-            <input className="form-control" type="file" accept="*.pdf" id="file" name="file" onChange={handleFileChange} required/>
-          </div>
-          <input type="hidden" name="usuario" id="usuario" value={usuario}/>
-          <button type="submit" className="btn btn-primary">Submit</button>
-        </form>
+            <div className="mb-3">
+              <label htmlFor="file" className="form-label">Documento Escaneado</label>
+              <input className="form-control" type="file" accept="*.pdf" id="file" name="file" onChange={handleFileChange} required/>
+            </div>
+            <input type="hidden" name="usuario" id="usuario" value={usuario}/>
+            <button type="submit" className="btn btn-primary">Submit</button>
+          </form>
+        </div>
       </div>
-     </div>
+    </div>
   )
 }

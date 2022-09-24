@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { useState, useEffect } from 'react';
 import './Login.css'
 import { Link } from 'react-router-dom';
 
-export default function Login() {
+export default function Login(props) {
         const [username, setUsername] = useState("");
         const [password, setPassword] = useState("");
         function performValidation() {
@@ -21,11 +21,9 @@ export default function Login() {
                         <h5 className="card-title text-center mb-5 fw-light fs-5">Ingresar</h5>
                         <form onSubmit={handleSubmit}>
                         <div className="form-floating mb-3">
-                            <label htmlFor="floatingInput">Usuario</label>
                             <input type="email" className="form-control" id="floatingInput" placeholder="Usuario" />
                         </div>
                         <div className="form-floating mb-3">
-                            <label htmlFor="floatingPassword">Constraseña</label>
                             <input type="password" className="form-control" id="floatingPassword" placeholder="Constraseña" />
                         </div>
                         <div className="d-grid">
@@ -42,3 +40,20 @@ export default function Login() {
         );
 }
 
+
+const loginFields = {
+    user: {
+      id: "usuario",
+      label: "usuario",
+      placeholder: "Usuario"
+    },
+    
+    psw: {
+      id: "contraseña",
+      label: "contraseña",
+      placeholder: "Contraseña"
+    },
+}
+
+
+export {loginFields}

@@ -1,10 +1,12 @@
 import React from 'react'
 import './profile.css'
 import { Link } from 'react-router-dom';
+import Navbar from './navbar';
 
 export default function Profile() {
   return (
-    <div>
+    <div className='profile-view'>
+      <Navbar />
         <div className='section p-5 mx-5'>
         <div className='container bg-white rounded-3 shadow'>
           <div className='row'>
