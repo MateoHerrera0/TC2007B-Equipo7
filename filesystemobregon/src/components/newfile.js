@@ -2,6 +2,7 @@ import { useState, useReducer } from "react";
 import { fields, Field } from "./fields"
 import {addDocument} from "../API/dbAPI";
 import Navbar from "./navbar";
+import PutFolio from "./addFolioForm";
 
 
 function reducer(state, event) {
@@ -69,7 +70,10 @@ export default function Newfile() {
     <div className="newfile">
       <Navbar />
       <div className="section p-5">
-        <p className="text-center fs-1"><strong>Para subir tus documentos, ingresa los datos necesarios</strong></p>
+        <p className="text-center fs-1"><strong>Si el expediente o la capeta ya existe, simplemente selecciona el documento correspondiente y sube el nuevo folio.</strong></p>
+        <p className="text-center fs-5">Selecciona un documento existente.</p>
+        <PutFolio />
+        <p className="text-center fs-1"><strong>O ingresa un documento completamente nuevo.</strong></p>
         <p className="text-center fs-5">Selecciona un tipo de documento.</p>
         <div className="row text-center p-5">
           <div className="col">
