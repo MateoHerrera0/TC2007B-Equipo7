@@ -28,7 +28,7 @@ async function addDocument(formData, setFormData, file) {
   }
 }
 
-async function getDocumentInfo(setData) {
+async function getDocumentInfo(setData) { //descargar db a un json para el sistema de búsqueda
   try {
     await fetch('api/getDocInfo', {
       method: "GET"
