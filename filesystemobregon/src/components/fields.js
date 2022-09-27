@@ -18,7 +18,7 @@ function Field(props) {
 
 const fields = {
     expediente: {
-      id: "expediente",
+      id: "docID",
       label: "Expediente",
       placeholder: "Ingresa el expediente aqui..."
     },
@@ -84,7 +84,7 @@ const fields = {
     },
 
     carpeta: {
-      id: "carpeta",
+      id: "docID",
       label: "Carpeta de Investigacion",
       placeholder: "Ingresa el carpeta de investigacion aqui..."
     },
