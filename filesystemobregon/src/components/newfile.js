@@ -1,7 +1,8 @@
-import { useState, useReducer } from "react";
+import { useState, useReducer} from "react";
 import { fields, Field } from "./fields"
 import {addDocument} from "../API/dbAPI";
 import Navbar from "./navbar";
+import PutFolio from "./addFolioForm";
 
 
 function reducer(state, event) {
@@ -14,9 +15,10 @@ function reducer(state, event) {
   }
 }
 
-export default function Newfile() {
+export default function Newfile(props) {
+  
+
   const [formData, setFormData] = useReducer(reducer, {})
-  const [file, setFile] = useState()
   
   function handleChange(ev) {
     setFormData({
@@ -25,16 +27,11 @@ export default function Newfile() {
     })
   }
 
-  function handleFileChange(event) {
-    setFile(event.target.files[0]);
-  }
-
   function handleSubmit(event) {
     event.preventDefault();
-    let formElem = document.querySelector("form")
+    let formElem = document.querySelector("#newFileForm")
     console.log("FORM DATA: " + formElem);
-    addDocument(formElem, setFormData, file);
-    setFile(null)
+    addDocument(formElem, setFormData);
     document.querySelector("#file").value = null;
 }
   
@@ -69,7 +66,10 @@ export default function Newfile() {
     <div className="newfile">
       <Navbar />
       <div className="section p-5">
-        <p className="text-center fs-1"><strong>Para subir tus documentos, ingresa los datos necesarios</strong></p>
+        <p className="text-center fs-1"><strong>Si el expediente o la capeta ya existe, simplemente selecciona el documento correspondiente y sube el nuevo folio.</strong></p>
+        <p className="text-center fs-5">Selecciona un documento existente.</p>
+        <PutFolio data={props.data} />
+        <p className="text-center fs-1"><strong>O ingresa un documento completamente nuevo.</strong></p>
         <p className="text-center fs-5">Selecciona un tipo de documento.</p>
         <div className="row text-center p-5">
           <div className="col">
@@ -80,7 +80,7 @@ export default function Newfile() {
           </div>
         </div>
         <div className="container p-5 shadow rounded-3">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} id="newFileForm">
             {fieldsToUse.map((value, index) => {
               let id = value.id
               return(
@@ -95,7 +95,7 @@ export default function Newfile() {
 
             <div className="mb-3">
               <label htmlFor="file" className="form-label">Documento Escaneado</label>
-              <input className="form-control" type="file" accept="*.pdf" id="file" name="file" onChange={handleFileChange} required/>
+              <input className="form-control" type="file" accept="*.pdf" id="file" name="file" required/>
             </div>
             <input type="hidden" name="usuario" id="usuario" value={usuario}/>
             <button type="submit" className="btn btn-primary">Submit</button>
