@@ -1,6 +1,6 @@
 import { useState, useReducer } from "react";
 import { fields, Field } from "./fields"
-import addDocument from "../API/dbAPI";
+import { addDocument } from "../API/dbAPI";
 
 
 function reducer(state, event) {

@@ -140,11 +140,12 @@ app.put("api/addfolio", uploads.single("file"), (req, res) => {
   }
 })
 
-app.get("api/getDocInfo", async (req, res) => {
+app.get("/api/getDocInfo", async (req, res) => {
   try {
     const cursor = db.collection("docs").find();
     const data = await cursor.toArray();
     res.json(data);
+    return data;
   } catch (error) {
     res.status(500);
     res.json(error);
