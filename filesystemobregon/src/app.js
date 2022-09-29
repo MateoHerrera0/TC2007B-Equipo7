@@ -7,8 +7,9 @@ import { Routes, Route } from 'react-router-dom';
 // Import components
 import Home from "./components/home";
 import Newfile from "./components/newfile";
-import Login from "./components/Login";
+import Login from "./components/login";
 import Profile from "./components/profile";
+import Register from "./components/register";
 
 export default function App() {
   useScript()
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/newFile" element={<Newfile />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </div>
   )
