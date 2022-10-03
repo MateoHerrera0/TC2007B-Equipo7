@@ -26,23 +26,6 @@ async function addDocument(formData, setFormData, file) {
     console.log("ERROR at 'addDocument'");
     console.log(error);
   }
-}
-
-async function getDocumentInfo(setData) { 
-  try {
-    await fetch('/api/getDocInfo', {
-      method: "GET"
-    })
-    .then(response => response.json()) 
-    .then(response => {
-      console.log("GetDocInfo Response: " + response);
-      setData(response);
-      })
-  } catch (error) {
-    console.log("ERROR at 'getDocumentInfo'");
-    console.log(error);
-    return [];
-  } 
 } 
 
 async function getFilteredDoc(jQuery, setData) {
@@ -67,4 +50,4 @@ async function getFilteredDoc(jQuery, setData) {
   } 
 }
 
-export { addDocument, getDocumentInfo, getFilteredDoc };
+export { addDocument, getFilteredDoc };
