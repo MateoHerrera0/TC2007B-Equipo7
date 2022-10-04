@@ -18,7 +18,7 @@ function Field(props) {
 
 const fields = {
     expediente: {
-      id: "expediente",
+      id: "docID",
       label: "Expediente",
       placeholder: "Ingresa el expediente aqui..."
     },
@@ -77,6 +77,12 @@ const fields = {
       placeholder: "Ingresa el folio aqui..."
     },
 
+    nombre: {
+      id: "nombre",
+      label: "Nombre del Archivo",
+      placeholder: "Ingresa el nombre del archivo aqui..."
+    },
+
     eco: {
       id: "eco",
       label: "ECO",
@@ -84,7 +90,7 @@ const fields = {
     },
 
     carpeta: {
-      id: "carpeta",
+      id: "docID",
       label: "Carpeta de Investigacion",
       placeholder: "Ingresa el carpeta de investigacion aqui..."
     },
@@ -124,6 +130,7 @@ const fields = {
       label: "Estado que Guarda",
       placeholder: "Ingresa el estado que guarda aqui..."
     },
+    
 }
 
 

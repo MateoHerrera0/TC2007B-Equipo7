@@ -34,6 +34,7 @@ export default function Navbar() {
               <Link to='/profile'>
                 <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Perfil</button>
               </Link>
+              
             </div>
       </span>
     </div>
