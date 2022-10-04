@@ -11,12 +11,14 @@ import esMessages from "./filterMessages.json";
 import { process } from "@progress/kendo-data-query";
 import {IntlProvider, LocalizationProvider,loadMessages} from "@progress/kendo-react-intl";
 import '@progress/kendo-theme-default/dist/all.css';
+import "./search.css";
 
 const Search = () => {
   const [data, setData] = useState([]);
     useEffect( ()=> {
       getData();
     }, [])
+
   const getData = async () => {
     const res = await axios.get('/api/getDocInfo')
     setData(res.data);
@@ -34,12 +36,11 @@ const Search = () => {
 
   return(
     <div>
-      <h2> Búsqueda de Archivos </h2>
-      <p> Selecciona un expediente para ver más detalles </p>
+      <br></br> <h2 id="Titulo"> Búsqueda </h2> <br></br>
       <LocalizationProvider language="es-ES"> 
         <IntlProvider locale="es">
           <Grid
-            data={data}
+            data={res}
             style={{
               height: "700px",
             }}
@@ -65,11 +66,11 @@ const Search = () => {
           </Grid>
         </IntlProvider>
       </LocalizationProvider>
-      {/* <form onSubmit={(e)=> {
+      <form onSubmit={(e)=> {
         e.preventDefault();
         getData()}}>
         <button type="submit">Get Info</button>
-      </form> */}
+      </form> 
     </div>
   )
 }
