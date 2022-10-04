@@ -45,6 +45,7 @@ export default function Newfile(props) {
     fields.eProcesal,
     fields.materia,
     fields.demandado,
+    fields.nombre,
     fields.folio
   ]
 
@@ -56,10 +57,12 @@ export default function Newfile(props) {
     fields.lugar,
     fields.objeto,
     fields.eGuarda,
+    fields.nombre,
     fields.folio
   ]
 
   const [fieldsToUse, setFields] = useState(nulidadFields)
+  const [docType, setDocType] = useState("juicioNulidad")
   const usuario = 'getusuario'
 
   return(
@@ -68,15 +71,15 @@ export default function Newfile(props) {
       <div className="section p-5">
         <p className="text-center fs-1"><strong>Si el expediente o la capeta ya existe, simplemente selecciona el documento correspondiente y sube el nuevo folio.</strong></p>
         <p className="text-center fs-5">Selecciona un documento existente.</p>
-        <PutFolio data={props.data} />
+        <PutFolio />
         <p className="text-center fs-1"><strong>O ingresa un documento completamente nuevo.</strong></p>
         <p className="text-center fs-5">Selecciona un tipo de documento.</p>
         <div className="row text-center p-5">
           <div className="col">
-            <button type="button" className="btn btn-primary" onClick={() => {setFields(nulidadFields); setFormData({reset: true})}}>Juicio de Nulidad</button>
+            <button type="button" className="btn btn-primary" onClick={() => {setFields(nulidadFields); setFormData({reset: true}); setDocType("juicioNulidad")}}>Juicio de Nulidad</button>
           </div>
           <div className="col">
-              <button type="button" className="btn btn-primary" onClick={() => {setFields(carpetaFields); setFormData({reset: true})}}>Carpeta de Investigacion</button>
+              <button type="button" className="btn btn-primary" onClick={() => {setFields(carpetaFields); setFormData({reset: true}); setDocType("carpetaInvestigacion")}}>Carpeta de Investigacion</button>
           </div>
         </div>
         <div className="container p-5 shadow rounded-3">
@@ -98,6 +101,7 @@ export default function Newfile(props) {
               <input className="form-control" type="file" accept="*.pdf" id="file" name="file" required/>
             </div>
             <input type="hidden" name="usuario" id="usuario" value={usuario}/>
+            <input type="hidden" name="docType" id="docType" value={docType}/>
             <button type="submit" className="btn btn-primary">Submit</button>
           </form>
         </div>

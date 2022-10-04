@@ -15,6 +15,7 @@ require("dotenv").config();
 app.use(express.json());
 app.use(cors());
 app.use(bodyparser.urlencoded({extended:true}))
+app.use(bodyparser.json());
 app.set("view-engine", "ejs")
 const uploads = multer({dest:".temp"})
 
@@ -107,7 +108,11 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
   try {
     let body = req.body;
     let folio = req.body.folio;
+    let nombre = req.body.nombre;
+    let collection = req.body.docType;
     delete(body.folio)
+    delete(body.docType)
+    delete(body.nombre)
     let rutaDefinitiva = "/.storage/" + folio;
     let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
     let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
@@ -119,9 +124,10 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
       let pair = {};
       pair.folio = folio;
       pair.archivo = rutaDefinitiva;
+      pair.nombre = nombre;
       fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
       let aInsertar = {...req.body, "archivos": [pair] };
-      db.collection("docs").insertOne(aInsertar, (err,res) => {
+      db.collection(collection).insertOne(aInsertar, (err,res) => {
         if (err) throw err;
         console.log("Guardado");
       })
@@ -174,14 +180,18 @@ app.get("/api/getDocs", async (req, res) => {
   }
 })
 
-app.get("/api/getDocNames", async (req, res) => {
+app.post("/api/getDocNames", async (request, response) => {
   try {
-    const cursor = db.collection("docs").find({}, {projection: {"docID": 1}});
+    let searchValue ={}
+    if (request.body.docID != null) {
+      searchValue = {"docID" : {$regex : request.body.docID}}
+    }
+    const cursor = db.collection("docs").find(searchValue, {projection: {"docID": 1}});
     const data = await cursor.toArray();
-    res.json(data);
+    response.json(data);
   } catch (error) {
-    res.status(500);
-    res.json(error);
+    response.status(500);
+    response.json(error);
     console.log(error);
   }
 })
