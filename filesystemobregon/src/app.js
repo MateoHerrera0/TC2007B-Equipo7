@@ -13,12 +13,6 @@ import Login from "./components/Login";
 import Profile from "./components/profile";
 
 export default function App() {
-  const [data, setData] = useState([]);
-  // Fetch the data when the page loads
-  useEffect(() => {
-    getDocNames(setData);
-
-  }, [])
   useScript()
   return(
     <div>
@@ -27,7 +21,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/newFile" element={<Newfile data ={data}/>} />
+        <Route path="/newFile" element={<Newfile/>} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>

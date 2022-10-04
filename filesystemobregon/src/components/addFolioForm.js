@@ -7,26 +7,50 @@ function reducer(state, event) {
   if (event.reset) {
     return {}
   }
-  
   return {...state,
     [event.id]: event.value
   }
 }
 
-export default function PutFolio(props) {
-
-  const data = props.data
-  console.log(props.data);
-  const loadOptions = (searchValue, callback) => {
-    setTimeout( () => {
-      const filteredOptions = data.filter((option) => 
-        option.label.toLowerCase().includes(searchValue.toLowerCase())
-      );
-      console.log('loadOptions', searchValue, filteredOptions);
-      callback(filteredOptions)
-    }, (2000));
-  }
-
+export default function PutFolio() {
+  const fetchData = (inputValue, callback) => {
+    setTimeout(() => {
+        fetch('/api/getDocNames', {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', 
+          },
+          body: JSON.stringify({'docID': inputValue}),
+          method: "POST",
+        })
+        .then((resp) => {
+          return resp.json();
+        })
+        .then((data) => {
+          const tempArray = [];
+          if (data) {
+            if (data.length) {
+              data.forEach((element) => {
+                console.log(element);
+                tempArray.push({
+                  label: `${element.docID}`,
+                  value: element._id,
+                });
+              });
+            } else {
+              tempArray.push({
+                label: `${data.body}`,
+                value: data.id,
+              });
+            }
+          }
+          callback(tempArray);
+        })
+        .catch((error) => {
+          console.log(error, "catch the hoop");
+        });
+    }, 2000);
+  };
   const [formData, setFormData] = useReducer(reducer, {})
   
   function handleChange(ev) {
@@ -56,12 +80,9 @@ export default function PutFolio(props) {
         <form onSubmit={handleSubmit} id="folioForm">
           <div className="mb-3">
             <label htmlFor="docID" className="form-label">Selecciona uno de los documentos existentes mediante su id.</label>
-            <AsyncSelect 
-              loadOptions={loadOptions} 
-              defaultOptions 
-              name="docID"
-              id="docID" 
-              placeholder = "Ej: EJ-123820"
+            <AsyncSelect
+              loadOptions={fetchData}
+              defaultOptions={true}
             />
           </div>
           {fieldsToUse.map((value, index) => {

@@ -68,7 +68,7 @@ export default function Newfile(props) {
       <div className="section p-5">
         <p className="text-center fs-1"><strong>Si el expediente o la capeta ya existe, simplemente selecciona el documento correspondiente y sube el nuevo folio.</strong></p>
         <p className="text-center fs-5">Selecciona un documento existente.</p>
-        <PutFolio data={props.data} />
+        <PutFolio />
         <p className="text-center fs-1"><strong>O ingresa un documento completamente nuevo.</strong></p>
         <p className="text-center fs-5">Selecciona un tipo de documento.</p>
         <div className="row text-center p-5">
