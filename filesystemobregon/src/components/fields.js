@@ -77,6 +77,12 @@ const fields = {
       placeholder: "Ingresa el folio aqui..."
     },
 
+    nombre: {
+      id: "nombre",
+      label: "Nombre del Archivo",
+      placeholder: "Ingresa el nombre del archivo aqui..."
+    },
+
     eco: {
       id: "eco",
       label: "ECO",

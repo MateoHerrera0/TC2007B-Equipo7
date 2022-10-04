@@ -86,7 +86,11 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
   try {
     let body = req.body;
     let folio = req.body.folio;
+    let nombre = req.body.nombre;
+    let collection = req.body.docType;
     delete(body.folio)
+    delete(body.docType)
+    delete(body.nombre)
     let rutaDefinitiva = "/.storage/" + folio;
     let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
     let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
@@ -98,9 +102,10 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
       let pair = {};
       pair.folio = folio;
       pair.archivo = rutaDefinitiva;
+      pair.nombre = nombre;
       fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
       let aInsertar = {...req.body, "archivos": [pair] };
-      db.collection("docs").insertOne(aInsertar, (err,res) => {
+      db.collection(collection).insertOne(aInsertar, (err,res) => {
         if (err) throw err;
         console.log("Guardado");
       })

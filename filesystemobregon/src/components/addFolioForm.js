@@ -71,6 +71,7 @@ export default function PutFolio() {
   const usuario = 'getusuario'
 
   const fieldsToUse = [
+    fields.nombre,
     fields.folio,
   ]
 
@@ -79,7 +80,7 @@ export default function PutFolio() {
       <div className="container p-5 shadow rounded-3">
         <form onSubmit={handleSubmit} id="folioForm">
           <div className="mb-3">
-            <label htmlFor="docID" className="form-label">Selecciona uno de los documentos existentes mediante su id.</label>
+            <label htmlFor="docID" className="form-label">Id del expediente o la carpeta</label>
             <AsyncSelect
               loadOptions={fetchData}
               defaultOptions={true}
