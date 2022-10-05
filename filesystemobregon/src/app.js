@@ -9,9 +9,10 @@ import { useState, useEffect } from "react";
 // Import components
 import Home from "./components/home";
 import Newfile from "./components/newfile";
-import Login from "./components/login";
+import Login from "./components/Login";
 import Profile from "./components/profile";
 import Register from "./components/register";
+import Search from "./components/search";
 
 export default function App() {
   useScript()
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/newFile" element={<Newfile/>} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </div>
   )

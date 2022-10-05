@@ -5,15 +5,9 @@ const bodyparser = require("body-parser")
 const multer = require("multer")
 const crypto = require("crypto")
 const {MongoClient, Binary} = require("mongodb")
-const cors = require("cors")
-const mongoose = require("mongoose")
-const register = require("./routes/register");
-const login = require("./routes/login");
 
 const app = express();
-require("dotenv").config();
 app.use(express.json());
-app.use(cors());
 app.use(bodyparser.urlencoded({extended:true}))
 app.use(bodyparser.json());
 app.set("view-engine", "ejs")
@@ -21,25 +15,11 @@ const uploads = multer({dest:".temp"})
 
 let db;
 
-app.use("/api/register", register);
-app.use("/api/login", login);
-
 function connectToDB() {
   let client = new MongoClient("mongodb://127.0.0.1:27017/AOFILES")
   client.connect()
   console.log("Conectado mongo");
   db = client.db()
-}
-
-function connectToUserDB() {
-  const uri = process.env.USER_DB_URI;
-  mongoose
-  .connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("MongooseDB connection established..."))
-  .catch((error) => console.error("MongooseDB connection failed:", error.message));
 }
 
 // app.get("/descargar", async (req, res)=>{
@@ -198,6 +178,5 @@ app.post("/api/getDocNames", async (request, response) => {
 
 app.listen(5000, ()=>{
   connectToDB()
-  connectToUserDB()
   console.log("Server started on port 5000........")
 })
