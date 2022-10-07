@@ -35,8 +35,8 @@ export default function App() {
       try {
         setLoading(true)
         const res = await fetch('/api/sessionExists')
-        if (res.ok == false) return setLoading(false)
-
+        if (!res.ok) return setLoading(false)
+        console.log(res.ok)
         setUserSession(await res.json())
         setLoading(false)
       } catch (error) {
@@ -61,8 +61,7 @@ export default function App() {
         <Route path="/newFile" element={<Newfile/>} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Register />} />
-      </Routes> */}
-        <Route path="/search" element={<Search />} />
+  </Routes> */}
       {/* </Routes> */}
     </div>
   )
