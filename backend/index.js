@@ -142,7 +142,7 @@ app.get("/api/sessionExists", async (req, res) => {
   }
   else
   {
-    return res.status(400).json("Not Authorized")
+    return res.json({})
   }
 })
 

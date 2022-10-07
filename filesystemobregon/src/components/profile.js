@@ -3,6 +3,7 @@ import './profile.css'
 import { Link } from 'react-router-dom';
 import Navbar from './navbar';
 import {getUser} from "../API/dbAPI";
+import { logout } from '../API/dbAPI';
 //import { UserContext } from '../app';
 
 //const userContext = useContext(UserContext)
@@ -66,7 +67,7 @@ export default function Profile(props) {
                 </Link>
                 <br />
                 <Link to='/'>
-                    <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Cerrar sesión</button>
+                    <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold" onClick={() => {logout()}}>Cerrar sesión</button>
                 </Link>
               </div>
             </div>

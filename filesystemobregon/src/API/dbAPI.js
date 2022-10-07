@@ -144,4 +144,4 @@ async function logout(){
   } 
 }
 
-export { addDocument, getDocumentInfo, getDocNames, putDocument, addUser, logUser, logout};
+export { addDocument, getDocumentInfo, putDocument, addUser, logUser, logout};
