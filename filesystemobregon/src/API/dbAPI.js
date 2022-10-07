@@ -57,24 +57,24 @@ async function getDocumentInfo(setData) {
   } 
 } 
 
-async function getDocNames(setData) {
-  try {
-    await fetch('/api/getDocNames', {
-      method: "GET",
-    })
-      .then(response => response.json())
-      .then(response => {
-        console.log("GetDocInfo response: " + response);
-        setData(response.map(({_id: value, docID: label})=>({value,label})));
-        return response;
-      })
+// async function getDocNames(setData) {
+//   try {
+//     await fetch('/api/getDocNames', {
+//       method: "GET",
+//     })
+//       .then(response => response.json())
+//       .then(response => {
+//         console.log("GetDocInfo response: " + response);
+//         setData(response.map(({_id: value, docID: label})=>({value,label})));
+//         return response;
+//       })
 
-  } catch (error) {
-    console.log("ERROR at 'getDocumentNames'");
-    console.log(error);
-    return [];
-  } 
-} 
+//   } catch (error) {
+//     console.log("ERROR at 'getDocumentNames'");
+//     console.log(error);
+//     return [];
+//   } 
+// } 
 
 async function addUser(userData){
   try {

@@ -14,6 +14,7 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(bodyparser.urlencoded({extended:true}))
+app.use(bodyparser.json());
 app.set("view-engine", "ejs")
 const uploads = multer({dest:".temp"})
 
@@ -38,13 +39,17 @@ app.use(session({
   // }
 }))
 
-async function connectDB(){
+async function connectToDB(){
   let client = new MongoClient("mongodb://127.0.0.1:27017/AOFILES")
   await client.connect();
   db = client.db();
 }
 
-
+// app.get("/descargar", async (req, res)=>{
+//   let array = await db.collection("AOFILES").find({}).project({_id: 0, nombre: 1}).toArray()
+//   res.render("descargar.ejs", {archivos: array})
+//   console.log(array);
+// })
 
 app.post("/api/login", (req, res) => {
   let user = req.body.email;
@@ -187,7 +192,11 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
   try {
     let body = req.body;
     let folio = req.body.folio;
+    let nombre = req.body.nombre;
+    let collection = req.body.docType;
     delete(body.folio)
+    delete(body.docType)
+    delete(body.nombre)
     let rutaDefinitiva = "/.storage/" + folio;
     let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
     let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
@@ -199,9 +208,10 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
       let pair = {};
       pair.folio = folio;
       pair.archivo = rutaDefinitiva;
+      pair.nombre = nombre;
       fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
       let aInsertar = {...req.body, "archivos": [pair] };
-      db.collection("docs").insertOne(aInsertar, (err,res) => {
+      db.collection(collection).insertOne(aInsertar, (err,res) => {
         if (err) throw err;
         console.log("Guardado");
       })
@@ -254,19 +264,23 @@ app.get("/api/getDocs", async (req, res) => {
   }
 })
 
-app.get("/api/getDocNames", async (req, res) => {
+app.post("/api/getDocNames", async (request, response) => {
   try {
-    const cursor = db.collection("docs").find({}, {projection: {"docID": 1}});
+    let searchValue ={}
+    if (request.body.docID != null) {
+      searchValue = {"docID" : {$regex : request.body.docID}}
+    }
+    const cursor = db.collection("docs").find(searchValue, {projection: {"docID": 1}});
     const data = await cursor.toArray();
-    res.json(data);
+    response.json(data);
   } catch (error) {
-    res.status(500);
-    res.json(error);
+    response.status(500);
+    response.json(error);
     console.log(error);
   }
 })
 
 app.listen(5000, ()=>{
-  connectDB()
+  connectToDB()
   console.log("Server started on port 5000........")
 })

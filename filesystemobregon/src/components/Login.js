@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import './login.css'
+import './Login.css'
 import { Link } from 'react-router-dom';
 import { logUser } from '../API/dbAPI';
 

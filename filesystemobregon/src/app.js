@@ -10,9 +10,10 @@ import Routes from './Routes'
 // Import components
 import Home from "./components/home";
 import Newfile from "./components/newfile";
-import Login from "./components/login";
+import Login from "./components/Login";
 import Profile from "./components/profile";
 import Register from "./components/register";
+import Search from "./components/search";
 
 
 export const UserContext = createContext({})
@@ -46,6 +47,7 @@ export default function App() {
     }
     fetchUserAuth()
   }, [])
+  useScript()
   return(
     <div>
       {/* Bootsrtap CSS CDN */}
@@ -56,10 +58,12 @@ export default function App() {
       {/* <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/newFile" element={<Newfile data ={data}/>} />
+        <Route path="/newFile" element={<Newfile/>} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Register />} />
       </Routes> */}
+        <Route path="/search" element={<Search />} />
+      {/* </Routes> */}
     </div>
   )
 }
