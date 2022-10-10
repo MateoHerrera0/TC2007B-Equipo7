@@ -19,7 +19,7 @@ const Search = () => {
       }, [])
   
     const getData = async () => {
-      const res = await axios.get('/api/getDocInfo')
+      const res = await axios.get('/api/getDocs')
       setData(res.data);
       console.log(data);
     }
@@ -72,6 +72,7 @@ const Search = () => {
     };
     return (
         <div>
+          
             <Navbar />
             <br></br> <h2 id="Titulo"> Búsqueda de Expedientes </h2> <br></br>
             <LocalizationProvider language="es-ES"> 
@@ -103,11 +104,11 @@ const Search = () => {
               </Grid>
             </IntlProvider>
           </LocalizationProvider>
-          <form onSubmit={(e)=> {
+          {/* <form onSubmit={(e)=> {
             e.preventDefault();
             getData()}}>
             <button type="submit">Get Info</button>
-          </form> 
+          </form>  */}
         </div>
     )
 }
