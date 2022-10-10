@@ -255,7 +255,7 @@ app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
 
 app.get("/api/getDocs", async (req, res) => {
   try {
-    const cursor = db.collection("docs").find();
+    const cursor = db.collection("docs").find(); // cambiar xq las colleciones se dividieron
     const data = await cursor.toArray();
     res.json(data);
   } catch (error) {
