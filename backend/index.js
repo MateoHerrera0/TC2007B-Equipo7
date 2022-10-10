@@ -138,11 +138,12 @@ app.get("/api/profile", async (req, res) => {
 
 app.get("/api/sessionExists", async (req, res) => {
   if(req.session.usuario) {
+    console.log("el usuario", req.session.usuario)
     return res.json(req.session.usuario)
   }
   else
   {
-    return res.json({})
+    return res.json(null)
   }
 })
 

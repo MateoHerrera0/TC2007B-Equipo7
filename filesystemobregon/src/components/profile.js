@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Navbar from './navbar';
 import {getUser} from "../API/dbAPI";
 import { logout } from '../API/dbAPI';
+
 //import { UserContext } from '../app';
 
 //const userContext = useContext(UserContext)
@@ -13,6 +14,10 @@ export default function Profile(props) {
   const [user, setUserData] = useState(
     {usuario: "", email: "", userType: "", area: ""}
   )
+
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
   console.log(props.usuario)
   useEffect(() => {
@@ -67,7 +72,7 @@ export default function Profile(props) {
                 </Link>
                 <br />
                 <Link to='/'>
-                    <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold" onClick={() => {logout()}}>Cerrar sesión</button>
+                    <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold" onClick={() => {logout(); window.location.assign('/')}}>Cerrar sesión</button>
                 </Link>
               </div>
             </div>
