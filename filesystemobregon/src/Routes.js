@@ -16,7 +16,7 @@ function RoutesComp() {
   return (
     <>
       <Routes>
-        {userContext != {} && (
+        {userContext != null && (
         <>
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Home />} />
@@ -26,7 +26,7 @@ function RoutesComp() {
           <Route path="/search" element={<Search />} />
         </>
         )}
-        {userContext == {} && (
+        {userContext == null && (
           <>
             <Route path="/" element={<Login />} />
           </>
