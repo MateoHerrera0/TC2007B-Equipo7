@@ -38,7 +38,7 @@ export default function Profile(props) {
 
   return (
     <div className='profile-view'>
-      <Navbar />
+      {props.navbar}
         <div className='section p-5 mx-5'>
         <div className='container bg-white rounded-3 shadow'>
           <div className='row'>

@@ -26,6 +26,11 @@ const SearchUsers = () => {
       console.log(data);
     }
 
+    const gridUserSelectionChange = (gridUser, selection) => {
+        // let selectedData = gridUser.data.data[selection.index];
+        const selectedData = selection.selectedRows[0].dataItem;
+        console.log(selectedData);
+    }
     const [dataState, setDataState] = React.useState()
     const [res, setResult] = React.useState(data);
     useEffect(() => { setResult(data)}, [data] );
@@ -98,7 +103,8 @@ const SearchUsers = () => {
                     pageSizes: true
                     }}
                     onDataStateChange={onDataStateChange}
-                    filterOperators={filterOperators}{...dataState}>
+                    filterOperators={filterOperators}{...dataState}
+                    selectionChange="gridUserSelectionChange(gridUser, $event)">
                   <GridColumn field="usuario" title="Usuario" width="auto"/>
                   <GridColumn field="email" title="Correo" width="auto"/>
                   <GridColumn field="userType" title="Tipo de Usuario" width="auto"/>

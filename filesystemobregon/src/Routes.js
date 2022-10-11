@@ -10,6 +10,8 @@ import Profile from './components/profile'
 import Register from './components/register'
 import Search from './components/search'
 import SearchUsers from './components/userManagement'
+import Navbar from './components/navbar'
+import AdminNavbar from './components/adminNavbar'
 
 function RoutesComp() {
   const userContext = useContext(UserContext)
@@ -38,7 +40,7 @@ function RoutesComp() {
           <Route path="/register" element={<Register />} />
           <Route path='/userManagement' element={<SearchUsers />} />
           <Route path='/' element={<SearchUsers />} />
-          <Route path="/profile" element={<Profile usuario = {userContext} />} />
+          <Route path="/profile" element={<Profile usuario = {userContext} navbar = {<AdminNavbar />}/>} />
         </>
         )}
         {userContext != null && user.userType == "Usuario" && (
@@ -46,7 +48,7 @@ function RoutesComp() {
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Home />} />
           <Route path="/newFile" element={<Newfile />} />
-          <Route path="/profile" element={<Profile usuario = {userContext} />} />
+          <Route path="/profile" element={<Profile usuario = {userContext} navbar = {<Navbar />}/>} />
           <Route path="/search" element={<Search />} />
         </>
         )}
