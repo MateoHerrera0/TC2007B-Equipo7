@@ -160,6 +160,7 @@ app.get("/api/getAllUsers", async (req, res) => {
 
 
 app.get("/api/logout", (req, res) => {
+  console.log(req.session);
   req.session.destroy()
   res.json({})
 })
@@ -316,25 +317,26 @@ app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
   }
 })
 
-app.get("/api/getDocs", async (req, res) => {
-  try {
-    const cursor = db.collection("docs").find(); // cambiar xq las colleciones se dividieron
-    const data = await cursor.toArray();
-    res.json(data);
-  } catch (error) {
-    res.status(500);
-    res.json(error);
-    console.log(error);
-  }
-})
+// app.get("/api/getDocs", async (req, res) => {
+//   try {
+//     const cursor = db.collection("docs").find(); // cambiar xq las colleciones se dividieron
+//     const data = await cursor.toArray();
+//     res.json(data);
+//   } catch (error) {
+//     res.status(500);
+//     res.json(error);
+//     console.log(error);
+//   }
+// })
 
-app.post("/api/getDocNames", async (request, response) => {
+app.post("/api/getDocs", async (request, response) => {
   try {
     let searchValue = {}
     if (request.body.docID != null) {
-      searchValue = {"docID" : {$regex : request.body.docID}}
+      searchValue = request.body.query
     }
-    const cursor = db.collection(request.body.docType).find(searchValue, {projection: {"docID": 1}});
+    // {"docID" : {$regex : request.body.docID}
+    const cursor = db.collection(request.body.docType).find(searchValue, request.body.projection);
     const data = await cursor.toArray();
     response.json(data);
   } catch (error) {
