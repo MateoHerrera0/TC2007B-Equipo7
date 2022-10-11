@@ -1,17 +1,25 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import axios from "axios";
+import { fields } from "./fieldsSearch";
 import * as ReactDOM from "react-dom";
 import { Link } from 'react-router-dom';
 import Navbar from './navbar'
-import Dropdown from 'react-bootstrap/Dropdown';
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
-//import { DropDownList } from "@progress/kendo-react-dropdowns";
-//import { GridPDFExport } from "@progress/kendo-react-pdf";
 import { process } from "@progress/kendo-data-query";
 import {IntlProvider, LocalizationProvider} from "@progress/kendo-react-intl";
 import '@progress/kendo-theme-default/dist/all.css';
 import "./search.css";
+
+function reducer(state, event) {
+  if (event.reset) {
+    return {}
+  }
+  
+  return {...state,
+    [event.id]: event.value
+  }
+}
 
 const Search = () => {
     const [data, setData] = useState([]);
@@ -34,9 +42,35 @@ const Search = () => {
         setResult(process(data, event.dataState));
     }
 
-    const [area, setArea] = useState({
-      area: "Área"
-    })
+    const [formData, setFormData] = useReducer(reducer, {})
+
+    const nulidadFields = [
+      fields.expediente, 
+      fields.tja,
+      fields.actor,
+      fields.domicilio,
+      fields.acto,
+      fields.eJuridico,
+      fields.eProcesal,
+      fields.materia,
+      fields.demandado,
+      fields.nombre,
+      fields.folio
+    ]
+
+    const carpetaFields = [
+      fields.eco,
+      fields.denuciante,
+      fields.imputado,
+      fields.delito,
+      fields.lugar,
+      fields.objeto,
+      fields.eGuarda,
+      fields.nombre,
+      fields.folio
+    ]
+
+    const [fieldsToUse, setFields] = useState(nulidadFields)
 
     const filterOperators = {
         text: [
@@ -77,19 +111,16 @@ const Search = () => {
     };
     return (
         <div>
-          
             <Navbar />
             <br></br> <h2 id="Titulo"> Búsqueda de Expedientes </h2> <br></br>
-            <Dropdown className="d-inline mx-2" id="dropDownBusqueda" onSelect={(e) => {setArea({...area, "area": e})}} >
-              <Dropdown.Toggle id="dropDownBusqueda" name="areaType">
-                {area.area}
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item eventKey="Juicio de Nulidad">Juicio de Nulidad</Dropdown.Item>
-                <Dropdown.Item eventKey= "Carpeta de Investigación" >Carpeta de Investigación</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <div className="row text-center p-5">
+              <div className="col">
+                <button type="button" className="btn btn-primary" onClick={() => {setFields(nulidadFields); setFormData({reset: true})}}>Juicio de Nulidad</button>
+              </div>
+              <div className="col">
+                  <button type="button" className="btn btn-primary" onClick={() => {setFields(carpetaFields); setFormData({reset: true})}}>Carpeta de Investigacion</button>
+              </div>
+            </div>
             <br></br>
 
             <LocalizationProvider language="es-ES"> 
@@ -109,7 +140,14 @@ const Search = () => {
                     }}
                     onDataStateChange={onDataStateChange}
                     filterOperators={filterOperators}{...dataState}>
-                  <GridColumn field="expediente" title="Expediente" width="auto"/>
+                    {fieldsToUse.map((value) => {
+                      return( 
+                      <GridColumn
+                        field = {fields.id}
+                        title = {fields.label}
+                      />
+                    )})}
+                  {/* <GridColumn field="expediente" title="Expediente" width="auto"/>
                   <GridColumn field="tja" title="Sala del TJA" width="auto"/>
                   <GridColumn field="actor" title="Actor" width="auto"/>
                   <GridColumn field="domicilio" title="Domicilio" width="auto"/>
@@ -118,7 +156,7 @@ const Search = () => {
                   <GridColumn field="eProcesal" title="Estado Procesal" width="auto"/>
                   <GridColumn field="materia" title="Materia" width="auto"/>
                   <GridColumn field="demandado" title="Demandado" width="auto"/>
-                  <GridColumn field="usuario" title="Usuario" width="auto"/>
+                  <GridColumn field="usuario" title="Usuario" width="auto"/> */}
               </Grid>
             </IntlProvider>
           </LocalizationProvider>
