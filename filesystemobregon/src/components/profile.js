@@ -67,7 +67,7 @@ export default function Profile(props) {
             <div className="col-md text-md-end text-center p-5">
               <p className="display-1"><strong>Imagen</strong></p>
               <div>
-                <Link to='/home'>
+                <Link to='/'>
                     <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Regresar a inicio</button>
                 </Link>
                 <br />
