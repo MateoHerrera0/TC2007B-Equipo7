@@ -4,6 +4,7 @@ import axios from "axios";
 import * as ReactDOM from "react-dom";
 import { Link } from 'react-router-dom';
 import Navbar from './navbar'
+import Dropdown from 'react-bootstrap/Dropdown';
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 //import { DropDownList } from "@progress/kendo-react-dropdowns";
 //import { GridPDFExport } from "@progress/kendo-react-pdf";
@@ -32,6 +33,10 @@ const Search = () => {
         setDataState(event.dataState);
         setResult(process(data, event.dataState));
     }
+
+    const [area, setArea] = useState({
+      area: "Área"
+    })
 
     const filterOperators = {
         text: [
@@ -75,7 +80,20 @@ const Search = () => {
           
             <Navbar />
             <br></br> <h2 id="Titulo"> Búsqueda de Expedientes </h2> <br></br>
+            <Dropdown className="d-inline mx-2" id="dropDownBusqueda" onSelect={(e) => {setArea({...area, "area": e})}} >
+              <Dropdown.Toggle id="dropDownBusqueda" name="areaType">
+                {area.area}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item eventKey="Juicio de Nulidad">Juicio de Nulidad</Dropdown.Item>
+                <Dropdown.Item eventKey= "Carpeta de Investigación" >Carpeta de Investigación</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            <br></br>
+
             <LocalizationProvider language="es-ES"> 
+              <br></br>
                 <IntlProvider locale="es">
                 <Grid
                     data={res}
