@@ -27,7 +27,7 @@ export default function PutFolio(props) {
             'Accept': 'application/json',
             'Content-Type': 'application/json', 
           },
-          body: JSON.stringify({'docID': inputValue, 
+          body: JSON.stringify({
           'docType': docType, 
           'query': {"docID" : {$regex : inputValue}},
           'projection': {projection: {"docID": 1}}}),

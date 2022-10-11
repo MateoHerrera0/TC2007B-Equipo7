@@ -48,10 +48,18 @@ async function putDocument(formData, setFormData) {
   }
 }
 
-async function getDocumentInfo(setData) {
+async function getDocs(reqBody, setData) {
   try {
-    await fetch('api/getDocs', {
-      method: "GET"
+    await fetch('/api/getDocs', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json', 
+      },
+      body: JSON.stringify({
+      'docType': reqBody.docType, 
+      'query': {"docID" : {$regex : reqBody.inputValue}},
+      'projection': reqBody.projection}),
+      method: "POST",
     })
       .then(response => response.json())
       .then(response => {
@@ -154,4 +162,4 @@ async function logout(){
   } 
 }
 
-export { addDocument, getDocumentInfo, putDocument, addUser, logUser, logout};
+export { addDocument, putDocument, addUser, logUser, logout};
