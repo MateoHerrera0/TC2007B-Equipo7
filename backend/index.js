@@ -3,7 +3,7 @@ const fs = require("fs")
 const bodyparser = require("body-parser")
 const multer = require("multer")
 const crypto = require("crypto")
-const {MongoClient, Binary} = require("mongodb")
+const {MongoClient, Binary, ObjectId} = require("mongodb")
 
 const app = express();
 app.use(bodyparser.urlencoded({extended:true}))
@@ -60,11 +60,11 @@ app.post("/api/adddoc", uploads.single("file"), (req, res) => {
     outputFS.on("finish", function() {
       fs.unlink(__dirname + "/.temp/" +req.file.filename, (err) => {
         if (err) throw err;
-        let pair = {};
-        pair.folio = folio;
+        let Folio = {};
+        Folio.folio = folio;
         let fileToUpload = fs.readFileSync(lugarGuardar);
-        pair.archivo = Binary(fileToUpload);
-        let aInsertar = {...body, "archivos": [pair]};
+        Folio.archivo = Binary(fileToUpload);
+        let aInsertar = {...body, "archivos": [Folio]};
         db.collection("docs").insertOne(aInsertar, (err,res) => {
           if (err) throw err;
           console.log("Guardado");
@@ -85,12 +85,62 @@ app.post("/api/adddoc", uploads.single("file"), (req, res) => {
 app.post("/api/addpath", uploads.single("file"), (req, res) => {
   try {
     let body = req.body;
-    let folio = req.body.folio;
-    let nombre = req.body.nombre;
+    // let folio = req.body.folio;
+    // let nombre = req.body.nombre;
     let collection = req.body.docType;
     delete(body.folio)
     delete(body.docType)
     delete(body.nombre)
+
+    db.collection(collection).insertOne(body, (err,res) => {
+      if (err) throw err;
+      console.log("Expediente Guardado");
+    })
+    res.json({'message': "Data inserted correctly."});
+
+    // const cursor = db.collection(collection).find({docID: docID}, {projection: {"_id": 1}});
+    // const data = await cursor.toArray();
+    // console.log(data)
+
+  //   let rutaDefinitiva = "/.storage/" + folio;
+  //   let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
+  //   let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
+  //   let key="abcabcabcabcabcabcabcabcabcabc12"
+  //   let iv= "abcabcabcabcabc1"
+  //   let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
+  //   inputFS.pipe(cipher).pipe(outputFS)
+  //   outputFS.on("finish", () => {
+  //     let Folio = {};
+  //     Folio.folio = folio;
+  //     Folio.archivo = rutaDefinitiva;
+  //     Folio.nombre = nombre;
+  //     Folio.expedienteID = data[0]._id
+  //     fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
+  //     db.collection("folios").insertOne(Folio, (err,res) => {
+  //       if (err) throw err;
+  //       console.log("Folio Guardado");
+  //     })
+  //   })
+  //   res.json({'message': "Data inserted correctly."});
+  } catch (error) {
+    res.status(500);
+    res.json(error);
+    console.log(error);
+  }
+  
+})
+
+app.post("/api/addFirstFolio", uploads.single("file"), async (req,res) => {
+  try {
+    let folio = req.body.folio;
+    let nombre = req.body.nombre;
+    let docID = req.body.docID
+    let collection = req.body.docType;
+
+    const cursor = db.collection(collection).find({docID: docID}, {projection: {"_id": 1}});
+    const data = await cursor.toArray();
+    console.log(data)
+
     let rutaDefinitiva = "/.storage/" + folio;
     let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
     let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
@@ -99,15 +149,15 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
     let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
     inputFS.pipe(cipher).pipe(outputFS)
     outputFS.on("finish", () => {
-      let pair = {};
-      pair.folio = folio;
-      pair.archivo = rutaDefinitiva;
-      pair.nombre = nombre;
+      let Folio = {};
+      Folio.folio = folio;
+      Folio.archivo = rutaDefinitiva;
+      Folio.nombre = nombre;
+      Folio.expedienteID = data[0]._id
       fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
-      let aInsertar = {...req.body, "archivos": [pair] };
-      db.collection(collection).insertOne(aInsertar, (err,res) => {
+      db.collection("folios").insertOne(Folio, (err,res) => {
         if (err) throw err;
-        console.log("Guardado");
+        console.log("Folio Guardado");
       })
     })
     res.json({'message': "Data inserted correctly."});
@@ -116,7 +166,6 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
     res.json(error);
     console.log(error);
   }
-  
 })
 
 app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
@@ -129,13 +178,15 @@ app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
     let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
     inputFS.pipe(cipher).pipe(outputFS)
     outputFS.on("finish", () => {
-      let pair = {};
-      pair.folio = req.body.folio;
-      pair.archivo = rutaDefinitiva;
+      let Folio = {};
+      Folio.folio = req.body.folio;
+      Folio.archivo = rutaDefinitiva;
+      Folio.nombre = req.body.nombre;
+      Folio.expedienteID = ObjectId(req.body.proceeding)
       fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
-      db.collection("docs").updateOne({_id: req.body.docID}, {$push: { archivos: pair }}, (err, res) => {
+      db.collection("folios").insertOne(Folio, (err,res) => {
         if (err) throw err;
-        console.log("Agregado")
+        console.log("Folio Guardado");
       })
     })
     res.json({'message': "Data updated correctly"})
@@ -160,11 +211,11 @@ app.get("/api/getDocs", async (req, res) => {
 
 app.post("/api/getDocNames", async (request, response) => {
   try {
-    let searchValue ={}
+    let searchValue = {}
     if (request.body.docID != null) {
       searchValue = {"docID" : {$regex : request.body.docID}}
     }
-    const cursor = db.collection("docs").find(searchValue, {projection: {"docID": 1}});
+    const cursor = db.collection(request.body.docType).find(searchValue, {projection: {"docID": 1}});
     const data = await cursor.toArray();
     response.json(data);
   } catch (error) {

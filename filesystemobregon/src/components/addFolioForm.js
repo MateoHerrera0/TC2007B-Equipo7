@@ -12,7 +12,14 @@ function reducer(state, event) {
   }
 }
 
-export default function PutFolio() {
+export default function PutFolio(props) {
+  const [docType, setDocType] = useState(props.docType)
+
+  if (docType != props.docType) {
+    setDocType(props.docType)
+  }
+
+  console.log(props.docType)
   const fetchData = (inputValue, callback) => {
     setTimeout(() => {
         fetch('/api/getDocNames', {
@@ -20,13 +27,14 @@ export default function PutFolio() {
             'Accept': 'application/json',
             'Content-Type': 'application/json', 
           },
-          body: JSON.stringify({'docID': inputValue}),
+          body: JSON.stringify({'docID': inputValue, 'docType': docType}),
           method: "POST",
         })
         .then((resp) => {
           return resp.json();
         })
         .then((data) => {
+          console.log(data);
           const tempArray = [];
           if (data) {
             if (data.length) {
@@ -64,7 +72,6 @@ export default function PutFolio() {
     event.preventDefault();
     let formElem = document.querySelector("#folioForm")
     putDocument(formElem, setFormData)
-    console.log(formData);
     document.querySelector("#file").value = null;
   }
 
@@ -84,6 +91,7 @@ export default function PutFolio() {
             <AsyncSelect
               loadOptions={fetchData}
               defaultOptions={true}
+              name = "proceeding"
             />
           </div>
           {fieldsToUse.map((value, index) => {

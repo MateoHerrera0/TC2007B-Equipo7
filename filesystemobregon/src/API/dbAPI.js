@@ -8,8 +8,16 @@ async function addDocument(formData, setFormData) {
       body: formBody
     })
       .then(response => response.json())
-      .then(response => {
-        console.log("addDocument response: " + response);
+      .then( async () => {
+        await fetch('/api/addFirstFolio', {
+          method: "POST",
+          body: formBody
+        })
+          .then(response => response.json())
+          .then(response => {
+            console.log("addDocument response: " + response);
+            window.location.reload()
+          })
       })
     setFormData({ reset: true });
   } catch(error) {
@@ -31,6 +39,7 @@ async function putDocument(formData, setFormData) {
       .then(response => response.json())
       .then(response => {
         console.log("addDocument response: " + response);
+        window.location.reload()
       })
     setFormData({ reset: true });
   } catch(error) {
