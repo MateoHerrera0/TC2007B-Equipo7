@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
 import {addUser} from "../API/dbAPI";
 import Dropdown from 'react-bootstrap/Dropdown';
+import AdminNavbar from "./adminNavbar";
 
 
 export default function Register(props){
@@ -19,11 +20,17 @@ export default function Register(props){
     setUser({...user, [name]: value})
   }
 
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
   function handleSubmit(event) {
     event.preventDefault();
     addUser(user);
+    delay(1000).then(() => window.location.reload());
   }
     return (
+      <div>
+      <AdminNavbar />
       <div className="container">
       <div className="row">
         <section className="vh-100" >
@@ -117,6 +124,7 @@ export default function Register(props){
           </div>
         </section>
       </div>
+  </div>
   </div>
   );
 };

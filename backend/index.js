@@ -147,6 +147,19 @@ app.get("/api/sessionExists", async (req, res) => {
   }
 })
 
+app.get("/api/getAllUsers", async (req, res) => {
+  try {
+    const cursor = db.collection("usuarios").find(); // cambiar xq las colleciones se dividieron
+    const data = await cursor.toArray();
+    res.json(data);
+  } catch (error) {
+    res.status(500);
+    res.json(error);
+    console.log(error);
+  }
+})
+
+
 app.get("/api/logout", (req, res) => {
   req.session.destroy()
   res.json({})
