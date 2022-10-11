@@ -89,7 +89,7 @@ const fields = {
       label: "Objeto del Delito"
     },
 
-    estado: {
+    eGuarda: {
       id: "eGuarda",
       label: "Estado que Guarda"
     },
