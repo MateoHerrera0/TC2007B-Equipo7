@@ -46,10 +46,7 @@ export default function PutFolio(props) {
                 });
               });
             } else {
-              tempArray.push({
-                label: `${data.body}`,
-                value: data.id,
-              });
+              
             }
           }
           callback(tempArray);
