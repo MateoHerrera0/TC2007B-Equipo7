@@ -139,15 +139,16 @@ async function logUser(userData){
 async function logout(){
   try {
     await fetch('/api/logout', {
-      method: "GET"
+      method: "GET",
     })
       .then(response => response.json())
       .then(response => {
         console.log("Session deleted " + response);
+        window.location.assign('/')
         return response;
       })
   } catch (error) {
-    console.log("ERROR at 'getDocumentNames'");
+    console.log("ERROR at logout");
     console.log(error);
     return [];
   } 

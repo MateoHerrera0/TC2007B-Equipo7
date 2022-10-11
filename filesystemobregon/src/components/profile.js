@@ -72,7 +72,7 @@ export default function Profile(props) {
                 </Link>
                 <br />
                 <Link to='/'>
-                    <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold" onClick={() => {logout(); window.location.assign('/')}}>Cerrar sesión</button>
+                    <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold" onClick={() => {logout()}}>Cerrar sesión</button>
                 </Link>
               </div>
             </div>

@@ -22,12 +22,15 @@ export default function PutFolio(props) {
   console.log(props.docType)
   const fetchData = (inputValue, callback) => {
     setTimeout(() => {
-        fetch('/api/getDocNames', {
+        fetch('/api/getDocs', {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json', 
           },
-          body: JSON.stringify({'docID': inputValue, 'docType': docType}),
+          body: JSON.stringify({'docID': inputValue, 
+          'docType': docType, 
+          'query': {"docID" : {$regex : inputValue}},
+          'projection': {projection: {"docID": 1}}}),
           method: "POST",
         })
         .then((resp) => {
