@@ -28,7 +28,7 @@ const Search = () => {
       }, [])
   
     const getData = async () => {
-      const res = await axios.get('/api/getDocs')
+      const res = await axios.post('/api/getDocs', )
       setData(res.data);
       console.log(data);
     }
