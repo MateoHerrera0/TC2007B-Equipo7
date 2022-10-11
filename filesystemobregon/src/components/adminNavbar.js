@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Navbar() {
+export default function AdminNavbar() {
   const[expand, setExpand] = useState("collapse navbar-collapse");
   
   return(
@@ -20,13 +20,10 @@ export default function Navbar() {
     <div className={expand} id="navbarSupportedContent">
       <ul className="navbar-nav me-auto mb-2 mb-lg-0">
         <li className="nav-item">
-          <a className="nav-link active" aria-current="page" href="/home">Inicio</a>
+          <a className="nav-link active" aria-current="page" href="/home">Manejo de usuarios</a>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="/newfile">Subir</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="/search">Buscar</a>
+          <a className="nav-link" href="/newfile">Historiales</a>
         </li>
       </ul>
       <span>

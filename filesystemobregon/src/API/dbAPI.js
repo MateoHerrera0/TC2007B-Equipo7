@@ -85,4 +85,72 @@ async function getDocumentInfo(setData) {
 //   } 
 // } 
 
-export { addDocument, getDocumentInfo, putDocument};
+async function addUser(userData){
+  try {
+    await fetch('/api/register', {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        usuario: userData.usuario, 
+        email: userData.email, 
+        password: userData.password, 
+        repPassword: userData.repPassword,
+        userType: userData.userType,
+        area: userData.area
+      })
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log("UserInfo response " + response);
+        return response;
+      })
+  } catch (error) {
+    console.log("ERROR at 'addUser'");
+    console.log(error);
+    return [];
+  } 
+}
+
+async function logUser(userData){
+  try {
+    await fetch('/api/login', {
+      mode: 'cors',
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      withCredentials: 'true',
+      credentials: 'include',
+      body: JSON.stringify({
+        email: userData.email, 
+        password: userData.password, 
+      })
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log("UserInfo response " + response);
+        return response;
+      })
+  } catch (error) {
+    console.log("ERROR at 'getDocumentNames'");
+    console.log(error);
+    return [];
+  } 
+}
+
+async function logout(){
+  try {
+    await fetch('/api/logout', {
+      method: "GET"
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log("Session deleted " + response);
+        return response;
+      })
+  } catch (error) {
+    console.log("ERROR at 'getDocumentNames'");
+    console.log(error);
+    return [];
+  } 
+}
+
+export { addDocument, getDocumentInfo, putDocument, addUser, logUser, logout};

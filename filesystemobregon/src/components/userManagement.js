@@ -1,38 +1,36 @@
 import React from "react";
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { fields } from "./fieldsSearch";
 import * as ReactDOM from "react-dom";
 import { Link } from 'react-router-dom';
 import Navbar from './navbar'
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
+//import { DropDownList } from "@progress/kendo-react-dropdowns";
+//import { GridPDFExport } from "@progress/kendo-react-pdf";
 import { process } from "@progress/kendo-data-query";
 import {IntlProvider, LocalizationProvider} from "@progress/kendo-react-intl";
 import '@progress/kendo-theme-default/dist/all.css';
 import "./search.css";
+import { UserContext } from '../app';
+import AdminNavbar from "./adminNavbar";
 
-function reducer(state, event) {
-  if (event.reset) {
-    return {}
-  }
-  
-  return {...state,
-    [event.id]: event.value
-  }
-}
-
-const Search = () => {
+const SearchUsers = () => {
     const [data, setData] = useState([]);
       useEffect( ()=> {
         getData();
       }, [])
   
     const getData = async () => {
-      const res = await axios.get('/api/getDocs')
+      const res = await axios.get('/api/getAllUsers')
       setData(res.data);
       console.log(data);
     }
 
+    const gridUserSelectionChange = (gridUser, selection) => {
+        // let selectedData = gridUser.data.data[selection.index];
+        const selectedData = selection.selectedRows[0].dataItem;
+        console.log(selectedData);
+    }
     const [dataState, setDataState] = React.useState()
     const [res, setResult] = React.useState(data);
     useEffect(() => { setResult(data)}, [data] );
@@ -41,36 +39,6 @@ const Search = () => {
         setDataState(event.dataState);
         setResult(process(data, event.dataState));
     }
-
-    const [formData, setFormData] = useReducer(reducer, {})
-
-    const nulidadFields = [
-      fields.expediente, 
-      fields.tja,
-      fields.actor,
-      fields.domicilio,
-      fields.acto,
-      fields.eJuridico,
-      fields.eProcesal,
-      fields.materia,
-      fields.demandado,
-      fields.nombre,
-      fields.folio
-    ]
-
-    const carpetaFields = [
-      fields.eco,
-      fields.denuciante,
-      fields.imputado,
-      fields.delito,
-      fields.lugar,
-      fields.objeto,
-      fields.eGuarda,
-      fields.nombre,
-      fields.folio
-    ]
-
-    const [fieldsToUse, setFields] = useState(nulidadFields)
 
     const filterOperators = {
         text: [
@@ -111,20 +79,16 @@ const Search = () => {
     };
     return (
         <div>
-            <Navbar />
-            <br></br> <h2 id="Titulo"> Búsqueda de Expedientes </h2> <br></br>
+          
+            <AdminNavbar />
+            <br></br> <h2 id="Titulo"> Manejo de usuarios </h2> <br></br>
             <div className="row text-center p-5">
               <div className="col">
-                <button type="button" className="btn btn-primary" onClick={() => {setFields(nulidadFields); setFormData({reset: true})}}>Juicio de Nulidad</button>
-              </div>
-              <div className="col">
-                  <button type="button" className="btn btn-primary" onClick={() => {setFields(carpetaFields); setFormData({reset: true})}}>Carpeta de Investigacion</button>
+              <Link to='/register'>
+                <button type="button" className="btn btn-primary btn-lg fw-bold">Agregar Usuario</button> </Link>
               </div>
             </div>
-            <br></br>
-
             <LocalizationProvider language="es-ES"> 
-              <br></br>
                 <IntlProvider locale="es">
                 <Grid
                     data={res}
@@ -139,24 +103,12 @@ const Search = () => {
                     pageSizes: true
                     }}
                     onDataStateChange={onDataStateChange}
-                    filterOperators={filterOperators}{...dataState}>
-                    {fieldsToUse.map((value) => {
-                      return( 
-                      <GridColumn
-                        field = {fields.id}
-                        title = {fields.label}
-                      />
-                    )})}
-                  {/* <GridColumn field="expediente" title="Expediente" width="auto"/>
-                  <GridColumn field="tja" title="Sala del TJA" width="auto"/>
-                  <GridColumn field="actor" title="Actor" width="auto"/>
-                  <GridColumn field="domicilio" title="Domicilio" width="auto"/>
-                  <GridColumn field="acto" title="Acto" width="auto"/>
-                  <GridColumn field="eJuridico" title="Estado Jurídico" width="auto"/>
-                  <GridColumn field="eProcesal" title="Estado Procesal" width="auto"/>
-                  <GridColumn field="materia" title="Materia" width="auto"/>
-                  <GridColumn field="demandado" title="Demandado" width="auto"/>
-                  <GridColumn field="usuario" title="Usuario" width="auto"/> */}
+                    filterOperators={filterOperators}{...dataState}
+                    selectionChange="gridUserSelectionChange(gridUser, $event)">
+                  <GridColumn field="usuario" title="Usuario" width="auto"/>
+                  <GridColumn field="email" title="Correo" width="auto"/>
+                  <GridColumn field="userType" title="Tipo de Usuario" width="auto"/>
+                  <GridColumn field="area" title="Área" width="auto"/>
               </Grid>
             </IntlProvider>
           </LocalizationProvider>
@@ -169,4 +121,4 @@ const Search = () => {
     )
 }
     
-export default Search;
+export default SearchUsers;
