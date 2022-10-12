@@ -332,14 +332,16 @@ app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
 app.post("/api/getDocs", async (request, response) => {
   try {
     let searchValue = {}
-    if (request.body.docID != null) {
+    if (request.body.query != null) {
       searchValue = request.body.query
     }
     // {"docID" : {$regex : request.body.docID}
     const cursor = db.collection(request.body.docType).find(searchValue, request.body.projection);
     const data = await cursor.toArray();
+    console.log(data);
     response.json(data);
   } catch (error) {
+    
     response.status(500);
     response.json(error);
     console.log(error);

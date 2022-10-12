@@ -22,15 +22,20 @@ function reducer(state, event) {
 }
 
 const Search = () => {
+    const [docType, setDocType] = useState({docType: "nulidad"});
+    
     const [data, setData] = useState([]);
       useEffect( ()=> {
-        getData();
+        getData({docType: "juicioNulidad"});
       }, [])
-  
-    const getData = async () => {
-      const res = await axios.post('/api/getDocs', )
-      setData(res.data);
-      console.log(data);
+
+    const getData = async (docJson) => {
+      console.log(docJson);
+      await axios.post('/api/getDocs', {... docJson, query:{}, projection: {}})
+      .then(response => {
+        setData(response.data);
+        console.log(response.data);
+      })
     }
 
     const [dataState, setDataState] = React.useState()
@@ -115,10 +120,22 @@ const Search = () => {
             <br></br> <h2 id="Titulo"> Búsqueda de Expedientes </h2> <br></br>
             <div className="row text-center p-5">
               <div className="col">
-                <button type="button" className="btn btn-primary" onClick={() => {setFields(nulidadFields); setFormData({reset: true})}}>Juicio de Nulidad</button>
+                <button type="button" className="btn btn-primary" onClick={
+                  () => {
+                    setFields(nulidadFields);
+                    setFormData({reset: true});
+                    setDocType({docType: "juicioNulidad"});
+                    getData({docType: "juicioNulidad"});
+                  }}>Juicio de Nulidad</button>
               </div>
               <div className="col">
-                  <button type="button" className="btn btn-primary" onClick={() => {setFields(carpetaFields); setFormData({reset: true})}}>Carpeta de Investigacion</button>
+                  <button type="button" className="btn btn-primary" onClick={
+                    () => {
+                      setFields(carpetaFields);
+                      setFormData({reset: true});
+                      setDocType({docType: "carpetaInvestigacion"});
+                      getData({docType: "carpetaInvestigacion"});
+                    }}>Carpeta de Investigacion</button>
               </div>
             </div>
             <br></br>
@@ -127,7 +144,7 @@ const Search = () => {
               <br></br>
                 <IntlProvider locale="es">
                 <Grid
-                    data={res}
+                    data={data}
                     style={{
                     height: "auto",
                     }}
