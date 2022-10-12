@@ -4,7 +4,12 @@
     font-weight: bolder;
 };
 
-#dropDownBusqueda {
-    color: blueviolet;
-    text-align: center;
+#buttonBusqueda {
+    color: blueviolet !important ;
+    border-color: blueviolet !important ;
+}
+
+.btn {
+    background-color: blueviolet !important ;
+    border-color: blueviolet !important ;
 };

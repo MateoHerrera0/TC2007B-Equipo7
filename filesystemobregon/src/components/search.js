@@ -2,8 +2,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { fields } from "./fieldsSearch";
-import * as ReactDOM from "react-dom";
-import { Link } from 'react-router-dom';
+//import * as ReactDOM from "react-dom";
+//import { Link } from 'react-router-dom';
 import Navbar from './navbar'
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { process } from "@progress/kendo-data-query";
@@ -103,10 +103,10 @@ const Search = () => {
     return (
         <div>
             <Navbar />
-            <br></br> <h2 id="Titulo"> Búsqueda de Expedientes </h2> <br></br>
+            <br></br> <h2 id="Titulo"> Búsqueda de Expedientes </h2> 
             <div className="row text-center p-5">
               <div className="col">
-                <button type="button" className="btn btn-primary" onClick={
+                <button type="button" className="btn btn-primary" id="buttonBusqueda" onClick={
                   () => {
                     setFields(nulidadFields);
                     setDocType({docType: "juicioNulidad"});
@@ -114,7 +114,7 @@ const Search = () => {
                   }}>Juicio de Nulidad</button>
               </div>
               <div className="col">
-                  <button type="button" className="btn btn-primary" onClick={
+                  <button type="button" className="btn btn-primary" id="buttonBusqueda" onClick={
                     () => {
                       setFields(carpetaFields);
                       setDocType({docType: "carpetaInvestigacion"});
@@ -122,7 +122,6 @@ const Search = () => {
                     }}>Carpeta de Investigacion</button>
               </div>
             </div>
-            <br></br>
 
             <LocalizationProvider language="es-ES"> 
               <br></br>
