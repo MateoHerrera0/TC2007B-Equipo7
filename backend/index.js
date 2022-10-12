@@ -288,8 +288,9 @@ app.post("/api/getDocs", async (request, response) => {
 app.post("/api/getFolios", async (request, response) => {
   try {
     let searchValue = request.body.query
+    console.log(searchValue);
     // {"docID" : {$regex : request.body.docID}
-    const cursor = db.collection("folios").find(searchValue);
+    const cursor = db.collection("folios").find({expedienteID: ObjectId(searchValue)});
     const data = await cursor.toArray();
     console.log(data);
     response.json(data);
