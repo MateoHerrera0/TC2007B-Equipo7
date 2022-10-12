@@ -32,10 +32,10 @@ export default function Home() {
         <div className="container p-5">
           <div className="row align-items-center">
             <div className="col-md-5 text-md-end text-center order-md-5">
-              <p className="title text-info"><strong>Busca archivos</strong></p>
+              <p className="title"><strong>Busca archivos</strong></p>
               <p className="lead fs-5">Haz click en el boton y busca los archivos que necesites</p>
               <Link to='/search'>
-                <button type="button" className="btn btn-primary btn-sm rounded-3 bg-dark fw-bold">Buscar archivo</button>
+                <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Buscar archivo</button>
               </Link>
             </div>
             <div className="col-md text-md-start text-center order-md-1 pt-md-0 pt-5">
@@ -49,8 +49,8 @@ export default function Home() {
         <div className='container bg-white rounded-3 shadow'>
           <div className='row'>
             <div className="col-md-5 text-md-start text-center p-5">
-              <p className="fs-1"><strong>Consulta las instrucciones aquí</strong></p>
-              <p className="fw-bold">Subir archivos:</p>
+              <p className="fs-1"><strong>¿Cómo subir mis archivos?</strong></p>
+              <p className="fw-bold">Instrucciones:</p>
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
                   <p className="fs-3"><strong>Paso 1</strong></p>
@@ -74,12 +74,26 @@ export default function Home() {
       </div>
 
       <div className='section px-5 mx-5'>
-        <div className='container'>
+        <div className='container bg-white rounded-3 shadow'>
           <div className='row'>
             <div className="col-md-6 justify-content-start text-md-start text-center p-5 order-md-5">
-              <p className="fw-bold">Subir archivos:</p>
-              <p className="fs-2"><strong>Ingresa a la sección de búsqueda</strong></p>
-              <p className='fw-lighter'>Utiliza los filtros para encontrar rápidamente los archivos que necesites, mediante folio, nombre, o categoría.</p>
+              <p className="fs-1"><strong>¿Cómo buscar documentos?</strong></p>
+              <p className="fw-bold">Conoce el sistema de búsqueda:</p>
+              <ul className="list-group list-group-flush"> 
+                <li className="list-group-item">
+                    <p className="fs-3"><strong>Paso 1</strong></p>
+                    <p className='fw-lighter'>Utiliza los filtros para encontrar rápidamente los expedientes que necesites, mediante expediente, materia, acto, estado, etc.</p>
+                </li>
+                <li className="list-group-item">
+                    <p className="fs-3"><strong>Paso 2</strong></p>
+                    <p className='fw-lighter'>Selecciona un expediente y haz click en el botón de "Folios" </p>
+                </li>
+                <li className="list-group-item">
+                    <p className="fs-3"><strong>Paso 3</strong></p>
+                    <p className='fw-lighter'>Utiliza los filtros para encontrar el documento y ¡descarga! </p>
+                </li>
+              </ul>
+              
             </div>
             <div className="col-md text-md-start text-center p-5 order-md-1">
               <p className="display-1"><img src={instructions1} alt='search image' width='60%'/></p>
