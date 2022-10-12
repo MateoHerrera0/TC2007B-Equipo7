@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
 import axios from "axios";
 import { fields } from "./fieldsSearch";
 //import * as ReactDOM from "react-dom";
@@ -10,23 +9,36 @@ import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { process } from "@progress/kendo-data-query";
 import {IntlProvider, LocalizationProvider} from "@progress/kendo-react-intl";
 import '@progress/kendo-theme-default/dist/all.css';
-import "./search.css";
+import { useLocation } from 'react-router-dom'
 
-const Search = () => {
-    const [docType, setDocType] = useState({docType: "nulidad"});
-    
-    const [data, setData] = useState([]);
+export default function SearchDocument() {
+  const location = useLocation()
+  const { docId } = location.state
+
+  const [data, setData] = useState([]);
       useEffect( ()=> {
-        getData({docType: "juicioNulidad"});
+        getData({expedienteID: docId});
       }, [])
 
-    const getData = async (docJson) => {
-      console.log(docJson);
-      await axios.post('/api/getDocs', {... docJson, query:{ }, projection: {}})
+    const getData = async (query) => {
+      await axios.post('/api/getFolios', {query: query})
       .then(response => {
         setData(response.data);
         console.log(response.data);
       })
+    }
+
+    const download = async (id, name) => {
+      await axios.post('/api/descargarFolio', {_id: id}, {
+        responseType: 'blob',
+      }).then((res) => {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', name);
+        document.body.appendChild(link);
+        link.click();
+    })
     }
 
     const [dataState, setDataState] = React.useState()
@@ -37,32 +49,6 @@ const Search = () => {
         setDataState(event.dataState);
         setResult(process(data, event.dataState));
     }
-
-    const nulidadFields = [
-      fields.expediente, 
-      fields.tja,
-      fields.actor,
-      fields.domicilio,
-      fields.acto,
-      fields.eJuridico,
-      fields.eProcesal,
-      fields.materia,
-      fields.demandado,
-      fields.usuario
-    ]
-
-    const carpetaFields = [
-      fields.eco,
-      fields.denuciante,
-      fields.imputado,
-      fields.delito,
-      fields.lugar,
-      fields.objeto,
-      fields.eGuarda,
-      fields.usuario
-    ]
-
-    const [fieldsToUse, setFields] = useState(nulidadFields)
 
     const filterOperators = {
         text: [
@@ -104,25 +90,7 @@ const Search = () => {
     return (
         <div>
             <Navbar />
-            <br></br> <h2 id="Titulo"> Búsqueda de Expedientes </h2> 
-            <div className="row text-center p-5">
-              <div className="col">
-                <button type="button" className="btn btn-primary" id="buttonBusqueda" onClick={
-                  () => {
-                    setFields(nulidadFields);
-                    setDocType({docType: "juicioNulidad"});
-                    getData({docType: "juicioNulidad"});
-                  }}>Juicio de Nulidad</button>
-              </div>
-              <div className="col">
-                  <button type="button" className="btn btn-primary" id="buttonBusqueda" onClick={
-                    () => {
-                      setFields(carpetaFields);
-                      setDocType({docType: "carpetaInvestigacion"});
-                      getData({docType: "carpetaInvestigacion"});
-                    }}>Carpeta de Investigacion</button>
-              </div>
-            </div>
+            <br></br> <h2 id="Titulo"> Búsqueda de Folios </h2> 
 
             <LocalizationProvider language="es-ES"> 
               <br></br>
@@ -141,23 +109,23 @@ const Search = () => {
                     }}
                     onDataStateChange={onDataStateChange}
                     filterOperators={filterOperators}{...dataState}>
-                    {fieldsToUse.map((value) => {
-                      return( 
-                      <GridColumn
-                        field = {value.id} 
-                        title = {value.label}
+                    <GridColumn
+                        field = "folio" 
+                        title = "Folio"
                       />
-                    )})}
+                    <GridColumn
+                        field = "nombre" 
+                        title = "Nombre"
+                      />
                     <GridColumn
                         field = "_id" 
-                        title = "Folios"
+                        title = "Descargar Archivo"
                         cell = {(props) => 
-                        <td>
-                          <Link to="/searchFolio" state={{ expId: props.dataItem[props.field] }}>
-                            <button type="button" className="btn btn-primary btn-sm">Folios</button>
-                          </Link>
-                        </td>}
+                          <td>
+                            <button type="button" className="btn btn-primary btn-sm" onClick={() => download(props.dataItem[props.field], props.dataItem["nombre"])}>Descargar</button>
+                          </td>}
                       />
+                    
                   {/* <GridColumn field="expediente" title="Expediente" width="auto"/>
                   <GridColumn field="tja" title="Sala del TJA" width="auto"/>
                   <GridColumn field="actor" title="Actor" width="auto"/>
@@ -179,5 +147,3 @@ const Search = () => {
         </div>
     )
 }
-    
-export default Search;

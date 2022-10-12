@@ -12,6 +12,7 @@ import Search from './components/search'
 import SearchUsers from './components/userManagement'
 import Navbar from './components/navbar'
 import AdminNavbar from './components/adminNavbar'
+import SearchDocument from './components/SearchDocument'
 
 function RoutesComp() {
   const userContext = useContext(UserContext)
@@ -50,6 +51,7 @@ function RoutesComp() {
           <Route path="/newFile" element={<Newfile />} />
           <Route path="/profile" element={<Profile usuario = {userContext} navbar = {<Navbar />}/>} />
           <Route path="/search" element={<Search />} />
+          <Route path="/searchFolio" element={<SearchDocument />} />
         </>
         )}
         {userContext == null && (
