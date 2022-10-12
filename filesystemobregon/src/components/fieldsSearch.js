@@ -93,6 +93,11 @@ const fields = {
       id: "eGuarda",
       label: "Estado que Guarda"
     },
+
+    usuario: {
+        id: "usuario",
+        label: "Usuario"
+    }
 }
 
 export {fields}

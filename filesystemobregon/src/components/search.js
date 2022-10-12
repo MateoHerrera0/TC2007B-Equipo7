@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { fields } from "./fieldsSearch";
 import * as ReactDOM from "react-dom";
@@ -11,16 +11,6 @@ import {IntlProvider, LocalizationProvider} from "@progress/kendo-react-intl";
 import '@progress/kendo-theme-default/dist/all.css';
 import "./search.css";
 
-function reducer(state, event) {
-  if (event.reset) {
-    return {}
-  }
-  
-  return {...state,
-    [event.id]: event.value
-  }
-}
-
 const Search = () => {
     const [docType, setDocType] = useState({docType: "nulidad"});
     
@@ -31,7 +21,7 @@ const Search = () => {
 
     const getData = async (docJson) => {
       console.log(docJson);
-      await axios.post('/api/getDocs', {... docJson, query:{}, projection: {}})
+      await axios.post('/api/getDocs', {... docJson, query:{ }, projection: {}})
       .then(response => {
         setData(response.data);
         console.log(response.data);
@@ -47,8 +37,6 @@ const Search = () => {
         setResult(process(data, event.dataState));
     }
 
-    const [formData, setFormData] = useReducer(reducer, {})
-
     const nulidadFields = [
       fields.expediente, 
       fields.tja,
@@ -59,8 +47,7 @@ const Search = () => {
       fields.eProcesal,
       fields.materia,
       fields.demandado,
-      fields.nombre,
-      fields.folio
+      fields.usuario
     ]
 
     const carpetaFields = [
@@ -71,8 +58,7 @@ const Search = () => {
       fields.lugar,
       fields.objeto,
       fields.eGuarda,
-      fields.nombre,
-      fields.folio
+      fields.usuario
     ]
 
     const [fieldsToUse, setFields] = useState(nulidadFields)
@@ -123,7 +109,6 @@ const Search = () => {
                 <button type="button" className="btn btn-primary" onClick={
                   () => {
                     setFields(nulidadFields);
-                    setFormData({reset: true});
                     setDocType({docType: "juicioNulidad"});
                     getData({docType: "juicioNulidad"});
                   }}>Juicio de Nulidad</button>
@@ -132,7 +117,6 @@ const Search = () => {
                   <button type="button" className="btn btn-primary" onClick={
                     () => {
                       setFields(carpetaFields);
-                      setFormData({reset: true});
                       setDocType({docType: "carpetaInvestigacion"});
                       getData({docType: "carpetaInvestigacion"});
                     }}>Carpeta de Investigacion</button>
@@ -160,8 +144,8 @@ const Search = () => {
                     {fieldsToUse.map((value) => {
                       return( 
                       <GridColumn
-                        field = {fields.id}
-                        title = {fields.label}
+                        field = {value.id} 
+                        title = {value.label}
                       />
                     )})}
                   {/* <GridColumn field="expediente" title="Expediente" width="auto"/>
