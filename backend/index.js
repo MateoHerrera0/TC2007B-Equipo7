@@ -313,10 +313,10 @@ async function descargarArchivo(req, res, key, iv){
     outputFS.on('finish', function() {
       res.download(archivoTemporal, (err) => {
         if (err) throw err;
-        // fs.unlink(archivoTemporal, (err) => {
-        //   if (err) throw err;
-        //   console.log("Borrado despues de descarga");
-        // })
+        fs.unlink(archivoTemporal, (err) => {
+          if (err) throw err;
+          console.log("Borrado despues de descarga");
+        })
       })
     })
   })
