@@ -9,6 +9,7 @@ const bcrypt = require("bcrypt");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cors = require("cors");
+const https = require('https');
 const { func } = require("joi")
 
 const app = express();
@@ -22,7 +23,7 @@ let db;
 
 app.use(
   cors({
-    origin: "http://localhost:3000", 
+    origin: "https://localhost:3000", 
     optionsSuccessStatus: 200,
     credentials: true,
 }))
@@ -344,10 +345,10 @@ async function descargarArchivo(req, res, key, iv){
     outputFS.on('finish', function() {
       res.download(archivoTemporal, (err) => {
         if (err) throw err;
-        // fs.unlink(archivoTemporal, (err) => {
-        //   if (err) throw err;
-        //   console.log("Borrado despues de descarga");
-        // })
+        fs.unlink(archivoTemporal, (err) => {
+          if (err) throw err;
+          console.log("Borrado despues de descarga");
+        })
       })
     })
   })
@@ -357,7 +358,13 @@ app.post("/api/descargarFolio", (req, res) => {
   descargarArchivo(req, res, "abcabcabcabcabcabcabcabcabcabc12", "abcabcabcabcabc1")
 })
 
-app.listen(5000, ()=>{
+
+https.createServer({ cert: fs.readFileSync('testLab.cer'), key: fs.readFileSync('testLab.key') },app).listen(443, ()=>{ 
   connectToDB()
-  console.log("Server started on port 5000........")
-})
+  console.log('Servidor funcionando en puerto 443'); 
+});
+
+// app.listen(5000, ()=>{
+//   connectToDB()
+//   console.log("Server started on port 5000........")
+// })
