@@ -13,7 +13,7 @@ export default function Home() {
       <Navbar />
       <div className="section p-5">
         <div className="row align-items-center">
-          <img src={AOFisico} alt='Logo' width='100'></img>
+          <img src={AOFisico} width='50'></img>
         </div>
       </div>
       <div className="section p-5">
@@ -28,7 +28,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="col-md text-md-end text-center pt-md-0 pt-5">
-              <p className="display-1"><img src={upload} alt='upload image' width='60%'/></p>
+              <p className="display-1"><img src={upload} width='60%'/></p>
             </div>
           </div>
         </div>
@@ -73,7 +73,7 @@ export default function Home() {
               </ul>
             </div>
             <div className="col-md text-md-end text-center p-5">
-              <p className="display-1"><img src={instructions2} alt='search image' width='80%'/></p>
+              <p className="display-1"><img src={instructions2} width='80%'/></p>
             </div>
           </div>
         </div>

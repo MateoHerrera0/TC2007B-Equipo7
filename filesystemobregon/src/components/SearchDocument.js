@@ -9,7 +9,8 @@ import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { process } from "@progress/kendo-data-query";
 import {IntlProvider, LocalizationProvider} from "@progress/kendo-react-intl";
 import '@progress/kendo-theme-default/dist/all.css';
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom';
+import './searchDocument.css';
 
 export default function SearchDocument() {
   const location = useLocation()
@@ -89,7 +90,7 @@ export default function SearchDocument() {
         ],
     };
     return (
-        <div>
+        <div className="searchDoc">
             <Navbar />
             <br></br> <h2 id="Titulo"> Búsqueda de Folios </h2> 
 

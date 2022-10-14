@@ -1,3 +1,8 @@
+.profile-view {
+    background-image: url("../Images/6.png") !important;
+    background-size: cover;
+}
+
 .gradient-custom {
     /* fallback for old browsers */
     background: #f6d365;

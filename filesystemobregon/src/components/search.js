@@ -102,7 +102,7 @@ const Search = () => {
         ],
     };
     return (
-        <div>
+        <div className="searchClass">
             <Navbar />
             <br></br> <h2 id="Titulo"> Búsqueda de Expedientes </h2> 
             <div className="row text-center p-5">
