@@ -3,7 +3,7 @@ import { fields, Field } from "./fields"
 import {addDocument} from "../API/dbAPI";
 import Navbar from "./navbar";
 import PutFolio from "./addFolioForm";
-
+import "./newFile.css"
 
 function reducer(state, event) {
   if (event.reset) {

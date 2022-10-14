@@ -1,3 +1,8 @@
+.searchClass {
+    background-image: url("../Images/8.png") !important;
+    /*background-size: cover;*/
+}
+
 #Titulo {
     text-align: center;
     color: blueviolet;

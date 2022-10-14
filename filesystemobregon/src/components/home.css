@@ -1,5 +1,7 @@
 .home {
-  background-color: whitesmoke;
+  /*background-color: whitesmoke;*/
+  background-image: url("../Images/2.png");
+  background-size: cover;
 }
 
 .title {

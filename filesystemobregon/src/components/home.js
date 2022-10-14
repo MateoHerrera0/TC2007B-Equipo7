@@ -13,7 +13,7 @@ export default function Home() {
       <Navbar />
       <div className="section p-5">
         <div className="row align-items-center">
-          <img src={AOFisico} alt='Logo' width='100'></img>
+          <img src={AOFisico} alt='Logo' width='50'></img>
         </div>
       </div>
       <div className="section p-5">

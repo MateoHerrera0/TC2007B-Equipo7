@@ -1,10 +1,9 @@
 import React, { useState , useEffect} from 'react'
-import './profile.css'
 import { Link } from 'react-router-dom';
 import Navbar from './navbar';
 import {getUser} from "../API/dbAPI";
 import { logout } from '../API/dbAPI';
-
+import './profile.css';
 //import { UserContext } from '../app';
 
 //const userContext = useContext(UserContext)
@@ -44,7 +43,7 @@ export default function Profile(props) {
           <div className='row'>
             <div className="col-md-5 text-md-start text-center p-5">
               <p className="fs-1"><strong>Perfil</strong></p>
-              <p className="fw-bold">Datos</p>
+              <p className="fs-2">Mis Datos</p>
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
                   <p className="fs-3"><strong>Correo Electrónico</strong></p>
@@ -70,7 +69,9 @@ export default function Profile(props) {
                 <Link to='/'>
                     <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Regresar a inicio</button>
                 </Link>
-                <br />
+              </div>
+              <br></br>
+              <div>
                 <Link to='/'>
                     <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold" onClick={() => {logout()}}>Cerrar sesión</button>
                 </Link>

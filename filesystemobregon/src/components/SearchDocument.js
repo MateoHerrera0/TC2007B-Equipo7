@@ -89,7 +89,7 @@ export default function SearchDocument() {
         ],
     };
     return (
-        <div>
+        <div className="searchClass">
             <Navbar />
             <br></br> <h2 id="Titulo"> Búsqueda de Folios </h2> 
 
