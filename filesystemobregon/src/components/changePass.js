@@ -50,7 +50,7 @@ export default function ChangePass(props) {
     
                               <div className="d-flex flex-row align-items-center mb-4">
                                 <label htmlFor="usuario">
-                                  <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                  <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                                 </label>
                                 <div className="form-outline flex-fill mb-0">
                                   <input type="text" id="usuario" required name="usuario" className="form-control" placeholder="Nombre" autoComplete="off" value={userPass.usuario} onChange={handleInputs}/>
@@ -58,7 +58,7 @@ export default function ChangePass(props) {
                               </div>
                               <div className="d-flex flex-row align-items-center mb-4">
                                 <label htmlFor="email">
-                                  <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                  <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                                 </label>
                                 <div className="form-outline flex-fill mb-0">
                                   <input type="email" id="email" required name="email" className="form-control" placeholder="Email" autoComplete="off" value={userPass.email} onChange={handleInputs}/>
@@ -66,7 +66,7 @@ export default function ChangePass(props) {
                               </div>
                               <div className="d-flex flex-row align-items-center mb-4">
                                 <label htmlFor="ogPassword">
-                                  <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                  <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                                 </label>
                                 <div className="form-outline flex-fill mb-0">
                                   <input type="password" id="ogPassword" required name="ogPassword" className="form-control" placeholder="Contraseña Original" autoComplete="off" value={userPass.password} onChange={handleInputs}/>
@@ -74,7 +74,7 @@ export default function ChangePass(props) {
                               </div>
                               <div className="d-flex flex-row align-items-center mb-4">
                                 <label htmlFor="newPassword">
-                                  <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                  <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                                 </label>
                                 <div className="form-outline flex-fill mb-0">
                                   <input type="password" id="newPassword" required name="newPassword" className="form-control" placeholder="Nueva Contraseña" autoComplete="off" value={userPass.newPassword} onChange={handleInputs}/>
@@ -82,7 +82,7 @@ export default function ChangePass(props) {
                               </div>
                               <div className="d-flex flex-row align-items-center mb-4">
                                 <label htmlFor="repPassword">
-                                  <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                  <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                                 </label>
                                 <div className="form-outline flex-fill mb-0">
                                   <input type="password" id="repPassword" required name="repPassword" className="form-control" placeholder="Repetir Nueva Contraseña" autoComplete="off" value={userPass.repPassword} onChange={handleInputs}/>
