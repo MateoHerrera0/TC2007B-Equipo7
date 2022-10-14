@@ -111,7 +111,7 @@ export default function PutFolio(props) {
             <input className="form-control" type="file" accept="*.pdf" id="fileFolio" name="fileFolio" required/>
           </div>
           <input type="hidden" name="usuario" id="usuario" value={usuario}/>
-          <input type="hidden" name="docType" id="usuario" value={props.docType}/>
+          <input type="hidden" name="docType" id="docType" value={props.docType}/>
           <div className="text-center">
             <button type="submit" className="btn btn-primary">Subir Documento</button>
           </div>
