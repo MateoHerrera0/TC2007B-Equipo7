@@ -4,8 +4,7 @@ import upload from '../Images/upload.png'
 import download from '../Images/download.png'
 import instructions1 from '../Images/instruct1.png'
 import instructions2 from '../Images/instruct2.png'
-import AOLogo2 from '../Images/AOLogo2.png'
-import AOFisico from '../Images/AOFisico.jpg'
+import AOFisico from '../Images/AOFisico.png'
 import Navbar from "./navbar"
 
 export default function Home() {
@@ -14,7 +13,7 @@ export default function Home() {
       <Navbar />
       <div className="section p-5">
         <div className="row align-items-center">
-          <img src={AOLogo2} alt='Logo' width='500'></img>
+          <img src={AOFisico} alt='Logo' width='100'></img>
         </div>
       </div>
       <div className="section p-5">
