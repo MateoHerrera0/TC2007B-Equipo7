@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { fields } from "./fieldsSearch";
 //import * as ReactDOM from "react-dom";
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Navbar from './navbar'
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { process } from "@progress/kendo-data-query";
@@ -13,11 +13,12 @@ import { useLocation } from 'react-router-dom'
 
 export default function SearchDocument() {
   const location = useLocation()
-  const { docId } = location.state
+  const { expId } = location.state
 
   const [data, setData] = useState([]);
       useEffect( ()=> {
-        getData({expedienteID: docId});
+        console.log(expId);
+        getData(expId);
       }, [])
 
     const getData = async (query) => {
@@ -126,24 +127,15 @@ export default function SearchDocument() {
                           </td>}
                       />
                     
-                  {/* <GridColumn field="expediente" title="Expediente" width="auto"/>
-                  <GridColumn field="tja" title="Sala del TJA" width="auto"/>
-                  <GridColumn field="actor" title="Actor" width="auto"/>
-                  <GridColumn field="domicilio" title="Domicilio" width="auto"/>
-                  <GridColumn field="acto" title="Acto" width="auto"/>
-                  <GridColumn field="eJuridico" title="Estado Jurídico" width="auto"/>
-                  <GridColumn field="eProcesal" title="Estado Procesal" width="auto"/>
-                  <GridColumn field="materia" title="Materia" width="auto"/>
-                  <GridColumn field="demandado" title="Demandado" width="auto"/>
-                  <GridColumn field="usuario" title="Usuario" width="auto"/> */}
               </Grid>
             </IntlProvider>
           </LocalizationProvider>
-          {/* <form onSubmit={(e)=> {
-            e.preventDefault();
-            getData()}}>
-            <button type="submit">Get Info</button>
-          </form>  */}
+          <br></br>
+          <td>
+            <Link to="/search">
+                <button type="button" className="btn btn-primary btn-sm">Regresar a Expedientes</button>
+              </Link>
+          </td>
         </div>
     )
 }

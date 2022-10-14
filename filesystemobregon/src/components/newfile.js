@@ -71,7 +71,7 @@ export default function Newfile(props) {
       <div className="section p-5">
         <div className="container">
 
-          <p className="text-center fs-1"><strong>Selecciona un tipo de documento.</strong></p>
+          <p className="text-center fs-1"><strong>Selecciona un tipo de documento</strong></p>
           <div className="row text-center p-5 gx-5">
             <div className="col d-grid">
               <button type="button" className="btn btn-primary btn-lg" onClick={() => {setFields(nulidadFields); setFormData({reset: true}); setDocType("juicioNulidad")}}>Juicio de Nulidad</button>
