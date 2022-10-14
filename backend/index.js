@@ -1,3 +1,10 @@
+/* Code used to define endpoints and connection to database (backend)
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
 // Imports
 const express = require("express")
 const fs = require("fs")
@@ -35,15 +42,15 @@ app.set("trust proxy", 1);
 // Create session
 app.use(session({
   secret: "team7AOFILES",
-  resave: false, // no volver a guardar si en la sesión no se hizo nada nuevo
-  saveUninitialized: false, // cuando alguien se conecte al sistema, tenemos una sesión, pero si no se logguea, no queremos guardarla
+  resave: false, // don't save again if nothing got changed in session 
+  saveUninitialized: false, // do not save session if no one logged in
   store: MongoStore.create({mongoUrl: "mongodb://127.0.0.1:27017/AOFILES"}),
   cookie: {
-     maxAge: 60000 * 30 // Permitir que la cookie exista por 30 mins
+     maxAge: 60000 * 30 // cookie lifespan of 30 minutes
   }
 }))
 
-// Función para conectar a base de datos
+// Function to connect database
 async function connectToDB(){
   let client = new MongoClient("mongodb://127.0.0.1:27017/AOFILES")
   await client.connect();
@@ -57,43 +64,43 @@ async function connectToDB(){
 // })
 
 
-// Post para login
+// Post for user login
 app.post("/api/login", (req, res) => {
-  // Recibir req
+  // Receive req
   let user = req.body.email;
   let pass = req.body.password;
-  // Buscar usuario en la base de datos 
+  // Look for user in database
   db.collection("usuarios").findOne({email:user}, (err, result) => {
-      // Si el usuario existe
+      // If user exists
       if(result!=null)
       {
-          // Verificar contraseña
+          // Verify password
           bcrypt.compare(pass, result.password, (err, result) => {
-              // Si la contraseña es correcta
+              // If password is correct
               if(result){
-                  // Inicializar sesión
+                  // Start session
                   req.session.usuario=user;
                   req.session.nulidad = result.nulidad;
                   req.session.investigacion = result.investigacion;
-                  // Enviar sesión
+                  // Send session
                   res.send(JSON.stringify({'email': req.session.usuario}));
               }
-              // Si la contraseña no es correcta
+              // If password is incorrect
               else{
                   res.send({"Message": "Error in login"});
               }
           })
       }
-      // Si el usuario no existe
+      // If user doesn't exist
       else{
           res.send({"Message" : "Error1 in login"});
       }
   })
 })
 
-// Post para registro
+// Post for user register
 app.post("/api/register", (req, res) => {
-  console.log(req.body);
+  // Receive req
   let user = req.body.usuario;
   let pass = req.body.password;
   let mail = req.body.email;
@@ -101,30 +108,38 @@ app.post("/api/register", (req, res) => {
   let uType = req.body.userType;
   let typeNulidad = req.body.nulidad; 
   let typeInv = req.body.investigacion;
-  console.log(user);
   try{
+    // Look for user in database
     db.collection("usuarios").findOne({email:mail}, (err, result) => {
+      // If user exists
       if(result!=null)
       {
-        console.log("El usuario ya existe")
+        res.send({"Message": "User already exists"});
       }
+      // Check if password confirmation is valid
       else if (pass != cpass) 
       {
-        console.log("Las contraseñas no coinciden")
+        res.send({"Message": "Passwords don't match"});
       }
+      // Otherwise
       else
       {
+        // Hash password
         bcrypt.hash(pass, 10, (err, hash) => {
+          // Save new user info into variable
           let aAgregar = {usuario: user, email: mail, password: hash, userType: uType, nulidad: typeNulidad, investigacion: typeInv}
+          // Add new user info to database
           db.collection("usuarios").insertOne(aAgregar, (err, result) => {
+          // Evaluate for error
           if(err) throw err;
-          console.log("Usuario agregado");
+          res.send({"Message": "User registered"});
           })
         })
       }
     })
-    res.json({'message': "User inserted correctly."});
+    res.json({'Message': "User inserted correctly."});
   }
+  // Error
   catch (error){
     res.status(500);
     res.json(error);
@@ -132,123 +147,138 @@ app.post("/api/register", (req, res) => {
   }
 })
 
+// Get for user profile
 app.get("/api/profile", async (req, res) => {
+  // If session exists
   if(req.session.usuario)
   {
-    console.log(req.session.usuario)
     try{
+      // Find user in database from session info
       const cursor = db.collection("usuarios").find({email:req.session.usuario}, {password: 0});
       const data = await cursor.toArray();
+      // Send user data
       return res.json(data);
     }
+    // Error
     catch (error){
       res.status(500);
       res.json(error);
       console.log(error);
     }
   }
+  // If session doesn't exist
   else
   {
-    return res.status(400).json("Not Authorized")
+    return res.status(400).json("Not Authorized");
   }
 })
 
+// Get for session --> determine if session exists
 app.get("/api/sessionExists", async (req, res) => {
+  // If session exists
   if(req.session.usuario) {
-    console.log("el usuario", req.session.usuario)
-    return res.json(req.session.usuario)
+    // Return session
+    return res.json(req.session.usuario);
   }
+  // If session doesn't exist
   else
   {
-    return res.json(null)
+    // Return null
+    return res.json(null);
   }
 })
 
+// Get for all users in database
 app.get("/api/getAllUsers", async (req, res) => {
   try {
-    const cursor = db.collection("usuarios").find(); // cambiar xq las colleciones se dividieron
+    // Get all info from users collection
+    const cursor = db.collection("usuarios").find(); 
     const data = await cursor.toArray();
+    // Get results
     res.json(data);
-  } catch (error) {
+  } 
+  // Error
+  catch (error) {
     res.status(500);
     res.json(error);
     console.log(error);
   }
 })
 
-app.get("/api/User", async (req, res) => {
-  try {
-    const cursor = db.collection("usuarios").find(); // cambiar xq las colleciones se dividieron
-    const data = await cursor.toArray();
-    res.json(data);
-  } catch (error) {
-    res.status(500);
-    res.json(error);
-    console.log(error);
-  }
-})
-
-
+// Get for logout
 app.get("/api/logout", (req, res) => {
-  console.log(req.session);
-  req.session.destroy()
-  res.json({})
+  // Delete session to logout
+  req.session.destroy();
+  res.json({});
 })
 
+// Delete for user
 app.delete("/api/deleteUser", (req, res) => {
+  // Get req user data
   let mail = req.body.email;
   let user = req.body.usuario;
-  db.collection("usuarios").deleteOne({usuario: user, email: mail}) 
-  res.send({"message": "User deleted"})
+  // Delete from database
+  db.collection("usuarios").deleteOne({usuario: user, email: mail});
+  res.send({"message": "User deleted"});
 })
 
+// Put to edit users
 app.put("/api/editUser", (req, res) => {
+  // Get user new info and original user identifier (email in this case)
   let mail = req.body.email; 
   let user = req.body.usuario; 
   let ogEmail = req.body.ogEmail;
   let tNulidad = req.body.nulidad; 
   let tInvestigacion = req.body.investigacion;
-  db.collection("usuarios").updateOne({email: ogEmail}, {$set: {usuario: user, email: mail, nulidad: tNulidad, investigacion: tInvestigacion}})
-  res.send({"message": "User edited"})
+  // Update database
+  db.collection("usuarios").updateOne({email: ogEmail}, {$set: {usuario: user, email: mail, nulidad: tNulidad, investigacion: tInvestigacion}});
+  res.send({"Message": "User edited"});
 })
 
+// Put to update passwords
 app.put("/api/changePass", (req, res) => {
+  // Get req info
   let mail = req.body.email; 
   let ogPass = req.body.ogPassword;
   let newPass = req.body.newPassword;
   let repPass = req.body.repPassword;
-  console.log(req.body)
+  // Look for user in database
   db.collection("usuarios").findOne({email:mail}, (err, result) => {
-    console.log("hey ", result);
+    // If user exists
     if(result!=null)
     {
-        bcrypt.compare(ogPass, result.password, (err, result) => {
-            if(result){
-              
-              if (newPass != repPass) 
-              {
-                console.log("Las contraseñas no coinciden")
-                res.send({"message": "Las contraseñas no coinciden"})
-              }
-              else {
-                bcrypt.hash(newPass, 10, (err, hash) => {
-                  if (err) throw err;
-                  console.log(hash)
-                  db.collection("usuarios").updateOne({email: mail}, {$set: {password: hash}})
-                })
-                res.send({"message": "Cambio realizado"})
-              }
-                //res.redirect("/pagina")
-            }
-            else{
-                console.log("Error")
-                //res.redirect("/")
-            }
-        })
+      // Verify if original password matches password in database
+      bcrypt.compare(ogPass, result.password, (err, result) => {
+        // If they match
+        if(result){
+          // Confirm new password
+          if (newPass != repPass) 
+          {
+            // If new passwords don't match
+            res.send({"Message": "Passwords don't match"})
+          }
+          // If new passwords match
+          else {
+            // Hash new password
+            bcrypt.hash(newPass, 10, (err, hash) => {
+              // Error
+              if (err) throw err;
+              // update password in database
+              db.collection("usuarios").updateOne({email: mail}, {$set: {password: hash}})
+            })
+            res.send({"Message": "Change Successful"})
+          }
+        }
+        // If original password doesn't match with database
+        else{
+          res.send({"Message": "Error"})
+        }
+      })
     }
-    else{
-        res.send(false)
-        console.log("El usuario no existe")
+    // If user doesn't exist
+    else
+    {
+      res.send(false)
     }
 })
 })
