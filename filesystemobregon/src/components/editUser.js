@@ -56,7 +56,7 @@ export default function EditUser(props) {
     
                               <div className="d-flex flex-row align-items-center mb-4">
                                 <label htmlFor="usuario">
-                                  <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                  <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                                 </label>
                                 <div className="form-outline flex-fill mb-0">
                                   <input type="text" id="usuario" required name="usuario" className="form-control" placeholder="Nombre" autoComplete="off" value={user.usuario} onChange={handleInputs}/>
@@ -65,7 +65,7 @@ export default function EditUser(props) {
     
                               <div className="d-flex flex-row align-items-center mb-4">
                                 <label htmlFor="email">
-                                  <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                  <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                                 </label>
                                 <div className="form-outline flex-fill mb-0">
                                   <input type="email" id="email" required name="email" className="form-control" placeholder="Email" autoComplete="off" value={user.email} onChange={handleInputs}/>

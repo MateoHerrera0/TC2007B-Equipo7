@@ -104,7 +104,9 @@ export default function Newfile(props) {
               </div>
               <input type="hidden" name="usuario" id="usuario" value={usuario}/>
               <input type="hidden" name="docType" id="docType" value={docType}/>
-              <button type="submit" className="btn btn-primary">Submit</button>
+              <div className="text-center">
+                <button type="submit" className="btn btn-primary">Subir Documento</button>
+              </div>
             </form>
           </div>
         </div>
