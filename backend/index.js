@@ -35,9 +35,9 @@ app.use(session({
   resave: false, // no volver a guardar si en la sesión no se hizo nada nuevo
   saveUninitialized: false, // cuando alguien se conecte al sistema, tenemos una sesión, pero si no se logguea, no queremos guardarla
   store: MongoStore.create({mongoUrl: "mongodb://127.0.0.1:27017/AOFILES"}),
-  // cookie: {
-  //     maxAge: 60000
-  // }
+  cookie: {
+     maxAge: 60000 * 15
+  }
 }))
 
 async function connectToDB(){
@@ -79,12 +79,14 @@ app.post("/api/login", (req, res) => {
 })
 
 app.post("/api/register", (req, res) => {
+  console.log(req.body);
   let user = req.body.usuario;
   let pass = req.body.password;
   let mail = req.body.email;
   let cpass = req.body.repPassword;
   let uType = req.body.userType;
-  let uArea = req.body.area;
+  let typeNulidad = req.body.nulidad; 
+  let typeInv = req.body.investigacion;
   console.log(user);
   try{
     db.collection("usuarios").findOne({email:mail}, (err, result) => {
@@ -99,7 +101,7 @@ app.post("/api/register", (req, res) => {
       else
       {
         bcrypt.hash(pass, 10, (err, hash) => {
-          let aAgregar = {usuario: user, email: mail, password: hash, userType: uType, area: uArea}
+          let aAgregar = {usuario: user, email: mail, password: hash, userType: uType, nulidad: typeNulidad, investigacion: typeInv}
           db.collection("usuarios").insertOne(aAgregar, (err, result) => {
           if(err) throw err;
           console.log("Usuario agregado");
@@ -160,11 +162,40 @@ app.get("/api/getAllUsers", async (req, res) => {
   }
 })
 
+app.get("/api/User", async (req, res) => {
+  try {
+    const cursor = db.collection("usuarios").find(); // cambiar xq las colleciones se dividieron
+    const data = await cursor.toArray();
+    res.json(data);
+  } catch (error) {
+    res.status(500);
+    res.json(error);
+    console.log(error);
+  }
+})
+
 
 app.get("/api/logout", (req, res) => {
   console.log(req.session);
   req.session.destroy()
   res.json({})
+})
+
+app.delete("/api/deleteUser", (req, res) => {
+  let mail = req.body.email;
+  let user = req.body.usuario;
+  db.collection("usuarios").deleteOne({usuario: user, email: mail}) 
+  res.send({"message": "User deleted"})
+})
+
+app.put("/api/editUser", (req, res) => {
+  let mail = req.body.email; 
+  let user = req.body.usuario; 
+  let ogUser = req.body.ogUsuario;
+  let tNulidad = req.body.nulidad; 
+  let tInvestigacion = req.body.investigacion;
+  db.collection("usuarios").updateOne({usuario: ogUser}, {$set: {usuario: user, email: mail, nulidad: tNulidad, investigacion: tInvestigacion}})
+  res.send({"message": "User edited"})
 })
 
 app.post("/api/addpath", uploads.single("file"), (req, res) => {

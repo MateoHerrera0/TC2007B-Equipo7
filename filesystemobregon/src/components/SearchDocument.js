@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { fields } from "./fieldsSearch";
 //import * as ReactDOM from "react-dom";
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Navbar from './navbar'
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { process } from "@progress/kendo-data-query";
@@ -130,7 +130,12 @@ export default function SearchDocument() {
               </Grid>
             </IntlProvider>
           </LocalizationProvider>
-          
+          <br></br>
+          <td>
+            <Link to="/search">
+                <button type="button" className="btn btn-primary btn-sm">Regresar a Expedientes</button>
+              </Link>
+          </td>
         </div>
     )
 }

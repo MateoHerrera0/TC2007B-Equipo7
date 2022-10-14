@@ -13,6 +13,29 @@ import '@progress/kendo-theme-default/dist/all.css';
 import "./search.css";
 import { UserContext } from '../app';
 import AdminNavbar from "./adminNavbar";
+import { deleteUser } from "../API/dbAPI";
+
+const userEditButton = (props) => {
+    console.log(props);
+    const { dataItem } = props;
+    return(
+        <td>
+            <Link to='/editUser' state={dataItem}>
+                <button className="btn btn-primary btn-sm rounded-3 fw-bold" onClick={ () => {console.log(dataItem)}}>Editar</button>
+            </Link>
+        </td>
+    );
+};
+
+const userDeleteButton = (props) => {
+    console.log(props);
+    const { dataItem } = props;
+    return(
+        <td>
+        <button className="btn btn-primary btn-sm rounded-3 fw-bold" onClick={ () => {deleteUser(dataItem)}}>Borrar</button>
+        </td>
+    );
+};
 
 const SearchUsers = () => {
     const [data, setData] = useState([]);
@@ -26,11 +49,6 @@ const SearchUsers = () => {
       console.log(data);
     }
 
-    const gridUserSelectionChange = (gridUser, selection) => {
-        // let selectedData = gridUser.data.data[selection.index];
-        const selectedData = selection.selectedRows[0].dataItem;
-        console.log(selectedData);
-    }
     const [dataState, setDataState] = React.useState()
     const [res, setResult] = React.useState(data);
     useEffect(() => { setResult(data)}, [data] );
@@ -108,7 +126,14 @@ const SearchUsers = () => {
                   <GridColumn field="usuario" title="Usuario" width="auto"/>
                   <GridColumn field="email" title="Correo" width="auto"/>
                   <GridColumn field="userType" title="Tipo de Usuario" width="auto"/>
-                  <GridColumn field="area" title="Área" width="auto"/>
+                  <GridColumn field="nulidad" title="Nulidad" width="auto"/>
+                  <GridColumn field="investigacion" title="Investigación" width="auto"/>
+                  <GridColumn cell = {
+                    userEditButton
+                  } width="100px" filterable={false}/>
+                  <GridColumn cell = {
+                    userDeleteButton
+                  } width="100px" filterable={false}/>
               </Grid>
             </IntlProvider>
           </LocalizationProvider>
