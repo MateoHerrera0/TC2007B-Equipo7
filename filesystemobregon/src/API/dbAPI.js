@@ -1,4 +1,11 @@
-// Send the data to Mongo using an API
+/* Code use to send data to Mongo using an API
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Function to add document
 async function addDocument(formData, setFormData) {
   let formBody = new FormData(formData);
 
@@ -93,8 +100,10 @@ async function getDocs(reqBody, setData) {
 //   } 
 // } 
 
+// Function to add users
 async function addUser(userData){
   try {
+    // Fetch endpoint, specifying method and request body
     await fetch('/api/register', {
       method: "POST",
       headers: {'Content-Type': 'application/json'},
@@ -108,11 +117,13 @@ async function addUser(userData){
         investigacion: userData.investigacion
       })
     })
+    // Response
       .then(response => response.json())
       .then(response => {
         console.log("UserInfo response " + response);
         return response;
       })
+    // error
   } catch (error) {
     console.log("ERROR at 'addUser'");
     console.log(error);
@@ -120,8 +131,10 @@ async function addUser(userData){
   } 
 }
 
+// Function used to login user
 async function logUser(userData){
   try {
+    // Fetch endpoint, specifying method and request body
     await fetch('/api/login', {
       mode: 'cors',
       method: "POST",
@@ -133,29 +146,35 @@ async function logUser(userData){
         password: userData.password, 
       })
     })
+    // Response
       .then(response => response.json())
       .then(response => {
         console.log("UserInfo response " + response);
         return response;
       })
+    // Error
   } catch (error) {
-    console.log("ERROR at 'getDocumentNames'");
+    console.log("ERROR at 'login'");
     console.log(error);
     return [];
   } 
 }
 
+// Function used to logout users
 async function logout(){
   try {
+    // Fetch endpoint, specifying method
     await fetch('/api/logout', {
       method: "GET",
     })
+    // Response
       .then(response => response.json())
       .then(response => {
         console.log("Session deleted " + response);
         window.location.assign('/')
         return response;
       })
+    // Error
   } catch (error) {
     console.log("ERROR at logout");
     console.log(error);
@@ -163,9 +182,11 @@ async function logout(){
   } 
 }
 
+// Function used to delete users from database
 async function deleteUser(userData) 
 {
   try {
+    // Fetch endpoint, specifying method and request body
     await fetch('/api/deleteUser', {
       mode: 'cors',
       method: "DELETE",
@@ -175,11 +196,13 @@ async function deleteUser(userData)
         email: userData.email, 
       })
     })
+      // Response
       .then(response => response.json())
       .then(response => {
         window.location.assign('/')
         return response;
       })
+    // Error
   } catch (error) {
     console.log("ERROR at 'Delete user'");
     console.log(error);
@@ -187,14 +210,17 @@ async function deleteUser(userData)
   } 
 }
 
+// Function used to edit users in database
 async function editUser(ogUserData, userData) 
 {
   try {
+    // Fetch endpoint, specifying method and request body
     await fetch('/api/editUser', {
       mode: 'cors',
       method: "PUT",
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
+        // Get new and original user data
         usuario: userData.usuario,
         ogEmail: ogUserData.email,
         email: userData.email,
@@ -202,11 +228,13 @@ async function editUser(ogUserData, userData)
         investigacion: userData.investigacion
       })
     })
+      // Response
       .then(response => response.json())
       .then(response => {
         window.location.reload()
         return response;
       })
+    // Error
   } catch (error) {
     console.log("ERROR at 'Edit User'");
     console.log(error);
@@ -214,8 +242,10 @@ async function editUser(ogUserData, userData)
   } 
 }
 
+// Function used to change user password
 async function changePass(userPassData) 
 {
+  // Fetch endpoint, specifying method and request body
   try {
     await fetch('/api/changePass', {
       mode: 'cors',
@@ -229,11 +259,13 @@ async function changePass(userPassData)
         repPassword: userPassData.repPassword
       })
     })
+      // Response
       .then(response => response.json())
       .then(response => {
         window.location.reload()
         return response;
       })
+    // Error
   } catch (error) {
     console.log("ERROR at 'Edit Password'");
     console.log(error);
@@ -241,4 +273,5 @@ async function changePass(userPassData)
   } 
 }
 
+// Export functions
 export { addDocument, putDocument, addUser, logUser, logout, deleteUser, editUser, changePass};
