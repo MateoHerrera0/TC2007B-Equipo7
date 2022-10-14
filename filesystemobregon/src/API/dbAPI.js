@@ -104,7 +104,8 @@ async function addUser(userData){
         password: userData.password, 
         repPassword: userData.repPassword,
         userType: userData.userType,
-        area: userData.area
+        nulidad: userData.nulidad,
+        investigacion: userData.investigacion
       })
     })
       .then(response => response.json())
@@ -162,4 +163,55 @@ async function logout(){
   } 
 }
 
-export { addDocument, putDocument, addUser, logUser, logout};
+async function deleteUser(userData) 
+{
+  try {
+    await fetch('/api/deleteUser', {
+      mode: 'cors',
+      method: "DELETE",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        usuario: userData.usuario,
+        email: userData.email, 
+      })
+    })
+      .then(response => response.json())
+      .then(response => {
+        window.location.assign('/')
+        return response;
+      })
+  } catch (error) {
+    console.log("ERROR at 'Delete user'");
+    console.log(error);
+    return [];
+  } 
+}
+
+async function editUser(ogUserData, userData) 
+{
+  try {
+    await fetch('/api/editUser', {
+      mode: 'cors',
+      method: "PUT",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        usuario: userData.usuario,
+        ogUsuario: ogUserData.usuario,
+        email: userData.email,
+        nulidad: userData.nulidad,
+        investigacion: userData.investigacion
+      })
+    })
+      .then(response => response.json())
+      .then(response => {
+        window.location.reload()
+        return response;
+      })
+  } catch (error) {
+    console.log("ERROR at 'Edit User'");
+    console.log(error);
+    return [];
+  } 
+}
+
+export { addDocument, putDocument, addUser, logUser, logout, deleteUser, editUser};
