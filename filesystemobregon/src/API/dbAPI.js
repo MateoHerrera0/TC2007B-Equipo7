@@ -196,7 +196,7 @@ async function editUser(ogUserData, userData)
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         usuario: userData.usuario,
-        ogUsuario: ogUserData.usuario,
+        ogEmail: ogUserData.email,
         email: userData.email,
         nulidad: userData.nulidad,
         investigacion: userData.investigacion
@@ -214,4 +214,31 @@ async function editUser(ogUserData, userData)
   } 
 }
 
-export { addDocument, putDocument, addUser, logUser, logout, deleteUser, editUser};
+async function changePass(userPassData) 
+{
+  try {
+    await fetch('/api/changePass', {
+      mode: 'cors',
+      method: "PUT",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        ogEmail: userPassData.email,
+        email: userPassData.email,
+        ogPassword: userPassData.ogPassword,
+        newPassword: userPassData.newPassword,
+        repPassword: userPassData.repPassword
+      })
+    })
+      .then(response => response.json())
+      .then(response => {
+        window.location.reload()
+        return response;
+      })
+  } catch (error) {
+    console.log("ERROR at 'Edit Password'");
+    console.log(error);
+    return [];
+  } 
+}
+
+export { addDocument, putDocument, addUser, logUser, logout, deleteUser, editUser, changePass};

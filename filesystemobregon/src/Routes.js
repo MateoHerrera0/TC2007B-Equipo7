@@ -14,6 +14,7 @@ import Navbar from './components/navbar'
 import AdminNavbar from './components/adminNavbar'
 import SearchDocument from './components/SearchDocument'
 import EditUser from './components/editUser'
+import ChangePass from './components/changePass'
 
 function RoutesComp() {
   const userContext = useContext(UserContext)
@@ -44,6 +45,7 @@ function RoutesComp() {
           <Route path='/' element={<SearchUsers />} />
           <Route path="/profile" element={<Profile usuario = {userContext} navbar = {<AdminNavbar />}/>} />
           <Route path='/editUser' element={<EditUser />} />
+          <Route path='/changePass' element={<ChangePass />} />
         </>
         )}
         {userContext != null && user.userType == "Usuario" && (
