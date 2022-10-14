@@ -35,7 +35,6 @@ export default function Profile(props) {
   }, [])
 
   console.log(user)
-
   return (
     <div className='profile-view'>
       {props.navbar}
@@ -55,12 +54,8 @@ export default function Profile(props) {
                   <p className='fw-lighter'>{user.usuario}</p>
                 </li>
                 <li className="list-group-item">
-                  <p className="fs-3"><strong>Permisos</strong></p>
+                  <p className="fs-3"><strong>Tipo de Usuario</strong></p>
                   <p className='fw-lighter'>{user.userType}</p>
-                </li>
-                <li className="list-group-item">
-                  <p className="fs-3"><strong>Área</strong></p>
-                  <p className='fw-lighter'>{user.area}</p>
                 </li>
               </ul>
             </div>
