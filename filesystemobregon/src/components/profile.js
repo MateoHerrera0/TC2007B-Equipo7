@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Navbar from './navbar';
 import {getUser} from "../API/dbAPI";
 import { logout } from '../API/dbAPI';
+import stock from '../Images/womanStock.jpg'
 import './profile.css';
 //import { UserContext } from '../app';
 
@@ -59,7 +60,9 @@ export default function Profile(props) {
               </ul>
             </div>
             <div className="col-md text-md-end text-center p-5">
-              <p className="display-1"><strong>Imagen</strong></p>
+              <p className="display-1"><strong>Tu Foto</strong></p>
+              <img src={stock} alt='Logo' width='450'></img> <br></br>
+              <br></br>
               <div>
                 <Link to='/'>
                     <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Regresar a inicio</button>
