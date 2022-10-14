@@ -21,6 +21,7 @@ const uploads = multer({dest:".temp/"})
 
 let db;
 
+// Cors configuration
 app.use(
   cors({
     origin: "https://localhost:3000", 
@@ -28,18 +29,21 @@ app.use(
     credentials: true,
 }))
 
+// Trust proxy
 app.set("trust proxy", 1);
 
+// Create session
 app.use(session({
-  secret: "secretVal",
+  secret: "team7AOFILES",
   resave: false, // no volver a guardar si en la sesión no se hizo nada nuevo
   saveUninitialized: false, // cuando alguien se conecte al sistema, tenemos una sesión, pero si no se logguea, no queremos guardarla
   store: MongoStore.create({mongoUrl: "mongodb://127.0.0.1:27017/AOFILES"}),
   cookie: {
-     maxAge: 60000 * 15
+     maxAge: 60000 * 30 // Permitir que la cookie exista por 30 mins
   }
 }))
 
+// Función para conectar a base de datos
 async function connectToDB(){
   let client = new MongoClient("mongodb://127.0.0.1:27017/AOFILES")
   await client.connect();
@@ -52,32 +56,42 @@ async function connectToDB(){
 //   console.log(array);
 // })
 
+
+// Post para login
 app.post("/api/login", (req, res) => {
+  // Recibir req
   let user = req.body.email;
   let pass = req.body.password;
+  // Buscar usuario en la base de datos 
   db.collection("usuarios").findOne({email:user}, (err, result) => {
+      // Si el usuario existe
       if(result!=null)
       {
+          // Verificar contraseña
           bcrypt.compare(pass, result.password, (err, result) => {
+              // Si la contraseña es correcta
               if(result){
+                  // Inicializar sesión
                   req.session.usuario=user;
-                  console.log(req.session.usuario)
-                  res.send(JSON.stringify({'email': req.session.usuario}))
-                  //res.redirect("/pagina")
+                  req.session.nulidad = result.nulidad;
+                  req.session.investigacion = result.investigacion;
+                  // Enviar sesión
+                  res.send(JSON.stringify({'email': req.session.usuario}));
               }
+              // Si la contraseña no es correcta
               else{
-                  console.log("Error en password")
-                  //res.redirect("/")
+                  res.send({"Message": "Error in login"});
               }
           })
       }
+      // Si el usuario no existe
       else{
-          res.send(false)
-          console.log("El usuario no existe")
+          res.send({"Message" : "Error1 in login"});
       }
   })
 })
 
+// Post para registro
 app.post("/api/register", (req, res) => {
   console.log(req.body);
   let user = req.body.usuario;
@@ -191,11 +205,52 @@ app.delete("/api/deleteUser", (req, res) => {
 app.put("/api/editUser", (req, res) => {
   let mail = req.body.email; 
   let user = req.body.usuario; 
-  let ogUser = req.body.ogUsuario;
+  let ogEmail = req.body.ogEmail;
   let tNulidad = req.body.nulidad; 
   let tInvestigacion = req.body.investigacion;
-  db.collection("usuarios").updateOne({usuario: ogUser}, {$set: {usuario: user, email: mail, nulidad: tNulidad, investigacion: tInvestigacion}})
+  db.collection("usuarios").updateOne({email: ogEmail}, {$set: {usuario: user, email: mail, nulidad: tNulidad, investigacion: tInvestigacion}})
   res.send({"message": "User edited"})
+})
+
+app.put("/api/changePass", (req, res) => {
+  let mail = req.body.email; 
+  let ogPass = req.body.ogPassword;
+  let newPass = req.body.newPassword;
+  let repPass = req.body.repPassword;
+  console.log(req.body)
+  db.collection("usuarios").findOne({email:mail}, (err, result) => {
+    console.log("hey ", result);
+    if(result!=null)
+    {
+        bcrypt.compare(ogPass, result.password, (err, result) => {
+            if(result){
+              
+              if (newPass != repPass) 
+              {
+                console.log("Las contraseñas no coinciden")
+                res.send({"message": "Las contraseñas no coinciden"})
+              }
+              else {
+                bcrypt.hash(newPass, 10, (err, hash) => {
+                  if (err) throw err;
+                  console.log(hash)
+                  db.collection("usuarios").updateOne({email: mail}, {$set: {password: hash}})
+                })
+                res.send({"message": "Cambio realizado"})
+              }
+                //res.redirect("/pagina")
+            }
+            else{
+                console.log("Error")
+                //res.redirect("/")
+            }
+        })
+    }
+    else{
+        res.send(false)
+        console.log("El usuario no existe")
+    }
+})
 })
 
 app.post("/api/addpath", uploads.single("file"), (req, res) => {
