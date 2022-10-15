@@ -153,7 +153,7 @@ const Search = () => {
                         title = "Folios"
                         cell = {(props) => 
                         <td>
-                          <Link to="/searchFolio" state={{ expId: props.dataItem[props.field] }}>
+                          <Link to="/searchFolio" state={{ expId: props.dataItem[props.field], docType: docType.docType }}>
                             <button type="button" className="btn btn-primary btn-sm">Folios</button>
                           </Link>
                         </td>}

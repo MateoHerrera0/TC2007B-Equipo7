@@ -14,7 +14,7 @@ import './searchDocument.css';
 
 export default function SearchDocument() {
   const location = useLocation()
-  const { expId } = location.state
+  const { expId, docType } = location.state
 
   const [data, setData] = useState([]);
       useEffect( ()=> {
@@ -30,8 +30,8 @@ export default function SearchDocument() {
       })
     }
 
-    const download = async (id, name) => {
-      await axios.post('/api/descargarFolio', {_id: id}, {
+    const download = async (id, name, docType) => {
+      await axios.post('/api/descargarFolio', {_id: id, docType: docType}, {
         responseType: 'blob',
       }).then((res) => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -124,7 +124,7 @@ export default function SearchDocument() {
                         title = "Descargar Archivo"
                         cell = {(props) => 
                           <td>
-                            <button type="button" className="btn btn-primary btn-sm" onClick={() => download(props.dataItem[props.field], props.dataItem["nombre"])}>Descargar</button>
+                            <button type="button" className="btn btn-primary btn-sm" onClick={() => download(props.dataItem[props.field], props.dataItem["nombre"], docType)}>Descargar</button>
                           </td>}
                       />
                     

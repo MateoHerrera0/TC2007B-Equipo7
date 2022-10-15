@@ -57,13 +57,6 @@ async function connectToDB(){
   db = client.db();
 }
 
-// app.get("/descargar", async (req, res)=>{
-//   let array = await db.collection("AOFILES").find({}).project({_id: 0, nombre: 1}).toArray()
-//   res.render("descargar.ejs", {archivos: array})
-//   console.log(array);
-// })
-
-
 // Post for user login
 app.post("/api/login", (req, res) => {
   // Receive req
@@ -283,45 +276,107 @@ app.put("/api/changePass", (req, res) => {
 })
 })
 
+// Post to setup app backend --> create roles 
+app.post("/api/setup", (req, res)=>{
+  // Get request info
+  let mail = req.body.email;
+  let pass=req.body.password;
+  let nulidad = "nulidad"; 
+  let investigacion = "investigacion";
+  // Generate keys using private key
+  let privKey=fs.readFileSync("testLab.key");
+  // Key and initialization vector for nulidad
+  let nulidadKey=crypto.publicEncrypt(privKey, Buffer.from(crypto.randomBytes(16).toString("hex"))).toString("hex");
+  let nulidadIv=crypto.publicEncrypt(privKey, Buffer.from(crypto.randomBytes(8).toString("hex"))).toString("hex");
+  // Key and initialization vector for investigacion
+  let investigacionKey=crypto.publicEncrypt(privKey, Buffer.from(crypto.randomBytes(16).toString("hex"))).toString("hex");
+  let investigacionIv=crypto.publicEncrypt(privKey, Buffer.from(crypto.randomBytes(8).toString("hex"))).toString("hex");
+  // Insert values
+  let nulidadInsertar={rol: nulidad, llave: nulidadKey, iv: nulidadIv}
+  let investigacionInsertar={rol: investigacion, llave: investigacionKey, iv: investigacionIv}
+  // Insert roles in database
+  db.collection("roles").insertMany([{nulidadInsertar}, {investigacionInsertar}], (err, result)=>{
+    if (err) throw err;
+    // Create user admin
+    bcrypt.hash(pass, 10, (err, hash)=>{
+        let agregarAdmin={usuario: "Admin", email: mail, password: hash, userType: "Administrador", nulidad: false, investigacion: false}
+        // Insert admin in database
+        db.collection("usuarios").insertOne(agregarAdmin, (err, result)=>{
+            if (err) throw err;
+        })
+    })
+  res.send({"Message": "Setup complete"})
+  })
+});
+
+// Upload file path --> Expediente
 app.post("/api/addpath", uploads.single("file"), (req, res) => {
   try {
+    // Get request data
     let body = req.body;
     let collection = req.body.docType;
     delete(body.folio)
     delete(body.docType)
     delete(body.nombre)
 
+    // Insert into collection (nulidad or investigacion)
     db.collection(collection).insertOne(body, (err,res) => {
       if (err) throw err;
       console.log("Expediente Guardado");
     })
     res.json({'message': "Data inserted correctly."});
+    // ERror
   } catch (error) {
     res.status(500);
     res.json(error);
     console.log(error);
   }
-  
 })
 
+// Post for first folio
 app.post("/api/addFirstFolio", uploads.single("file"), async (req,res) => {
   try {
+    // Get req data
     let folio = req.body.folio;
     let nombre = req.body.nombre;
     let docID = req.body.docID
     let collection = req.body.docType;
-
+    // Initialize key and initialization vector
+    let key="";
+    let iv= "";
+    // Get doc id from database (depending on collection --> nulidad / investigacion)
     const cursor = db.collection(collection).find({docID: docID}, {projection: {"_id": 1}});
     const data = await cursor.toArray();
     console.log(data)
-
+    // Define route, input and output
     let rutaDefinitiva = "/.storage/" + folio;
     let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
     let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
-    let key="abcabcabcabcabcabcabcabcabcabc12"
-    let iv= "abcabcabcabcabc1"
+    // Get key and initialization vector depending on docType
+    if(docType == "juicioNulidad")
+    {
+      // Nulidad iv and key
+      db.collection("roles").findOne({rol:"nulidad"}, (err, result)=>{
+        fs.readFile("testLab.key", (err, decryptKey)=>{
+            key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
+            iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+        })
+      })
+    }
+    else if (docType == "carpetaInvestigacion")
+    {
+      // Investigacion iv and key
+      db.collection("roles").findOne({rol:"investigacion"}, (err, result)=>{
+        fs.readFile("testLab.key", (err, decryptKey)=>{
+            key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
+            iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+        })
+      })
+    }
+    // Cipher
     let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
     inputFS.pipe(cipher).pipe(outputFS)
+    // Add folio
     outputFS.on("finish", () => {
       let Folio = {};
       Folio.folio = folio;
@@ -329,12 +384,14 @@ app.post("/api/addFirstFolio", uploads.single("file"), async (req,res) => {
       Folio.nombre = nombre;
       Folio.expedienteID = data[0]._id
       fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
+      // Add folio to database
       db.collection("folios").insertOne(Folio, (err,res) => {
         if (err) throw err;
         console.log("Folio Guardado");
       })
     })
     res.json({'message': "Data inserted correctly."});
+    // Error
   } catch (error) {
     res.status(500);
     res.json(error);
@@ -342,28 +399,58 @@ app.post("/api/addFirstFolio", uploads.single("file"), async (req,res) => {
   }
 })
 
+// Put to add folios
 app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
   try {
+    // Get folio type
+    let folioType = req.body.docType;
+    // Define route, input and output
     let rutaDefinitiva = "/.storage/" + req.body.folio;
     let inputFS = fs.createReadStream(__dirname + "/.temp/" + req.file.filename)
     let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
-    let key="abcabcabcabcabcabcabcabcabcabc12"
-    let iv= "abcabcabcabcabc1"
-    let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
+    // Key and initialization vector
+    let key=""
+    let iv= ""
+    // Get key and initialization vector depending on docType
+    if(folioType == "juicioNulidad")
+    {
+      // Nulidad iv and key
+      db.collection("roles").findOne({rol:"nulidad"}, (err, result)=>{
+        fs.readFile("testLab.key", (err, decryptKey)=>{
+            key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
+            iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+        })
+      })
+    }
+    else if (folioType == "carpetaInvestigacion")
+    {
+      // Investigacion iv and key
+      db.collection("roles").findOne({rol:"investigacion"}, (err, result)=>{
+        fs.readFile("testLab.key", (err, decryptKey)=>{
+            key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
+            iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+        })
+      })
+    }
+    // Cipher
+    let cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
+    // Add folio
     inputFS.pipe(cipher).pipe(outputFS)
     outputFS.on("finish", () => {
       let Folio = {};
       Folio.folio = req.body.folio;
       Folio.archivo = rutaDefinitiva;
       Folio.nombre = req.body.nombre;
-      Folio.expedienteID = ObjectId(req.body.proceeding)
-      fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
+      Folio.expedienteID = ObjectId(req.body.proceeding);
+      fs.unlinkSync(__dirname + "/.temp/" +req.file.filename);
+      // Add folio to database
       db.collection("folios").insertOne(Folio, (err,res) => {
         if (err) throw err;
         console.log("Folio Guardado");
       })
     })
     res.json({'message': "Data updated correctly"})
+    // Error
   } catch (error) {
     res.status(500);
     res.json(error);
@@ -371,65 +458,67 @@ app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
   }
 })
 
-// app.get("/api/getDocs", async (req, res) => {
-//   try {
-//     const cursor = db.collection("docs").find(); // cambiar xq las colleciones se dividieron
-//     const data = await cursor.toArray();
-//     res.json(data);
-//   } catch (error) {
-//     res.status(500);
-//     res.json(error);
-//     console.log(error);
-//   }
-// })
-
+// Post to get docs
 app.post("/api/getDocs", async (request, response) => {
   try {
+    // Query to search docs
     let searchValue = {}
     if (request.body.query != null) {
       searchValue = request.body.query
     }
     // {"docID" : {$regex : request.body.docID}
+    // Look in collection corresponding to document type (nulidad/investigacion)
     const cursor = db.collection(request.body.docType).find(searchValue, request.body.projection);
     const data = await cursor.toArray();
     console.log(data);
+    // Get data
     response.json(data);
+    // Error
   } catch (error) {
-    
     response.status(500);
     response.json(error);
     console.log(error);
   }
 })
 
+// Post to get folios
 app.post("/api/getFolios", async (request, response) => {
   try {
+    // Save query
     let searchValue = request.body.query
     console.log(searchValue);
     // {"docID" : {$regex : request.body.docID}
+    // Look for query value in the folios collection
     const cursor = db.collection("folios").find({expedienteID: ObjectId(searchValue)});
     const data = await cursor.toArray();
     console.log(data);
+    // Get data
     response.json(data);
+    // Error
   } catch (error) {
-    
     response.status(500);
     response.json(error);
     console.log(error);
   }
 })
 
+// Function used to download a file --> receives key and initialization vector also
 async function descargarArchivo(req, res, key, iv){
+  // Find folio to download in database
   db.collection("folios").findOne({"_id":ObjectId(req.body._id)}, (err, result) => {
     if (err) throw err;
+    // Define input, output and temp file
     let archivoTemporal=__dirname+"/.temp/"+result.nombre+".pdf";
     const inputFS = fs.createReadStream(__dirname + result.archivo);
     const outputFS = fs.createWriteStream(archivoTemporal);
+    // Decipher using key and initialization vector 
     const decypher = crypto.createDecipheriv("aes-256-cbc", key, iv)
     inputFS.pipe(decypher).pipe(outputFS)
+    // Download
     outputFS.on('finish', function() {
       res.download(archivoTemporal, (err) => {
         if (err) throw err;
+        // Delete temp file after download
         fs.unlink(archivoTemporal, (err) => {
           if (err) throw err;
           console.log("Borrado despues de descarga");
@@ -439,12 +528,41 @@ async function descargarArchivo(req, res, key, iv){
   })
 }
 
+// Post to download folio
 app.post("/api/descargarFolio", (req, res) => {
-  descargarArchivo(req, res, "abcabcabcabcabcabcabcabcabcabc12", "abcabcabcabcabc1")
+  console.log(req.body);
+  // Initialize key and iv, get doctype to determine them
+  let key=""
+  let iv= ""
+  let folioType = req.body.docType;
+  // Get key and initialization vector depending on docType
+  if(folioType == "juicioNulidad")
+  {
+    // Nulidad iv and key
+    db.collection("roles").findOne({rol:"nulidad"}, (err, result)=>{
+      fs.readFile("testLab.key", (err, decryptKey)=>{
+          key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
+          iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+        })
+      })
+    }
+    else if (folioType == "carpetaInvestigacion")
+    {
+      // Investigacion iv and key
+      db.collection("roles").findOne({rol:"investigacion"}, (err, result)=>{
+        fs.readFile("testLab.key", (err, decryptKey)=>{
+            key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
+            iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+        })
+      })
+    }
+  // Call download function
+  descargarArchivo(req, res, key, iv);
 })
 
-
+// Https server
 https.createServer({ cert: fs.readFileSync('testLab.cer'), key: fs.readFileSync('testLab.key') },app).listen(443, ()=>{ 
+  // Connect database
   connectToDB()
   console.log('Servidor funcionando en puerto 443'); 
 });
