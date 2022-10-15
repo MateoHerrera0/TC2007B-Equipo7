@@ -101,6 +101,32 @@ async function getDocs(reqBody, setData) {
 // } 
 
 // Function to add users
+async function setupAdmin(adminData){
+  try {
+    // Fetch endpoint, specifying method and request body
+    await fetch('/api/setup', {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ 
+        email: adminData.email, 
+        password: adminData.password,
+      })
+    })
+    // Response
+      .then(response => response.json())
+      .then(response => {
+        console.log("AdminSetup response " + response);
+        return response;
+      })
+    // error
+  } catch (error) {
+    console.log("ERROR at 'setupAdmin'");
+    console.log(error);
+    return [];
+  } 
+}
+
+// Function to add users
 async function addUser(userData){
   try {
     // Fetch endpoint, specifying method and request body
@@ -274,4 +300,4 @@ async function changePass(userPassData)
 }
 
 // Export functions
-export { addDocument, putDocument, addUser, logUser, logout, deleteUser, editUser, changePass};
+export { addDocument, putDocument, addUser, logUser, logout, deleteUser, editUser, changePass, setupAdmin};
