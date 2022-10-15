@@ -15,6 +15,7 @@ import AdminNavbar from './components/adminNavbar'
 import SearchDocument from './components/SearchDocument'
 import EditUser from './components/editUser'
 import ChangePass from './components/changePass'
+import Setup from './components/setup'
 
 function RoutesComp() {
   const userContext = useContext(UserContext)
@@ -61,6 +62,7 @@ function RoutesComp() {
         {userContext == null && (
           <>
             <Route path="/" element={<Login />} />
+            <Route path='/api/setup' element={<Setup />}/>
           </>
         )}
       </Routes>

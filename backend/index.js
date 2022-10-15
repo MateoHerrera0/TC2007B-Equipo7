@@ -295,7 +295,7 @@ app.post("/api/setup", (req, res)=>{
   let nulidadInsertar={rol: nulidad, llave: nulidadKey, iv: nulidadIv}
   let investigacionInsertar={rol: investigacion, llave: investigacionKey, iv: investigacionIv}
   // Insert roles in database
-  db.collection("roles").insertMany([{nulidadInsertar}, {investigacionInsertar}], (err, result)=>{
+  db.collection("roles").insertMany([nulidadInsertar, investigacionInsertar], (err, result)=>{
     if (err) throw err;
     // Create user admin
     bcrypt.hash(pass, 10, (err, hash)=>{
@@ -337,13 +337,92 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
 app.post("/api/addFirstFolio", uploads.single("file"), async (req,res) => {
   try {
     // Get req data
+    let collection = req.body.docType;
+    console.log(collection);
+    // Get key and initialization vector depending on docType
+    if(collection == "juicioNulidad")
+    {
+      console.log("estoy en nulidad")
+      // Nulidad iv and key
+      db.collection("roles").findOne({rol:"nulidad"}, (err, result)=>{
+        console.log("estoy en colección");
+        fs.readFile("testLab.key", (err, decryptKey)=>{
+            console.log("el resultado",result.iv);
+            let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
+            let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+            uploadFirstFolio(req, key,iv);
+        })
+      })
+    }
+    else if (collection == "carpetaInvestigacion")
+    {
+      // Investigacion iv and key
+      db.collection("roles").findOne({rol:"investigacion"}, (err, result)=>{
+        console.log("el resultado",result.iv);
+        fs.readFile("testLab.key", (err, decryptKey)=>{
+            console.log("wuwuwuw");
+            let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
+            let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+            console.log("el iv", iv)
+            uploadFirstFolio(req, key,iv);
+        })
+      })
+    }
+    res.json({'message': "Data inserted correctly."});
+    // Error
+  } catch (error) {
+    res.status(500);
+    res.json(error);
+    console.log(error);
+  }
+})
+
+// Put to add folios
+app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
+  try {
+    // Get folio type
+    let collection = req.body.docType;
+    // Get key and initialization vector depending on docType
+    if(collection == "juicioNulidad")
+    {
+      // Nulidad iv and key
+      db.collection("roles").findOne({rol:"nulidad"}, (err, result)=>{
+        fs.readFile("testLab.key", (err, decryptKey)=>{
+            let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
+            let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+            uploadFolio(req, key, iv);
+        })
+      })
+    }
+    else if (collection == "carpetaInvestigacion")
+    {
+      // Investigacion iv and key
+      db.collection("roles").findOne({rol:"investigacion"}, (err, result)=>{
+        fs.readFile("testLab.key", (err, decryptKey)=>{
+            let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
+            let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+            uploadFolio(req, key, iv);
+        })
+      })
+    }
+    res.json({'message': "Data updated correctly"})
+    // Error
+  } catch (error) {
+    res.status(500);
+    res.json(error);
+    console.log(error);
+  }
+})
+
+// Function that 
+async function uploadFirstFolio(req, key, iv)
+{
+    // Get req data
     let folio = req.body.folio;
     let nombre = req.body.nombre;
     let docID = req.body.docID
     let collection = req.body.docType;
-    // Initialize key and initialization vector
-    let key="";
-    let iv= "";
+    console.log(collection);
     // Get doc id from database (depending on collection --> nulidad / investigacion)
     const cursor = db.collection(collection).find({docID: docID}, {projection: {"_id": 1}});
     const data = await cursor.toArray();
@@ -352,27 +431,7 @@ app.post("/api/addFirstFolio", uploads.single("file"), async (req,res) => {
     let rutaDefinitiva = "/.storage/" + folio;
     let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
     let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
-    // Get key and initialization vector depending on docType
-    if(docType == "juicioNulidad")
-    {
-      // Nulidad iv and key
-      db.collection("roles").findOne({rol:"nulidad"}, (err, result)=>{
-        fs.readFile("testLab.key", (err, decryptKey)=>{
-            key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
-            iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
-        })
-      })
-    }
-    else if (docType == "carpetaInvestigacion")
-    {
-      // Investigacion iv and key
-      db.collection("roles").findOne({rol:"investigacion"}, (err, result)=>{
-        fs.readFile("testLab.key", (err, decryptKey)=>{
-            key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
-            iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
-        })
-      })
-    }
+    console.log("iv aqui",iv);
     // Cipher
     let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
     inputFS.pipe(cipher).pipe(outputFS)
@@ -390,73 +449,32 @@ app.post("/api/addFirstFolio", uploads.single("file"), async (req,res) => {
         console.log("Folio Guardado");
       })
     })
-    res.json({'message': "Data inserted correctly."});
-    // Error
-  } catch (error) {
-    res.status(500);
-    res.json(error);
-    console.log(error);
-  }
-})
+}
 
-// Put to add folios
-app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
-  try {
-    // Get folio type
-    let folioType = req.body.docType;
-    // Define route, input and output
-    let rutaDefinitiva = "/.storage/" + req.body.folio;
-    let inputFS = fs.createReadStream(__dirname + "/.temp/" + req.file.filename)
-    let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
-    // Key and initialization vector
-    let key=""
-    let iv= ""
-    // Get key and initialization vector depending on docType
-    if(folioType == "juicioNulidad")
-    {
-      // Nulidad iv and key
-      db.collection("roles").findOne({rol:"nulidad"}, (err, result)=>{
-        fs.readFile("testLab.key", (err, decryptKey)=>{
-            key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
-            iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
-        })
-      })
-    }
-    else if (folioType == "carpetaInvestigacion")
-    {
-      // Investigacion iv and key
-      db.collection("roles").findOne({rol:"investigacion"}, (err, result)=>{
-        fs.readFile("testLab.key", (err, decryptKey)=>{
-            key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
-            iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
-        })
-      })
-    }
-    // Cipher
-    let cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
-    // Add folio
-    inputFS.pipe(cipher).pipe(outputFS)
-    outputFS.on("finish", () => {
-      let Folio = {};
-      Folio.folio = req.body.folio;
-      Folio.archivo = rutaDefinitiva;
-      Folio.nombre = req.body.nombre;
-      Folio.expedienteID = ObjectId(req.body.proceeding);
-      fs.unlinkSync(__dirname + "/.temp/" +req.file.filename);
-      // Add folio to database
-      db.collection("folios").insertOne(Folio, (err,res) => {
-        if (err) throw err;
-        console.log("Folio Guardado");
-      })
+async function uploadFolio(req, key, iv)
+{
+  // Define route, input and output
+  let rutaDefinitiva = "/.storage/" + req.body.folio;
+  let inputFS = fs.createReadStream(__dirname + "/.temp/" + req.file.filename)
+  let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
+  // Cipher
+  let cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
+  // Add folio
+  inputFS.pipe(cipher).pipe(outputFS)
+  outputFS.on("finish", () => {
+    let Folio = {};
+    Folio.folio = req.body.folio;
+    Folio.archivo = rutaDefinitiva;
+    Folio.nombre = req.body.nombre;
+    Folio.expedienteID = ObjectId(req.body.proceeding);
+    fs.unlinkSync(__dirname + "/.temp/" +req.file.filename);
+    // Add folio to database
+    db.collection("folios").insertOne(Folio, (err,res) => {
+      if (err) throw err;
+      console.log("Folio Guardado");
     })
-    res.json({'message': "Data updated correctly"})
-    // Error
-  } catch (error) {
-    res.status(500);
-    res.json(error);
-    console.log(error);
-  }
-})
+  })
+}
 
 // Post to get docs
 app.post("/api/getDocs", async (request, response) => {
@@ -543,6 +561,8 @@ app.post("/api/descargarFolio", (req, res) => {
       fs.readFile("testLab.key", (err, decryptKey)=>{
           key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
           iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+           // Call download function
+          descargarArchivo(req, res, key, iv);
         })
       })
     }
@@ -553,11 +573,11 @@ app.post("/api/descargarFolio", (req, res) => {
         fs.readFile("testLab.key", (err, decryptKey)=>{
             key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
             iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
+            // Call download function
+            descargarArchivo(req, res, key, iv);
         })
       })
     }
-  // Call download function
-  descargarArchivo(req, res, key, iv);
 })
 
 // Https server
