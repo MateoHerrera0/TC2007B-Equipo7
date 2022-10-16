@@ -1,4 +1,4 @@
-import { useState, useReducer} from "react";
+import { useState, useReducer, useEffect} from "react";
 import { fields, Field } from "./fields"
 import {addDocument} from "../API/dbAPI";
 import Navbar from "./navbar";
@@ -16,8 +16,9 @@ function reducer(state, event) {
 }
 
 export default function Newfile(props) {
-  
-
+  const [user, setUserData] = useState(
+    {usuario: "", email: "", userType: "", nulidad: false, investigacion: false}
+  )
   const [formData, setFormData] = useReducer(reducer, {})
   
   function handleChange(ev) {
@@ -26,7 +27,19 @@ export default function Newfile(props) {
       value: ev.target.value
     })
   }
-
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('/api/profile')
+        const userData = await res.json()
+        setUserData(userData[0])
+      } catch (error) {
+        console.error('There was an error fetch auth', error)
+        return
+      }
+    }
+    fetchUser()
+  }, [])
   function handleSubmit(event) {
     event.preventDefault();
     let formElem = document.querySelector("#newFileForm")

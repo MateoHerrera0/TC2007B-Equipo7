@@ -12,7 +12,7 @@ import './profile.css';
 export default function Profile(props) {
 
   const [user, setUserData] = useState(
-    {usuario: "", email: "", userType: "", area: ""}
+    {usuario: "", email: "", userType: ""}
   )
 
   function delay(ms) {
