@@ -40,6 +40,7 @@ export default function Newfile(props) {
     }
     fetchUser()
   }, [])
+  
   function handleSubmit(event) {
     event.preventDefault();
     let formElem = document.querySelector("#newFileForm")
@@ -74,8 +75,17 @@ export default function Newfile(props) {
     fields.folio
   ]
 
-  const [fieldsToUse, setFields] = useState(nulidadFields)
-  const [docType, setDocType] = useState("juicioNulidad")
+  const [fieldsToUse, setFields] = useState()
+
+  const [docType, setDocType] = useState()
+  if (user.nulidad) {
+    setFields(nulidadFields)
+    setDocType("juicioNulidad")
+  } else if (user.investigacion) {
+    setFields(carpetaFields)
+    setDocType("carpetaInvestigacion")
+  }
+  
   const usuario = 'getusuario'
 
   return(
@@ -86,12 +96,33 @@ export default function Newfile(props) {
 
           <p className="text-center fs-1"><strong>Selecciona un tipo de documento</strong></p>
           <div className="row text-center p-5 gx-5">
-            <div className="col d-grid">
-              <button type="button" className="btn btn-primary btn-lg" onClick={() => {setFields(nulidadFields); setFormData({reset: true}); setDocType("juicioNulidad")}}>Juicio de Nulidad</button>
-            </div>
-            <div className="col d-grid">
-              <button type="button" className="btn btn-primary btn-lg" onClick={() => {setFields(carpetaFields); setFormData({reset: true}); setDocType("carpetaInvestigacion")}}>Carpeta de Investigacion</button>
-            </div>
+            {
+              () => {
+                if (user.nulidad) {
+                  return(
+                    <div className="col d-grid">
+                      <button type="button" className="btn btn-primary btn-lg" onClick={() => {setFields(nulidadFields); setFormData({reset: true}); setDocType("juicioNulidad")}}>Juicio de Nulidad</button>
+                    </div>   
+                  )
+                } else {
+                  return
+                }
+              }
+            }
+
+            {
+              () => {
+                if (user.investigacion) {
+                  return(
+                    <div className="col d-grid">
+                      <button type="button" className="btn btn-primary btn-lg" onClick={() => {setFields(carpetaFields); setFormData({reset: true}); setDocType("carpetaInvestigacion")}}>Carpeta de Investigacion</button>
+                    </div>
+                  )
+                } else {
+                  return
+                }
+              }
+            }
           </div>
           <p className="text-center fs-1"><strong>Si el expediente o la capeta ya existe, simplemente selecciona el documento correspondiente y sube el nuevo folio.</strong></p>
           <p className="text-center fs-5 pb-0 mb-0">Selecciona un documento existente.</p>
