@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { fields } from "./fieldsSearch";
 //import * as ReactDOM from "react-dom";
 import { Link } from 'react-router-dom';
 import Navbar from './navbar'
@@ -10,7 +9,7 @@ import { process } from "@progress/kendo-data-query";
 import {IntlProvider, LocalizationProvider} from "@progress/kendo-react-intl";
 import '@progress/kendo-theme-default/dist/all.css';
 import { useLocation } from 'react-router-dom';
-import './searchDocument.css';
+import './searchDocument.css'
 
 export default function SearchDocument() {
   const location = useLocation()
@@ -132,10 +131,11 @@ export default function SearchDocument() {
             </IntlProvider>
           </LocalizationProvider>
           <br></br>
+          <br></br>
           <td>
             <Link to="/search">
                 <button type="button" className="btn btn-primary btn-sm">Regresar a Expedientes</button>
-              </Link>
+            </Link>
           </td>
         </div>
     )
