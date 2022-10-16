@@ -14,6 +14,7 @@ import "./search.css";
 import { UserContext } from '../app';
 import AdminNavbar from "./adminNavbar";
 import { deleteUser } from "../API/dbAPI";
+import "./userManagement.css"
 
 const userEditButton = (props) => {
     console.log(props);
@@ -96,8 +97,7 @@ const SearchUsers = () => {
         ],
     };
     return (
-        <div>
-          
+        <div className="management">
             <AdminNavbar />
             <br></br> <h2 id="Titulo"> Manejo de usuarios </h2> <br></br>
             <div className="row text-center p-5">
