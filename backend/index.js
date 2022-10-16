@@ -355,19 +355,19 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
 
 // Post for first folio
 app.post("/api/addFirstFolio", uploads.single("file"), (req,res) => {
+  console.log("hello");
   if(req.session.usuario)
   {
     try {
       // Get req data
       let collection = req.body.docType;
-      console.log(collection);
+      console.log("Estamos en ",collection)
       // Get key and initialization vector depending on docType
       if(collection == "juicioNulidad")
       {
         // Nulidad iv and key
         db.collection("roles").findOne({rol:"nulidad"}, (err, result)=>{
           fs.readFile("testLab.key", (err, decryptKey)=>{
-              console.log("el resultado",result.iv);
               let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
               let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
               uploadFirstFolio(req, key,iv);
@@ -381,7 +381,6 @@ app.post("/api/addFirstFolio", uploads.single("file"), (req,res) => {
           fs.readFile("testLab.key", (err, decryptKey)=>{
               let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
               let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
-              console.log("el iv", iv)
               uploadFirstFolio(req, key,iv);
           })
         })
@@ -453,7 +452,6 @@ async function uploadFirstFolio(req, key, iv)
     let rutaDefinitiva = "/.storage/" + folio;
     let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
     let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
-    console.log("iv aqui",iv);
     // Cipher
     let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
     inputFS.pipe(cipher).pipe(outputFS)

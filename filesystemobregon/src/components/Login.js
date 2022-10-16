@@ -1,33 +1,46 @@
+/* Code used to define login interface and functionality
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Imports
 import React from 'react';
 import { useState, useEffect } from 'react';
 import './Login.css'
 import { Link } from 'react-router-dom';
 import { logUser } from '../API/dbAPI';
 
+// Function for login
 export default function Login(props) {
+  // User data
   const [user, setUser] = useState({
     email: "", password: ""
   })
 
+  // Handle inputs
   let name, value;
-  let reloaded = false; 
   const handleInputs = (e) => {
     console.log(e);
     name = e.target.name;
     value = e.target.value;
-
     setUser({...user, [name]: value})
   }
 
+  // Delay function 
   function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+  // Handle submit --> Call login api
   function handleSubmit(event) {
     event.preventDefault();
     logUser(user);
+    // reload page after login api was called (using delay)
     delay(1000).then(() => window.location.reload());
   }
 
+  // Render login interface
   return (
   <div className="container">
     <div className="row">

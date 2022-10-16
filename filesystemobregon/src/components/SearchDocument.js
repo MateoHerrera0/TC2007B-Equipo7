@@ -1,7 +1,14 @@
+/* Code used to define search folio interface and to allow users to search a folio within an expediente
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Imports
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-//import * as ReactDOM from "react-dom";
 import { Link } from 'react-router-dom';
 import Navbar from './navbar'
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
@@ -11,16 +18,19 @@ import '@progress/kendo-theme-default/dist/all.css';
 import { useLocation } from 'react-router-dom';
 import './searchDocument.css'
 
+// Function to search document
 export default function SearchDocument() {
+  // Remember expediente
   const location = useLocation()
   const { expId, docType } = location.state
 
+  // Get data
   const [data, setData] = useState([]);
       useEffect( ()=> {
         console.log(expId);
         getData(expId);
       }, [])
-
+    // Function to call backend for data
     const getData = async (query) => {
       await axios.post('/api/getFolios', {query: query})
       .then(response => {
@@ -29,6 +39,7 @@ export default function SearchDocument() {
       })
     }
 
+    // Download a file --> call backend 
     const download = async (id, name, docType) => {
       await axios.post('/api/descargarFolio', {_id: id, docType: docType}, {
         responseType: 'blob',
@@ -42,15 +53,18 @@ export default function SearchDocument() {
     })
     }
 
+    // Set result
     const [dataState, setDataState] = React.useState()
     const [res, setResult] = React.useState(data);
     useEffect(() => { setResult(data)}, [data] );
 
+    // Handle data state changes
     const onDataStateChange = (event) => {
         setDataState(event.dataState);
         setResult(process(data, event.dataState));
     }
 
+    // Define filter operators
     const filterOperators = {
         text: [
             { text: 'grid.filterContainsOperator', operator: 'contains'},
@@ -88,6 +102,7 @@ export default function SearchDocument() {
           {text: "grid.filterEqOperator", operator: "eq"}
         ],
     };
+    // Render search folio interface
     return (
         <div className="searchDoc">
             <Navbar />

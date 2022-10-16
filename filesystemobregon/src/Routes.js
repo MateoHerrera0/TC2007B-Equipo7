@@ -1,8 +1,13 @@
+/* Code used to define routes within app depending in user context
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+// Imports
 import { useContext, useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Login from './components/Login'
-import Signup from './components/register'
-
 import { UserContext } from './app'
 import Home from './components/home'
 import Newfile from './components/newfile'
@@ -17,12 +22,15 @@ import EditUser from './components/editUser'
 import ChangePass from './components/changePass'
 import Setup from './components/setup'
 
+// Routes component
 function RoutesComp() {
+  // Get user context --> user logged in
   const userContext = useContext(UserContext)
-  console.log("el contexto",userContext);
+  // User data
   const [user, setUserData] = useState(
     {usuario: "", email: "", userType: "", area: ""}
   )
+  // Get user data from backend
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -36,6 +44,7 @@ function RoutesComp() {
     }
     fetchUser()
   }, [])
+  // Routes depending on user credentials (admin/user/not logged in)
   return (
     <>
       <Routes>

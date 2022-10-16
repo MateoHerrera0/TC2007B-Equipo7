@@ -1,10 +1,20 @@
+/* Code used to define user navbar 
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// imports
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AOLogo1 from '../Images/AOLogo1.png';
 
+// Navbar function
 export default function Navbar() {
+  // Allow expand
   const[expand, setExpand] = useState("collapse navbar-collapse");
-  
+  // Render navbar 
   return(
     <div className=''>
 

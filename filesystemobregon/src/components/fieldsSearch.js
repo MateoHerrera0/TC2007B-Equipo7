@@ -1,3 +1,10 @@
+/* Code used to define fields used for search
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+// Define fields
 const fields = {
     expediente: {
       id: "docID",
@@ -100,4 +107,5 @@ const fields = {
     }
 }
 
+// Export function
 export {fields}

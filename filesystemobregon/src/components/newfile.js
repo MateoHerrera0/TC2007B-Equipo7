@@ -1,3 +1,11 @@
+/* Code used to define newfile interface and to allow users to upload a file
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+//imports
 import { useState, useReducer, useEffect} from "react";
 import { fields, Field } from "./fields"
 import {addDocument} from "../API/dbAPI";
@@ -6,28 +14,34 @@ import Navbar from "./navbar";
 import PutFolio from "./addFolioForm";
 import "./newFile.css"
 
+// Reducer to determine what to render in form data
 function reducer(state, event) {
   if (event.reset) {
     return {}
   }
-  
   return {...state,
     [event.id]: event.value
   }
 }
 
+// Function for newfile
 export default function Newfile(props) {
+  // User data
   const [user, setUserData] = useState(
     {usuario: "", email: "", userType: "", nulidad: false, investigacion: false}
   )
+  // Set data to render in forms
   const [formData, setFormData] = useReducer(reducer, {})
   
+  // Handle change (inputs)
   function handleChange(ev) {
     setFormData({
       id: ev.target.name,
       value: ev.target.value
     })
   }
+
+  // Get current profile --> fetch from backend
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -42,13 +56,16 @@ export default function Newfile(props) {
     fetchUser()
   }, [])
   
+  // Handle submit
   function handleSubmit(event) {
     event.preventDefault();
     let formElem = document.querySelector("#newFileForm")
+    // Call api to add document
     addDocument(formElem, setFormData);
     document.querySelector("#file").value = null;
 }
   
+  // Fields to display in nulidad
   const nulidadFields = [
     fields.expediente, 
     fields.tja,
@@ -63,6 +80,7 @@ export default function Newfile(props) {
     fields.folio
   ]
 
+  // Fields to display in carpeta investigacion
   const carpetaFields = [
     fields.carpeta,
     fields.eco,
@@ -76,12 +94,16 @@ export default function Newfile(props) {
     fields.folio
   ]
 
-  const [fieldsToUse, setFields] = useState(user.nulidad ? nulidadFields : carpetaFields)
+  // Determine fields to use
+  const [fieldsToUse, setFields] = useState(user.nulidad ? nulidadFields : carpetaFields);
 
-  const [docType, setDocType] = useState(user.nulidad ? "juicioNulidad" : "carpetaInvestigacion")
+  // Determine doctype
+  const [docType, setDocType] = useState(user.nulidad ? "juicioNulidad" : "carpetaInvestigacion");
   
-  const usuario = 'getusuario'
+  // Define current user
+  const usuario = user.email;
 
+  // Render forms
   return(
     <div className="newfile">
       <Navbar />

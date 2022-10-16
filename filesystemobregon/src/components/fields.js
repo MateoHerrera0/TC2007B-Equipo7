@@ -1,3 +1,11 @@
+/* Code used to define fields for document upload
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Fields depending on props
 function Field(props) {
   return (
     <div className="mb-3">
@@ -16,6 +24,7 @@ function Field(props) {
   )
 }
 
+// Fields to use
 const fields = {
     expediente: {
       id: "docID",
@@ -133,5 +142,5 @@ const fields = {
     
 }
 
-
+// Export functions
 export {fields, Field}

@@ -1,3 +1,11 @@
+/* Code used to define change password interface and to allow admin to change password
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// imports
 import React from 'react';
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
@@ -6,13 +14,16 @@ import { useLocation, Link } from 'react-router-dom'
 import AdminNavbar from "./adminNavbar";
 import { changePass } from '../API/dbAPI';
 
+// Function to change password
 export default function ChangePass(props) {
+    // Remember selected user (admin may choose user to change password)
     const location = useLocation()
     const userId = location.state
+    // Save user info --> new password data
     const [userPass, setUserPass] = useState({
         usuario: userId.usuario, email: userId.email, ogPassword: "", newPassword: "", repPassword: ""
       })
-
+    // Handle inputs
     let name, value; 
     const handleInputs = (e) => {
         console.log(e);
@@ -21,14 +32,11 @@ export default function ChangePass(props) {
         setUserPass({...userPass, [name]: value})
       }
     
-      function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-      function handleSubmit(event) {
+    // Handle submit --> call change password backend (through api function)
+    function handleSubmit(event) {
         event.preventDefault();
         changePass(userPass);
-        //delay(1000).then(() => window.location.reload());
-      }
+    }
 
         return (
           <div>

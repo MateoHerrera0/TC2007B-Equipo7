@@ -1,8 +1,17 @@
+/* Code used to render addFolioForm and to allow users to add folios
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Import libraries
 import { useState, useReducer } from "react";
 import { putDocument } from "../API/dbAPI";
 import { fields, Field } from "./fields"
 import AsyncSelect from "react-select/async"
 
+// Reducer to determine what to display in form data --> reset or current state
 function reducer(state, event) {
   if (event.reset) {
     return {}
@@ -12,14 +21,17 @@ function reducer(state, event) {
   }
 }
 
+// Function to put folio
 export default function PutFolio(props) {
+  // Determine doctype (nulidad/investigacion)
   const [docType, setDocType] = useState(props.docType)
 
   if (docType != props.docType) {
     setDocType(props.docType)
   }
 
-  console.log(props.docType)
+  //console.log(props.docType)
+  // Call backend to get docs
   const fetchData = (inputValue, callback) => {
     setTimeout(() => {
         fetch('/api/getDocs', {
@@ -59,8 +71,11 @@ export default function PutFolio(props) {
         });
     }, 2000);
   };
+
+  // Form data
   const [formData, setFormData] = useReducer(reducer, {})
   
+  // Handle changes in forms
   function handleChange(ev) {
     setFormData({
       id: ev.target.name,
@@ -68,15 +83,18 @@ export default function PutFolio(props) {
     })
   }
 
+  // Handle submit
   function handleSubmit(event) {
     event.preventDefault();
     let formElem = document.querySelector("#folioForm")
+    // Add folio
     putDocument(formElem, setFormData)
     document.querySelector("#file").value = null;
   }
 
   const usuario = 'getusuario'
 
+  // Determine fields to render
   const fieldsToUse = [
     fields.nombre,
     fields.folio,
