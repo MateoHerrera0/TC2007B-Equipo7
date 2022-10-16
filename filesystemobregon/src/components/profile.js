@@ -14,7 +14,6 @@ export default function Profile(props) {
   const [user, setUserData] = useState(
     {usuario: "", email: "", userType: ""}
   )
-
   function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -34,7 +33,6 @@ export default function Profile(props) {
     fetchUser()
   }, [])
 
-  console.log(user)
   return (
     <div className='profile-view'>
       {props.navbar}

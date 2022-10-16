@@ -22,9 +22,6 @@ export default function AdminNavbar() {
         <li className="nav-item">
           <a className="nav-link active" aria-current="page" href="/">Manejo de usuarios</a>
         </li>
-        <li className="nav-item">
-          <a className="nav-link" href="/">Historiales</a>
-        </li>
       </ul>
       <span>
       <div className="col-md-5 text-md-start text-center">
