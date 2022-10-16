@@ -102,7 +102,7 @@ app.post("/api/register", (req, res) => {
   let uType = req.body.userType;
   let typeNulidad = req.body.nulidad; 
   let typeInv = req.body.investigacion;
-  if(req.session.usuario && req.session.userType == "Administrador")
+  if(req.session.usuario)
   {
     try{
       // Look for user in database
@@ -127,13 +127,12 @@ app.post("/api/register", (req, res) => {
             // Add new user info to database
             db.collection("usuarios").insertOne(aAgregar, (err, result) => {
             // Evaluate for error
-            if(err) throw err;
-            res.send({"Message": "User registered"});
+              if(err) throw err;
+              res.send({"Message": "User registered"});
             })
           })
         }
       })
-      res.json({'Message': "User inserted correctly."});
     }
     // Error
     catch (error){
@@ -220,7 +219,7 @@ app.delete("/api/deleteUser", (req, res) => {
   // Get req user data
   let mail = req.body.email;
   let user = req.body.usuario;
-  if(req.session.usuario && req.session.userType == "Administrador")
+  if(req.session.usuario)
   {
     // Delete from database
     db.collection("usuarios").deleteOne({usuario: user, email: mail});
@@ -236,7 +235,7 @@ app.put("/api/editUser", (req, res) => {
   let ogEmail = req.body.ogEmail;
   let tNulidad = req.body.nulidad; 
   let tInvestigacion = req.body.investigacion;
-  if(req.session.usuario && req.session.userType == "Administrador")
+  if(req.session.usuario)
   {
     // Update database
     db.collection("usuarios").updateOne({email: ogEmail}, {$set: {usuario: user, email: mail, nulidad: tNulidad, investigacion: tInvestigacion}});
@@ -251,7 +250,7 @@ app.put("/api/changePass", (req, res) => {
   let ogPass = req.body.ogPassword;
   let newPass = req.body.newPassword;
   let repPass = req.body.repPassword;
-  if(req.session.usuario && req.session.userType == "Administrador")
+  if(req.session.usuario)
   {
     // Look for user in database
     db.collection("usuarios").findOne({email:mail}, (err, result) => {

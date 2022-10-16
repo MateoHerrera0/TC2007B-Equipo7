@@ -1,6 +1,7 @@
 import { useState, useReducer, useEffect} from "react";
 import { fields, Field } from "./fields"
 import {addDocument} from "../API/dbAPI";
+import GetButtons from "./buttons";
 import Navbar from "./navbar";
 import PutFolio from "./addFolioForm";
 import "./newFile.css"
@@ -75,16 +76,9 @@ export default function Newfile(props) {
     fields.folio
   ]
 
-  const [fieldsToUse, setFields] = useState()
+  const [fieldsToUse, setFields] = useState(user.nulidad ? nulidadFields : carpetaFields)
 
-  const [docType, setDocType] = useState()
-  if (user.nulidad) {
-    setFields(nulidadFields)
-    setDocType("juicioNulidad")
-  } else if (user.investigacion) {
-    setFields(carpetaFields)
-    setDocType("carpetaInvestigacion")
-  }
+  const [docType, setDocType] = useState(user.nulidad ? "juicioNulidad" : "carpetaInvestigacion")
   
   const usuario = 'getusuario'
 
@@ -94,36 +88,16 @@ export default function Newfile(props) {
       <div className="section p-5">
         <div className="container">
 
-          <p className="text-center fs-1"><strong>Selecciona un tipo de documento</strong></p>
-          <div className="row text-center p-5 gx-5">
-            {
-              () => {
-                if (user.nulidad) {
-                  return(
-                    <div className="col d-grid">
-                      <button type="button" className="btn btn-primary btn-lg" onClick={() => {setFields(nulidadFields); setFormData({reset: true}); setDocType("juicioNulidad")}}>Juicio de Nulidad</button>
-                    </div>   
-                  )
-                } else {
-                  return
-                }
-              }
-            }
-
-            {
-              () => {
-                if (user.investigacion) {
-                  return(
-                    <div className="col d-grid">
-                      <button type="button" className="btn btn-primary btn-lg" onClick={() => {setFields(carpetaFields); setFormData({reset: true}); setDocType("carpetaInvestigacion")}}>Carpeta de Investigacion</button>
-                    </div>
-                  )
-                } else {
-                  return
-                }
-              }
-            }
-          </div>
+          <p className="text-center fs-1"><strong>Selecciona un tipo de documento</strong></p> 
+            <GetButtons 
+              nulidad = {user.nulidad}
+              carpeta = {user.investigacion}
+              setFields = {setFields}
+              setDocType = {setDocType}
+              setFormData = {setFormData}
+              nulidadFields = {nulidadFields}
+              carpetaFields = {carpetaFields}
+            />
           <p className="text-center fs-1"><strong>Si el expediente o la capeta ya existe, simplemente selecciona el documento correspondiente y sube el nuevo folio.</strong></p>
           <p className="text-center fs-5 pb-0 mb-0">Selecciona un documento existente.</p>
           <PutFolio docType = {docType} />
