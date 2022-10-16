@@ -53,7 +53,7 @@ function RoutesComp() {
         <>
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Home />} />
-          <Route path="/newFile" element={<Newfile />} />
+          <Route path="/newFile" element={<Newfile usuario = {userContext}/>}/>
           <Route path="/profile" element={<Profile usuario = {userContext} navbar = {<Navbar />}/>} />
           <Route path="/search" element={<Search />} />
           <Route path="/searchFolio" element={<SearchDocument />} />
