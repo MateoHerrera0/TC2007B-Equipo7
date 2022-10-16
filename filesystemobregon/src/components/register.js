@@ -9,7 +9,7 @@ import AdminNavbar from "./adminNavbar";
 
 export default function Register(props){
   const [user, setUser] = useState({
-    usuario: "", email: "", password: "", repPassword: "", userType: "Tipo de Usuario", nulidad: false, investigacion: false
+    usuario: "", email: "", password: "", repPassword: "", userType: "Usuario", nulidad: false, investigacion: false
   })
 
   let name, value; 
@@ -100,18 +100,6 @@ export default function Register(props){
                               <label className="custom-control-label" for="defaultChecked2">Investigacion</label>
                             </div>
                           </div>
-                          </div>
-                          <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                            <Dropdown className="d-inline mx-2" onSelect={(e) => {setUser({...user, "userType": e})}} >
-                              <Dropdown.Toggle id="userType" name="userType">
-                                {user.userType}
-                              </Dropdown.Toggle>
-
-                              <Dropdown.Menu>
-                                <Dropdown.Item eventKey="Administrador">Administrador</Dropdown.Item>
-                                <Dropdown.Item eventKey= "Usuario" >Usuario</Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
                           </div>
                           <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                             <button type="submit" className="btn btn-primary btn-lg" >Registrar</button>
