@@ -40,6 +40,7 @@ export default function Newfile(props) {
     }
     fetchUser()
   }, [])
+  
   function handleSubmit(event) {
     event.preventDefault();
     let formElem = document.querySelector("#newFileForm")

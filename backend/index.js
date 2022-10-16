@@ -77,17 +77,17 @@ app.post("/api/login", (req, res) => {
                   req.session.nulidad = result.nulidad;
                   req.session.investigacion = result.investigacion;
                   // Send session
-                  res.send(JSON.stringify({'email': req.session.usuario}));
+                  res.json({'email': req.session.usuario});
               }
               // If password is incorrect
               else{
-                  res.send({"Message": "Error in login"});
+                  res.json({"Message": "Error in login"});
               }
           })
       }
       // If user doesn't exist
       else{
-          res.send({"Message" : "Error1 in login"});
+          res.json({"Message" : "Error1 in login"});
       }
   })
 })
@@ -102,7 +102,7 @@ app.post("/api/register", (req, res) => {
   let uType = req.body.userType;
   let typeNulidad = req.body.nulidad; 
   let typeInv = req.body.investigacion;
-  if(req.session.usuario && req.session.userType == "Administrador")
+  if(req.session.usuario)
   {
     try{
       // Look for user in database
@@ -110,12 +110,12 @@ app.post("/api/register", (req, res) => {
         // If user exists
         if(result!=null)
         {
-          res.send({"Message": "User already exists"});
+          res.json({"Message": "User already exists"});
         }
         // Check if password confirmation is valid
         else if (pass != cpass) 
         {
-          res.send({"Message": "Passwords don't match"});
+          res.json({"Message": "Passwords don't match"});
         }
         // Otherwise
         else
@@ -128,12 +128,11 @@ app.post("/api/register", (req, res) => {
             db.collection("usuarios").insertOne(aAgregar, (err, result) => {
             // Evaluate for error
             if(err) throw err;
-            res.send({"Message": "User registered"});
+            res.json({"Message": "User registered"});
             })
           })
         }
       })
-      res.json({'Message': "User inserted correctly."});
     }
     // Error
     catch (error){
@@ -220,11 +219,11 @@ app.delete("/api/deleteUser", (req, res) => {
   // Get req user data
   let mail = req.body.email;
   let user = req.body.usuario;
-  if(req.session.usuario && req.session.userType == "Administrador")
+  if(req.session.usuario)
   {
     // Delete from database
     db.collection("usuarios").deleteOne({usuario: user, email: mail});
-    res.send({"message": "User deleted"});
+    res.json({"message": "User deleted"});
   }
 })
 
@@ -236,11 +235,11 @@ app.put("/api/editUser", (req, res) => {
   let ogEmail = req.body.ogEmail;
   let tNulidad = req.body.nulidad; 
   let tInvestigacion = req.body.investigacion;
-  if(req.session.usuario && req.session.userType == "Administrador")
+  if(req.session.usuario)
   {
     // Update database
     db.collection("usuarios").updateOne({email: ogEmail}, {$set: {usuario: user, email: mail, nulidad: tNulidad, investigacion: tInvestigacion}});
-    res.send({"Message": "User edited"});
+    res.json({"Message": "User edited"});
   }
 })
 
@@ -251,7 +250,7 @@ app.put("/api/changePass", (req, res) => {
   let ogPass = req.body.ogPassword;
   let newPass = req.body.newPassword;
   let repPass = req.body.repPassword;
-  if(req.session.usuario && req.session.userType == "Administrador")
+  if(req.session.usuario)
   {
     // Look for user in database
     db.collection("usuarios").findOne({email:mail}, (err, result) => {
@@ -266,7 +265,7 @@ app.put("/api/changePass", (req, res) => {
             if (newPass != repPass) 
             {
               // If new passwords don't match
-              res.send({"Message": "Passwords don't match"})
+              res.json({"Message": "Passwords don't match"})
             }
             // If new passwords match
             else {
@@ -277,19 +276,19 @@ app.put("/api/changePass", (req, res) => {
                 // update password in database
                 db.collection("usuarios").updateOne({email: mail}, {$set: {password: hash}})
               })
-              res.send({"Message": "Change Successful"})
+              res.json({"Message": "Change Successful"})
             }
           }
           // If original password doesn't match with database
           else{
-            res.send({"Message": "Error"})
+            res.json({"Message": "Error"})
           }
         })
       }
       // If user doesn't exist
       else
       {
-        res.send(false)
+        res.json(false)
       }
     })
   }
@@ -324,7 +323,7 @@ app.post("/api/setup", (req, res)=>{
             if (err) throw err;
         })
     })
-  res.send({"Message": "Setup complete"})
+  res.json({"Message": "Setup complete"})
   })
 });
 
@@ -345,7 +344,6 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
         if (err) throw err;
         console.log("Expediente Guardado");
       })
-      res.json({'message': "Data inserted correctly."});
       // ERror
     } catch (error) {
       res.status(500);
@@ -381,7 +379,6 @@ app.post("/api/addFirstFolio", uploads.single("file"), (req,res) => {
         // Investigacion iv and key
         db.collection("roles").findOne({rol:"investigacion"}, (err, result)=>{
           fs.readFile("testLab.key", (err, decryptKey)=>{
-              console.log("wuwuwuw");
               let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
               let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
               console.log("el iv", iv)

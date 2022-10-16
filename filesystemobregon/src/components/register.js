@@ -6,13 +6,12 @@ import {addUser} from "../API/dbAPI";
 import Dropdown from 'react-bootstrap/Dropdown';
 import AdminNavbar from "./adminNavbar";
 
-
 export default function Register(props){
   const [user, setUser] = useState({
     usuario: "", email: "", password: "", repPassword: "", userType: "Usuario", nulidad: false, investigacion: false
   })
 
-  let name, value; 
+  let name, value, responseMessage; 
   const handleInputs = (e) => {
     console.log(e);
     name = e.target.name;
@@ -24,8 +23,15 @@ export default function Register(props){
   }
   function handleSubmit(event) {
     event.preventDefault();
-    addUser(user);
-    delay(1000).then(() => window.location.reload());
+    if(user.nulidad == false && user.investigacion == false){
+      console.log("Tienes que dar por lo menos un permiso al usuario")
+    }
+    else {
+      //addUser(user);
+      responseMessage = addUser(user);
+      //console.log(responseMessage);
+      delay(1000).then(() => window.location.reload());
+    }
   }
     return (
       <div>
@@ -42,7 +48,7 @@ export default function Register(props){
                       <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
                         <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Añadir Usuario</p>
-
+                        <p>{responseMessage}</p>
                         <form className="mx-1 mx-md-4" id="newUser" onSubmit={handleSubmit}>
 
                           <div className="d-flex flex-row align-items-center mb-4">
@@ -105,7 +111,11 @@ export default function Register(props){
                             <button type="submit" className="btn btn-primary btn-lg" >Registrar</button>
                           </div>
                         </form>
-
+                        <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                <Link to='/'>
+                                    <button type="button" className="btn btn-primary btn-lg" >Regresar</button>
+                                </Link>
+                            </div>
                       </div>
                       <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
 

@@ -98,6 +98,11 @@ export default function EditUser(props) {
                             <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                                 <button type="submit" className="btn btn-primary btn-lg" >Aplicar Cambios</button>
                             </div>
+                            <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                <Link to='/'>
+                                    <button type="button" className="btn btn-primary btn-lg" >Regresar</button>
+                                </Link>
+                            </div>
                             </form>
     
                           </div>

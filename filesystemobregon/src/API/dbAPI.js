@@ -257,7 +257,7 @@ async function editUser(ogUserData, userData)
       // Response
       .then(response => response.json())
       .then(response => {
-        window.location.reload()
+        window.location.assign("/")
         return response;
       })
     // Error
@@ -288,7 +288,7 @@ async function changePass(userPassData)
       // Response
       .then(response => response.json())
       .then(response => {
-        window.location.reload()
+        window.location.assign("/")
         return response;
       })
     // Error
