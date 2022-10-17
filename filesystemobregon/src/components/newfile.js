@@ -10,7 +10,7 @@ import { useState, useReducer, useEffect} from "react";
 import { fields, Field } from "./fields"
 import {addDocument} from "../API/dbAPI";
 import Popup from "./popup";
-import GetButtons from "./buttons";
+import { GetButtons } from "./buttons";
 import Navbar from "./navbar";
 import PutFolio from "./addFolioForm";
 import "./newFile.css"
