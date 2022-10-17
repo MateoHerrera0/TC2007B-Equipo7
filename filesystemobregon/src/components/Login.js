@@ -19,6 +19,8 @@ export default function Login(props) {
     email: "", password: ""
   })
 
+  const[message, setMessage] = useState({})
+
   // Handle inputs
   let name, value;
   const handleInputs = (e) => {
@@ -35,7 +37,7 @@ export default function Login(props) {
   // Handle submit --> Call login api
   function handleSubmit(event) {
     event.preventDefault();
-    logUser(user);
+    logUser(user, setMessage);
     // reload page after login api was called (using delay)
     delay(1000).then(() => window.location.reload());
   }
@@ -76,7 +78,9 @@ export default function Login(props) {
                         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                           <button type="submit" className="btn btn-primary btn-lg">Entrar</button>
                         </div>
-
+                        <div>
+                          <p>{message}</p>
+                        </div>
                       </form> 
                     </div>
                     <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">

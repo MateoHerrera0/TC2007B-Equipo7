@@ -344,7 +344,8 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
         if (err) throw err;
         console.log("Expediente Guardado");
       })
-      // ERror
+      res.json({"Message":"Data inserted correctly"})
+      // Error
     } catch (error) {
       res.status(500);
       res.json(error);
@@ -525,24 +526,25 @@ app.post("/api/getDocs", async (request, response) => {
 
 // Post to get folios
 app.post("/api/getFolios", async (request, response) => {
-  if(req.session.usuario)
-  {}
-  try {
-    // Save query
-    let searchValue = request.body.query
-    console.log(searchValue);
-    // {"docID" : {$regex : request.body.docID}
-    // Look for query value in the folios collection
-    const cursor = db.collection("folios").find({expedienteID: ObjectId(searchValue)});
-    const data = await cursor.toArray();
-    console.log(data);
-    // Get data
-    response.json(data);
-    // Error
-  } catch (error) {
-    response.status(500);
-    response.json(error);
-    console.log(error);
+  if(request.session.usuario)
+  {
+    try {
+      // Save query
+      let searchValue = request.body.query
+      console.log(searchValue);
+      // {"docID" : {$regex : request.body.docID}
+      // Look for query value in the folios collection
+      const cursor = db.collection("folios").find({expedienteID: ObjectId(searchValue)});
+      const data = await cursor.toArray();
+      console.log(data);
+      // Get data
+      response.json(data);
+      // Error
+    } catch (error) {
+      response.status(500);
+      response.json(error);
+      console.log(error);
+    }
   }
 })
 
@@ -589,7 +591,7 @@ app.post("/api/descargarFolio", (req, res) => {
             key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
             iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
              // Call download function
-            descargarArchivo(req, res, key, iv);
+            return descargarArchivo(req, res, key, iv);
           })
         })
       }
@@ -601,7 +603,7 @@ app.post("/api/descargarFolio", (req, res) => {
               key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
               iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
               // Call download function
-              descargarArchivo(req, res, key, iv);
+              return descargarArchivo(req, res, key, iv);
           })
         })
       }

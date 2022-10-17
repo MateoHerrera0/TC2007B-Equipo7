@@ -13,17 +13,13 @@ async function addDocument(formData, setFormData) {
     await fetch('/api/addpath', {
       method: "POST",
       body: formBody
-    })
-      // Response
-      .then(response => response.json())
+    }).then(response => response.json())
       .then( async () => {
         // Fetch backend --> to add first folio
         await fetch('/api/addFirstFolio', {
           method: "POST",
           body: formBody
-        })
-          // Response
-          .then(response => response.json())
+        }).then(response => response.json())
           .then(response => {
             console.log("addDocument response: " + response);
             window.location.reload()
@@ -167,7 +163,7 @@ async function addUser(userData){
 }
 
 // Function used to login user
-async function logUser(userData){
+async function logUser(userData, setMessage){
   try {
     // Fetch endpoint, specifying method and request body
     await fetch('/api/login', {
@@ -183,9 +179,8 @@ async function logUser(userData){
     })
     // Response
       .then(response => response.json())
-      .then(response => {
-        console.log("UserInfo response " + response);
-        return response;
+      .then((data) => {
+        setMessage(data);
       })
     // Error
   } catch (error) {
