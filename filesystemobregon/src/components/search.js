@@ -145,7 +145,7 @@ const Search = (props) => {
               nulidadFields = {nulidadFields}
               carpetaFields = {carpetaFields}
               nulidad = {props.usuario.nulidad}
-              carpeta = {props.usuario.carpeta}
+              carpeta = {props.usuario.investigacion}
 
             /> 
 
@@ -214,11 +214,11 @@ const Search = (props) => {
           <Popup 
             visible = {visible}
             setVisible = {setVisible}
-            popupTitle = {"Acpetar cambios ?"}
+            popupTitle = {"Aceptar cambios ?"}
             popupBody = {
               <form onSubmit={handleSubmit} id="changeStatusForm">
               <div className="mb-3">
-                <label htmlFor="eGuarda" className="form-label">Ingresa aqui el nuevo estado del documento:</label>
+                <label htmlFor="eGuarda" className="form-label">Ingresa aquí el nuevo estado del documento:</label>
                 <input 
                   type="text" 
                   className="form-control" 
