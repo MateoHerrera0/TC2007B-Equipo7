@@ -125,7 +125,7 @@ export default function EditUser(props) {
                               visible = {visible}
                               setVisible = {setVisible}
                               popupTitle = {"Favor de confirmar lo siguiente:"}
-                              popupBody = {<p>¿Estás seguro de que queires cambiar los datos del usuario?</p>}
+                              popupBody = {<p>¿Estás seguro de que quieres cambiar los datos del usuario?</p>}
                               okFunction = {()=>submitForm("editUser")}
                             />
                           </div>

@@ -153,7 +153,7 @@ export default function Newfile(props) {
                 visible = {visible}
                 setVisible = {setVisible}
                 popupTitle = {"Favor de confirmar lo siguiente:"}
-                popupBody = {<p>Estas seguro de que los datos ingresados son correctos y el arcivo esta listo para ser guardado?</p>}
+                popupBody = {<p>¿Estás seguro de que los datos ingresados son correctos y el archivo esta listo para ser guardado?</p>}
                 okFunction = {()=>submitForm("newFileForm")}
               />
           </div>
