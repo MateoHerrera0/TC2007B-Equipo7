@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import AOLogo1 from '../Images/AOLogo1.png';
 
 export default function AdminNavbar() {
   const[expand, setExpand] = useState("collapse navbar-collapse");
   
   return(
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-  <div className="container-fluid">
-    <a className="navbar-brand" href="/">Alcaldía Álvaro Obregón</a>
+    <div className="container-fluid">
+    <a className="navbar-brand" href="/">
+      <img src={AOLogo1} alt='Logo' width="260" className="d-inline-block align-text-top" /> 
+    </a>
+    
     <button className="navbar-toggler" type="button" onClick={() => { 
       if(expand === "collapse navbar-collapse") {
         setExpand("collapse navbar-collapse show")

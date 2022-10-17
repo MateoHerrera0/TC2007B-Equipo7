@@ -43,6 +43,7 @@ const Search = () => {
       fields.tja,
       fields.actor,
       fields.domicilio,
+      fields.lFisico,
       fields.acto,
       fields.eJuridico,
       fields.eProcesal,
@@ -57,6 +58,7 @@ const Search = () => {
       fields.imputado,
       fields.delito,
       fields.lugar,
+      fields.lFisico,
       fields.objeto,
       fields.eGuarda,
       fields.usuario

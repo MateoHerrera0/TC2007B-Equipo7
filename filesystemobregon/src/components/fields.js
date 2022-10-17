@@ -65,6 +65,12 @@ const fields = {
       placeholder: "Ingresa la materia aqui..."
     },
 
+    lFisico: {
+      id: "lFisico",
+      label: "Lugar Físico",
+      placeholder: "Ingresa donde se encuentra guardado el documento en físico..."
+    },
+
     demandado: {
       id: "demandado",
       label: "Demandado",

@@ -19,6 +19,13 @@ const fields = {
       label: "Domicilio"
     },
 
+    lFisico: {
+      id: "lFisico",
+      label: "Lugar Físico",
+      placeholder: "Ingresa donde se encuentra guardado el documento en físico..."
+    },
+
+
     acto: {
       id: "acto",
       label: "Acto"
