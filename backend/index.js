@@ -77,17 +77,17 @@ app.post("/api/login", (req, res) => {
                   req.session.nulidad = result.nulidad;
                   req.session.investigacion = result.investigacion;
                   // Send session
-                  res.send(JSON.stringify({'email': req.session.usuario}));
+                  res.json({'email': req.session.usuario});
               }
               // If password is incorrect
               else{
-                  res.send({"Message": "Error in login"});
+                  res.json({"Message": "Error in login"});
               }
           })
       }
       // If user doesn't exist
       else{
-          res.send({"Message" : "Error1 in login"});
+          res.json({"Message" : "Error1 in login"});
       }
   })
 })
@@ -110,12 +110,12 @@ app.post("/api/register", (req, res) => {
         // If user exists
         if(result!=null)
         {
-          res.send({"Message": "User already exists"});
+          res.json({"Message": "User already exists"});
         }
         // Check if password confirmation is valid
         else if (pass != cpass) 
         {
-          res.send({"Message": "Passwords don't match"});
+          res.json({"Message": "Passwords don't match"});
         }
         // Otherwise
         else
@@ -127,8 +127,8 @@ app.post("/api/register", (req, res) => {
             // Add new user info to database
             db.collection("usuarios").insertOne(aAgregar, (err, result) => {
             // Evaluate for error
-              if(err) throw err;
-              res.send({"Message": "User registered"});
+            if(err) throw err;
+            res.json({"Message": "User registered"});
             })
           })
         }
@@ -190,7 +190,7 @@ app.get("/api/getAllUsers", async (req, res) => {
   {
     try {
       // Get all info from users collection
-      const cursor = db.collection("usuarios").find(); 
+      const cursor = db.collection("usuarios").find({email: {$ne: req.session.usuario}}); 
       const data = await cursor.toArray();
       // Get results
       res.json(data);
@@ -223,7 +223,7 @@ app.delete("/api/deleteUser", (req, res) => {
   {
     // Delete from database
     db.collection("usuarios").deleteOne({usuario: user, email: mail});
-    res.send({"message": "User deleted"});
+    res.json({"message": "User deleted"});
   }
 })
 
@@ -239,7 +239,7 @@ app.put("/api/editUser", (req, res) => {
   {
     // Update database
     db.collection("usuarios").updateOne({email: ogEmail}, {$set: {usuario: user, email: mail, nulidad: tNulidad, investigacion: tInvestigacion}});
-    res.send({"Message": "User edited"});
+    res.json({"Message": "User edited"});
   }
 })
 
@@ -265,7 +265,7 @@ app.put("/api/changePass", (req, res) => {
             if (newPass != repPass) 
             {
               // If new passwords don't match
-              res.send({"Message": "Passwords don't match"})
+              res.json({"Message": "Passwords don't match"})
             }
             // If new passwords match
             else {
@@ -276,19 +276,19 @@ app.put("/api/changePass", (req, res) => {
                 // update password in database
                 db.collection("usuarios").updateOne({email: mail}, {$set: {password: hash}})
               })
-              res.send({"Message": "Change Successful"})
+              res.json({"Message": "Change Successful"})
             }
           }
           // If original password doesn't match with database
           else{
-            res.send({"Message": "Error"})
+            res.json({"Message": "Error"})
           }
         })
       }
       // If user doesn't exist
       else
       {
-        res.send(false)
+        res.json(false)
       }
     })
   }
@@ -323,7 +323,7 @@ app.post("/api/setup", (req, res)=>{
             if (err) throw err;
         })
     })
-  res.send({"Message": "Setup complete"})
+  res.json({"Message": "Setup complete"})
   })
 });
 
@@ -344,8 +344,8 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
         if (err) throw err;
         console.log("Expediente Guardado");
       })
-      res.json({'message': "Data inserted correctly."});
-      // ERror
+      res.json({"Message":"Data inserted correctly"})
+      // Error
     } catch (error) {
       res.status(500);
       res.json(error);
@@ -361,14 +361,13 @@ app.put("/api/addFirstFolio", uploads.single("file"), (req,res) => {
     try {
       // Get req data
       let collection = req.body.docType;
-      console.log(collection);
+      console.log("Estamos en ",collection)
       // Get key and initialization vector depending on docType
       if(collection == "juicioNulidad")
       {
         // Nulidad iv and key
         db.collection("roles").findOne({rol:"nulidad"}, (err, result)=>{
           fs.readFile("testLab.key", (err, decryptKey)=>{
-              console.log("el resultado",result.iv);
               let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
               let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
               return uploadFirstFolio(req, key,iv, res);
@@ -380,7 +379,6 @@ app.put("/api/addFirstFolio", uploads.single("file"), (req,res) => {
         // Investigacion iv and key
         db.collection("roles").findOne({rol:"investigacion"}, (err, result)=>{
           fs.readFile("testLab.key", (err, decryptKey)=>{
-              console.log("wuwuwuw");
               let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
               let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
               console.log("el iv", iv)
@@ -427,6 +425,7 @@ app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
           })
         })
       }
+      res.json({"Message": "Folio uploaded"})
       // Error
     } catch (error) {
       res.status(500);
@@ -454,7 +453,6 @@ async function uploadFirstFolio(req, key, iv, result)
     let rutaDefinitiva = "/.storage/" + folio + now;
     let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
     let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
-    console.log("iv aqui",iv);
     // Cipher
     let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
     inputFS.pipe(cipher).pipe(outputFS)
