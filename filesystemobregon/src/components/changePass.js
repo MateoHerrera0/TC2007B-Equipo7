@@ -7,9 +7,7 @@ Ana Paula Katsuda Zalce, A01025303
 
 // imports
 import React from 'react';
-import { useState, useEffect, useContext } from "react";
-import axios from "axios";
-import * as ReactDOM from "react-dom";
+import { useState} from "react";
 import { useLocation, Link } from 'react-router-dom'
 import AdminNavbar from "./adminNavbar";
 import { changePass } from '../API/dbAPI';

@@ -22,7 +22,7 @@ export default function Home() {
       <Navbar />
       <div className="section p-5">
         <div className="row align-items-center">
-          <img src={AOFisico} width='50'></img>
+          <img src={AOFisico} width='50' alt='Portada'></img>
         </div>
       </div>
       <div className="section p-5">
@@ -37,7 +37,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="col-md text-md-end text-center pt-md-0 pt-5">
-              <p className="display-1"><img src={upload} width='60%'/></p>
+              <p className="display-1"><img src={upload} width='60%'alt='subir'/></p>
             </div>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="col-md text-md-start text-center order-md-1 pt-md-0 pt-5">
-              <p className="display-1"><img src={download} alt='search image' width='60%'/></p>
+              <p className="display-1"><img src={download} alt='buscar' width='60%'/></p>
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@ export default function Home() {
               </ul>
             </div>
             <div className="col-md text-md-end text-center p-5">
-              <p className="display-1"><img src={instructions2} width='80%'/></p>
+              <p className="display-1"><img src={instructions2} width='80%'alt='instrucciones'/></p>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@ export default function Home() {
               
             </div>
             <div className="col-md text-md-start text-center p-5 order-md-1">
-              <p className="display-1"><img src={instructions1} alt='search image' width='60%'/></p>
+              <p className="display-1"><img src={instructions1} alt='search' width='60%'/></p>
             </div>
           </div>
         </div>
@@ -120,7 +120,8 @@ export default function Home() {
       <div className='section px-5'>
         <div className='border-top'>
           <div className='text-center p-3'>
-            <p className='fw-lighter'>Créditos</p>
+            <p className='fw-lighter'>ITESM, CSF</p>
+            <p className='fw-lighter'>Equipo 7</p>
           </div>
         </div>
 
