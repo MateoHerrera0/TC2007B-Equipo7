@@ -6,6 +6,7 @@ import { fields } from "./fieldsSearch";
 import Popup from "./popup";
 //import * as ReactDOM from "react-dom";
 //import { Link } from 'react-router-dom';
+import { GetButtonsSearch } from "./buttons";
 import Navbar from './navbar'
 import { changeStatus } from "../API/dbAPI";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
@@ -14,7 +15,7 @@ import {IntlProvider, LocalizationProvider} from "@progress/kendo-react-intl";
 import '@progress/kendo-theme-default/dist/all.css';
 import "./search.css";
 
-const Search = () => {
+const Search = (props) => {
     const [docType, setDocType] = useState({docType: "juicioNulidad"});
     const [visible, setVisible] = useState(false);
     
@@ -117,25 +118,17 @@ const Search = () => {
     return (
         <div className="searchClass">
             <Navbar />
-            <br></br> <h2 id="Titulo"> Búsqueda de Expedientes </h2> 
-            <div className="row text-center p-5">
-              <div className="col">
-                <button type="button" className="btn btn-primary" id="buttonBusqueda" onClick={
-                  () => {
-                    setFields(nulidadFields);
-                    setDocType({docType: "juicioNulidad"});
-                    getData({docType: "juicioNulidad"});
-                  }}>Juicio de Nulidad</button>
-              </div>
-              <div className="col">
-                  <button type="button" className="btn btn-primary" id="buttonBusqueda" onClick={
-                    () => {
-                      setFields(carpetaFields);
-                      setDocType({docType: "carpetaInvestigacion"});
-                      getData({docType: "carpetaInvestigacion"});
-                    }}>Carpeta de Investigacion</button>
-              </div>
-            </div>
+            <br></br> <h2 id="Titulo"> Búsqueda de Expedientes </h2>
+            <GetButtonsSearch
+              setFields = {setFields}
+              setDocType = {setDocType}
+              getData = {getData}
+              nulidadFields = {nulidadFields}
+              carpetaFields = {carpetaFields}
+              nulidad = {props.usuario.nulidad}
+              carpeta = {props.usuario.carpeta}
+
+            /> 
 
             <LocalizationProvider language="es-ES"> 
               <br></br>
