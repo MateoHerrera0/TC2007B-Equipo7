@@ -9,6 +9,7 @@ Ana Paula Katsuda Zalce, A01025303
 import { useState, useReducer, useEffect} from "react";
 import { fields, Field } from "./fields"
 import {addDocument} from "../API/dbAPI";
+import Popup from "./popup";
 import GetButtons from "./buttons";
 import Navbar from "./navbar";
 import PutFolio from "./addFolioForm";
@@ -26,12 +27,19 @@ function reducer(state, event) {
 
 // Function for newfile
 export default function Newfile(props) {
+<<<<<<< HEAD
   // User data
   const [user, setUserData] = useState(
     {usuario: "", email: "", userType: "", nulidad: false, investigacion: false}
   )
   // Set data to render in forms
+=======
+  // const [user, setUserData] = useState(
+  //   {usuario: "", email: "", userType: "", nulidad: false, investigacion: false}
+  // )
+>>>>>>> 143b0cfda95eac76d353b765174133bb6c562202
   const [formData, setFormData] = useReducer(reducer, {})
+  const [visible, setVisible] = useState(false);
   
   // Handle change (inputs)
   function handleChange(ev) {
@@ -40,6 +48,7 @@ export default function Newfile(props) {
       value: ev.target.value
     })
   }
+<<<<<<< HEAD
 
   // Get current profile --> fetch from backend
   useEffect(() => {
@@ -55,6 +64,21 @@ export default function Newfile(props) {
     }
     fetchUser()
   }, [])
+=======
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const res = await fetch('/api/profile')
+  //       const userData = await res.json()
+  //       setUserData(userData[0])
+  //     } catch (error) {
+  //       console.error('There was an error fetch auth', error)
+  //       return
+  //     }
+  //   }
+  //   fetchUser()
+  // }, [])
+>>>>>>> 143b0cfda95eac76d353b765174133bb6c562202
   
   // Handle submit
   function handleSubmit(event) {
@@ -63,7 +87,11 @@ export default function Newfile(props) {
     // Call api to add document
     addDocument(formElem, setFormData);
     document.querySelector("#file").value = null;
-}
+  }
+
+  function submitForm(formId) {
+    document.getElementById(formId).requestSubmit();
+  }
   
   // Fields to display in nulidad
   const nulidadFields = [
@@ -94,6 +122,7 @@ export default function Newfile(props) {
     fields.folio
   ]
 
+<<<<<<< HEAD
   // Determine fields to use
   const [fieldsToUse, setFields] = useState(user.nulidad ? nulidadFields : carpetaFields);
 
@@ -102,6 +131,13 @@ export default function Newfile(props) {
   
   // Define current user
   const usuario = user.email;
+=======
+  const [fieldsToUse, setFields] = useState(props.usuario.nulidad ? nulidadFields : carpetaFields)
+
+  const [docType, setDocType] = useState(props.usuario.nulidad ? "juicioNulidad" : "carpetaInvestigacion")
+  
+  const usuario = props.usuario.usuario
+>>>>>>> 143b0cfda95eac76d353b765174133bb6c562202
 
   // Render forms
   return(
@@ -109,11 +145,10 @@ export default function Newfile(props) {
       <Navbar />
       <div className="section p-5">
         <div className="container">
-
           <p className="text-center fs-1"><strong>Selecciona un tipo de documento</strong></p> 
             <GetButtons 
-              nulidad = {user.nulidad}
-              carpeta = {user.investigacion}
+              nulidad = {props.usuario.nulidad}
+              carpeta = {props.usuario.investigacion}
               setFields = {setFields}
               setDocType = {setDocType}
               setFormData = {setFormData}
@@ -122,7 +157,10 @@ export default function Newfile(props) {
             />
           <p className="text-center fs-1"><strong>Si el expediente o la capeta ya existe, simplemente selecciona el documento correspondiente y sube el nuevo folio.</strong></p>
           <p className="text-center fs-5 pb-0 mb-0">Selecciona un documento existente.</p>
-          <PutFolio docType = {docType} />
+          <PutFolio 
+            docType = {docType}
+            submitForm = {submitForm}
+          />
           <p className="text-center fs-1"><strong>O ingresa un documento completamente nuevo.</strong></p>
           <div className="container p-5 shadow rounded-3">
             <form onSubmit={handleSubmit} id="newFileForm">
@@ -145,9 +183,16 @@ export default function Newfile(props) {
               <input type="hidden" name="usuario" id="usuario" value={usuario}/>
               <input type="hidden" name="docType" id="docType" value={docType}/>
               <div className="text-center">
-                <button type="submit" className="btn btn-primary">Subir Documento</button>
+                <button type="button" className="btn btn-primary" onClick={() => setVisible(true)}>Subir Documento</button>
               </div>
             </form>
+              <Popup 
+                visible = {visible}
+                setVisible = {setVisible}
+                popupTitle = {"Favor de confirmar lo siguiente:"}
+                popupBody = {<p>Estas seguro de que los datos ingresados son correctos y el arcivo esta listo para ser guardado?</p>}
+                okFunction = {()=>submitForm("newFileForm")}
+              />
           </div>
         </div>
       </div>

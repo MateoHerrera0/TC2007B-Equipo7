@@ -10,6 +10,7 @@ import { useState, useReducer } from "react";
 import { putDocument } from "../API/dbAPI";
 import { fields, Field } from "./fields"
 import AsyncSelect from "react-select/async"
+import Popup from "./popup";
 
 // Reducer to determine what to display in form data --> reset or current state
 function reducer(state, event) {
@@ -21,10 +22,16 @@ function reducer(state, event) {
   }
 }
 
+<<<<<<< HEAD
 // Function to put folio
+=======
+
+>>>>>>> 143b0cfda95eac76d353b765174133bb6c562202
 export default function PutFolio(props) {
   // Determine doctype (nulidad/investigacion)
   const [docType, setDocType] = useState(props.docType)
+  const [visible, setVisible] = useState(false);
+
 
   if (docType != props.docType) {
     setDocType(props.docType)
@@ -131,9 +138,16 @@ export default function PutFolio(props) {
           <input type="hidden" name="usuario" id="usuario" value={usuario}/>
           <input type="hidden" name="docType" id="docType" value={props.docType}/>
           <div className="text-center">
-            <button type="submit" className="btn btn-primary">Subir Documento</button>
+            <button type="button" className="btn btn-primary" onClick={() => setVisible(true)}>Subir Documento</button>
           </div>
         </form>
+        <Popup 
+          visible = {visible}
+          setVisible = {setVisible}
+          popupTitle = {"Favor de confirmar lo siguiente:"}
+          popupBody = {<p>Estas seguro de que los datos ingresados son correctos y el arcivo esta listo para ser guardado?</p>}
+          okFunction = {()=>props.submitForm("folioForm")}
+        />
       </div>
      </div>
   )

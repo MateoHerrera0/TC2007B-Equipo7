@@ -28,7 +28,7 @@ function RoutesComp() {
   const userContext = useContext(UserContext)
   // User data
   const [user, setUserData] = useState(
-    {usuario: "", email: "", userType: "", area: ""}
+    {usuario: "", email: "", userType: "", nulidad: false, investigacion: false}
   )
   // Get user data from backend
   useEffect(() => {
@@ -62,7 +62,7 @@ function RoutesComp() {
         <>
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Home />} />
-          <Route path="/newFile" element={<Newfile usuario = {userContext}/>}/>
+          <Route path="/newFile" element={<Newfile usuario = {user}/>}/>
           <Route path="/profile" element={<Profile usuario = {userContext} navbar = {<Navbar />}/>} />
           <Route path="/search" element={<Search />} />
           <Route path="/searchFolio" element={<SearchDocument />} />
