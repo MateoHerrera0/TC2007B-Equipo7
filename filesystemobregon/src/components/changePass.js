@@ -1,3 +1,11 @@
+/* Code used to define change password interface and to allow admin to change password
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// imports
 import React from 'react';
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
@@ -5,14 +13,23 @@ import * as ReactDOM from "react-dom";
 import { useLocation, Link } from 'react-router-dom'
 import AdminNavbar from "./adminNavbar";
 import { changePass } from '../API/dbAPI';
+import Popup from './popup';
 
+// Function to change password
 export default function ChangePass(props) {
+    // Remember selected user (admin may choose user to change password)
     const location = useLocation()
     const userId = location.state
+    // Save user info --> new password data
     const [userPass, setUserPass] = useState({
         usuario: userId.usuario, email: userId.email, ogPassword: "", newPassword: "", repPassword: ""
       })
-
+    // Code for popup
+    const [visible, setVisible] = useState(false);
+    function submitForm(formId) {
+      document.getElementById(formId).requestSubmit();
+    }
+    // Handle inputs
     let name, value; 
     const handleInputs = (e) => {
         console.log(e);
@@ -21,14 +38,11 @@ export default function ChangePass(props) {
         setUserPass({...userPass, [name]: value})
       }
     
-      function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-      function handleSubmit(event) {
+    // Handle submit --> call change password backend (through api function)
+    function handleSubmit(event) {
         event.preventDefault();
         changePass(userPass);
-        //delay(1000).then(() => window.location.reload());
-      }
+    }
 
         return (
           <div>
@@ -46,7 +60,7 @@ export default function ChangePass(props) {
     
                             <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Editar Contraseña</p>
     
-                            <form className="mx-1 mx-md-4" id="newUser" onSubmit={handleSubmit}>
+                            <form className="mx-1 mx-md-4" id="newPassword" onSubmit={handleSubmit}>
     
                               <div className="d-flex flex-row align-items-center mb-4">
                                 <label htmlFor="usuario">
@@ -94,9 +108,16 @@ export default function ChangePass(props) {
                                 </Link>
                             </div>
                             <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                <button type="submit" className="btn btn-primary btn-lg" >Cambiar Contraseña</button>
+                                <button type="button" className="btn btn-primary btn-lg" onClick={() => setVisible(true)}>Cambiar Contraseña</button>
                             </div>
                             </form>
+                            <Popup 
+                              visible = {visible}
+                              setVisible = {setVisible}
+                              popupTitle = {"Favor de confirmar lo siguiente:"}
+                              popupBody = {<p>¿Estás seguro de que queires cambiar la contraseña del usuario?</p>}
+                              okFunction = {()=>submitForm("newPassword")}
+                            />
                           </div>
                           <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
     

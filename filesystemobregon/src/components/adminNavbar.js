@@ -1,8 +1,18 @@
+/* Code used to define admin interface navbar
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Imports
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AOLogo1 from '../Images/AOLogo1.png';
 
+// Function for admin navbar
 export default function AdminNavbar() {
+    // Allow expand
   const[expand, setExpand] = useState("collapse navbar-collapse");
   
   return(
@@ -26,17 +36,13 @@ export default function AdminNavbar() {
         <li className="nav-item">
           <a className="nav-link active" aria-current="page" href="/">Manejo de usuarios</a>
         </li>
-        <li className="nav-item">
-          <a className="nav-link" href="/">Historiales</a>
-        </li>
       </ul>
       <span>
       <div className="col-md-5 text-md-start text-center">
-              <Link to='/profile'>
-                <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Perfil</button>
-              </Link>
-              
-            </div>
+        <Link to='/profile'>
+            <button type="button" className="btn btn-primary btn-sm rounded-3 fw-bold">Perfil</button>
+        </Link>
+        </div>
       </span>
     </div>
   </div>

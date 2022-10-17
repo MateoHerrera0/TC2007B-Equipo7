@@ -1,35 +1,25 @@
-import Navbar from "./components/navbar"
-import useScript from "./components/jscdn"
-import { getDocNames } from "./API/dbAPI";
+/* Code used for app definition
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
 
-// Import the Components for routing
-import { Route, Navigate} from 'react-router-dom';
+// Imports
+import useScript from "./components/jscdn"
 import { useState, useEffect, createContext } from "react";
 import Routes from './Routes'
 
-// Import components
-import Home from "./components/home";
-import Newfile from "./components/newfile";
-import Login from "./components/Login";
-import Profile from "./components/profile";
-import Register from "./components/register";
-import Search from "./components/search";
-
-
+// Set user context
 export const UserContext = createContext({})
 
-
+// App function
 export default function App() {
-  const [userData, setUserData] = useState();
-  // Fetch the data when the page loads
-  // useEffect(() => {
-  //   getDocNames(setData);
-
-  // }, [])
-  // useScript()
-
+  // Detemine if page is loading
   const [loading, setLoading] = useState(true)
+  // Define user session
   const [userSession, setUserSession] = useState(true)
+  // Get user session from backend --> depending on existence of session
   useEffect(() => {
     const fetchUserAuth = async () => {
       try {
@@ -48,6 +38,7 @@ export default function App() {
     fetchUserAuth()
   }, [])
   useScript()
+  // Evaluate if loaded and render routes depending on user session
   return(
     <div>
       {/* Bootsrtap CSS CDN */}
@@ -55,14 +46,6 @@ export default function App() {
       <UserContext.Provider value={userSession}>
         {loading ? <>loading...</> : <Routes />}
       </UserContext.Provider>
-      {/* <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/newFile" element={<Newfile/>} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/register" element={<Register />} />
-  </Routes> */}
-      {/* </Routes> */}
     </div>
   )
 }

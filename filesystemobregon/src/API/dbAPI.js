@@ -8,55 +8,59 @@ Ana Paula Katsuda Zalce, A01025303
 // Function to add document
 async function addDocument(formData, setFormData) {
   let formBody = new FormData(formData);
-
+  // Fetch backend --> to add path
   try {
     await fetch('/api/addpath', {
       method: "POST",
       body: formBody
-    })
-      .then(response => response.json())
+    }).then(response => response.json())
       .then( async () => {
+        // Fetch backend --> to add first folio
         await fetch('/api/addFirstFolio', {
-          method: "POST",
+          method: "PUT",
           body: formBody
-        })
-          .then(response => response.json())
+        }).then(response => response.json())
           .then(response => {
             console.log("addDocument response: " + response);
             window.location.reload()
           })
       })
     setFormData({ reset: true });
+    // Error
   } catch(error) {
     console.log("ERROR at 'addDocument'");
     console.log(error);
   }
 }
 
-// Send the data to Mongo using an API
+// Send the data to Mongo using an API --> put document
 async function putDocument(formData, setFormData) {
   let formBody = new FormData(formData);
   console.log(formBody);
-
   try {
+    // Fetch backend --> add folio
     await fetch('/api/addfolio', {
       method: "PUT",
       body: formBody
     })
+      // Response
       .then(response => response.json())
       .then(response => {
         console.log("addDocument response: " + response);
         window.location.reload()
       })
     setFormData({ reset: true });
+    // Error
   } catch(error) {
     console.log("ERROR at 'addDocument'");
     console.log(error);
   }
 }
 
+// Post data to get documents 
 async function getDocs(reqBody, setData) {
   try {
+    // Fetch api --> get documents
     await fetch('/api/getDocs', {
       headers: {
         'Accept': 'application/json',
@@ -68,12 +72,13 @@ async function getDocs(reqBody, setData) {
       'projection': reqBody.projection}),
       method: "POST",
     })
+      // Response
       .then(response => response.json())
       .then(response => {
         console.log("GetDocInfo response: " + response);
         setData(response);
       })
-
+    // Error
   } catch (error) {
     console.log("ERROR at 'getDocumentInfo'");
     console.log(error);
@@ -100,7 +105,7 @@ async function getDocs(reqBody, setData) {
 //   } 
 // } 
 
-// Function to add users
+// Function to add admin --> setup of app
 async function setupAdmin(adminData){
   try {
     // Fetch endpoint, specifying method and request body
@@ -147,6 +152,7 @@ async function addUser(userData){
       .then(response => response.json())
       .then(response => {
         console.log("UserInfo response " + response);
+        window.location.assign('/')
         return response;
       })
     // error
@@ -158,7 +164,7 @@ async function addUser(userData){
 }
 
 // Function used to login user
-async function logUser(userData){
+async function logUser(userData, setMessage){
   try {
     // Fetch endpoint, specifying method and request body
     await fetch('/api/login', {
@@ -175,7 +181,7 @@ async function logUser(userData){
     // Response
       .then(response => response.json())
       .then(response => {
-        console.log("UserInfo response " + response);
+        console.log("LogUser response " + response);
         return response;
       })
     // Error
@@ -257,7 +263,7 @@ async function editUser(ogUserData, userData)
       // Response
       .then(response => response.json())
       .then(response => {
-        window.location.reload()
+        window.location.assign("/")
         return response;
       })
     // Error
@@ -288,7 +294,7 @@ async function changePass(userPassData)
       // Response
       .then(response => response.json())
       .then(response => {
-        window.location.reload()
+        window.location.assign("/")
         return response;
       })
     // Error

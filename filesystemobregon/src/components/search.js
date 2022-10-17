@@ -1,10 +1,16 @@
+/* Code used to define search interface and allow user to search specific expediente
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Imports
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { fields } from "./fieldsSearch";
-//import * as ReactDOM from "react-dom";
-//import { Link } from 'react-router-dom';
 import Navbar from './navbar'
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { process } from "@progress/kendo-data-query";
@@ -12,14 +18,17 @@ import {IntlProvider, LocalizationProvider} from "@progress/kendo-react-intl";
 import '@progress/kendo-theme-default/dist/all.css';
 import "./search.css";
 
+// Search variable
 const Search = () => {
-    const [docType, setDocType] = useState({docType: "nulidad"});
+    const [docType, setDocType] = useState({docType: "juicioNulidad"});
     
+    // Get documents
     const [data, setData] = useState([]);
       useEffect( ()=> {
         getData({docType: "juicioNulidad"});
       }, [])
 
+    // Call backend to get documents from area 
     const getData = async (docJson) => {
       console.log(docJson);
       await axios.post('/api/getDocs', {... docJson, query:{ }, projection: {}})
@@ -29,15 +38,18 @@ const Search = () => {
       })
     }
 
+    // Results
     const [dataState, setDataState] = React.useState()
     const [res, setResult] = React.useState(data);
     useEffect(() => { setResult(data)}, [data] );
 
+    // Handle data state changes
     const onDataStateChange = (event) => {
         setDataState(event.dataState);
         setResult(process(data, event.dataState));
     }
 
+    // Fields for nulidad
     const nulidadFields = [
       fields.expediente, 
       fields.tja,
@@ -52,6 +64,7 @@ const Search = () => {
       fields.usuario
     ]
 
+    // Fields for carpeta investigacion
     const carpetaFields = [
       fields.eco,
       fields.denuciante,
@@ -64,8 +77,10 @@ const Search = () => {
       fields.usuario
     ]
 
+    // Define fields to use
     const [fieldsToUse, setFields] = useState(nulidadFields)
 
+    // Define filter operators
     const filterOperators = {
         text: [
             { text: 'grid.filterContainsOperator', operator: 'contains'},
@@ -103,6 +118,7 @@ const Search = () => {
           {text: "grid.filterEqOperator", operator: "eq"}
         ],
     };
+    // Show search interface
     return (
         <div className="searchClass">
             <Navbar />
@@ -130,7 +146,7 @@ const Search = () => {
               <br></br>
                 <IntlProvider locale="es">
                 <Grid
-                    data={data}
+                    data={res}
                     style={{
                     height: "auto",
                     }}

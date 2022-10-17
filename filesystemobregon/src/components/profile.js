@@ -1,25 +1,25 @@
+/* Code used to define profile interface and functionality
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Imports
 import React, { useState , useEffect} from 'react'
 import { Link } from 'react-router-dom';
-import Navbar from './navbar';
-import {getUser} from "../API/dbAPI";
 import { logout } from '../API/dbAPI';
 import stock from '../Images/womanStock.jpg'
 import './profile.css';
-//import { UserContext } from '../app';
 
-//const userContext = useContext(UserContext)
-
+// Function for profile
 export default function Profile(props) {
-
+  // User data
   const [user, setUserData] = useState(
     {usuario: "", email: "", userType: ""}
   )
 
-  function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  console.log(props.usuario)
+  // Get user from backend
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -34,7 +34,7 @@ export default function Profile(props) {
     fetchUser()
   }, [])
 
-  console.log(user)
+  // Render profile with its user information and navbar depending on user type
   return (
     <div className='profile-view'>
       {props.navbar}
