@@ -61,10 +61,9 @@ export default function Newfile(props) {
     fields.actor,
     fields.domicilio,
     fields.acto,
-    fields.eJuridico,
-    fields.eProcesal,
     fields.materia,
     fields.demandado,
+    fields.eGuarda,
     fields.nombre,
     fields.folio
   ]

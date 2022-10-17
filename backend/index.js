@@ -328,7 +328,7 @@ app.post("/api/setup", (req, res)=>{
 });
 
 // Upload file path --> Expediente
-app.post("/api/addpath", uploads.single("file"), (req, res) => {
+app.post("/api/addpath", uploads.single("file"), (req, result) => {
   if(req.session.usuario)
   {
     try {
@@ -343,8 +343,8 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
       db.collection(collection).insertOne(body, (err,res) => {
         if (err) throw err;
         console.log("Expediente Guardado");
+        result.json({'message': "Data inserted correctly."});
       })
-      res.json({'message': "Data inserted correctly."});
       // ERror
     } catch (error) {
       res.status(500);
@@ -427,6 +427,28 @@ app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
           })
         })
       }
+      // Error
+    } catch (error) {
+      res.status(500);
+      res.json(error);
+      console.log(error);
+    }
+  }
+})
+
+// Put to add folios
+app.put("/api/changeStatus", uploads.single("fileFolio"), (req, res) => {
+  if(req.session.usuario)
+  {
+    try {
+      // Get folio type
+      let collection = req.body.docType
+      db.collection(collection).updateOne({'_id': ObjectId(req.body._id)}, { $set:{'eGuarda':req.body.eGuarda}}, (err, res) => {
+        if (err) throw err;
+        console.log("updated");
+      })
+      
+      res.json({'message': "updated status"})
       // Error
     } catch (error) {
       res.status(500);

@@ -47,17 +47,17 @@ const fields = {
       placeholder: "Ingresa el acto impugnado aqui..."
     },
 
-    eJuridico: {
-      id: "eJuridico",
-      label: "Estado Juidico",
-      placeholder: "Ingresa el estado juridico aqui..."
-    },
+    // eJuridico: {
+    //   id: "eJuridico",
+    //   label: "Estado Juidico",
+    //   placeholder: "Ingresa el estado juridico aqui..."
+    // },
 
-    eProcesal: {
-      id: "eProcesal",
-      label: "Estado Procesal",
-      placeholder: "Ingresa el estado procesal aqui..."
-    },
+    // eProcesal: {
+    //   id: "eProcesal",
+    //   label: "Estado Procesal",
+    //   placeholder: "Ingresa el estado procesal aqui..."
+    // },
 
     materia: {
       id: "materia",
