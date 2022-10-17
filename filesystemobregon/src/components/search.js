@@ -145,7 +145,7 @@ const Search = (props) => {
               nulidadFields = {nulidadFields}
               carpetaFields = {carpetaFields}
               nulidad = {props.usuario.nulidad}
-              carpeta = {props.usuario.carpeta}
+              carpeta = {props.usuario.investigacion}
 
             /> 
 
