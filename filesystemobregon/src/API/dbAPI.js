@@ -57,6 +57,27 @@ async function putDocument(formData, setFormData) {
   }
 }
 
+// Change document status
+async function changeStatus(formData) {
+  let formBody = new FormData(formData);
+  console.log(formBody);
+
+  try {
+    await fetch('/api/changeStatus', {
+      method: "PUT",
+      body: formBody
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log("changeStatus response: " + response);
+        window.location.reload()
+      })
+  } catch(error) {
+    console.log("ERROR at 'changestatus'");
+    console.log(error);
+  }
+}
+
 // Post data to get documents 
 async function getDocs(reqBody, setData) {
   try {
@@ -306,4 +327,4 @@ async function changePass(userPassData)
 }
 
 // Export functions
-export { addDocument, putDocument, addUser, logUser, logout, deleteUser, editUser, changePass, setupAdmin};
+export { addDocument, putDocument, addUser, logUser, logout, deleteUser, editUser, changePass, setupAdmin, changeStatus };

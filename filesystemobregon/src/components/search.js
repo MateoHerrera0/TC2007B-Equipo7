@@ -11,7 +11,11 @@ import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { fields } from "./fieldsSearch";
+import Popup from "./popup";
+//import * as ReactDOM from "react-dom";
+//import { Link } from 'react-router-dom';
 import Navbar from './navbar'
+import { changeStatus } from "../API/dbAPI";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { process } from "@progress/kendo-data-query";
 import {IntlProvider, LocalizationProvider} from "@progress/kendo-react-intl";
@@ -21,6 +25,7 @@ import "./search.css";
 // Search variable
 const Search = () => {
     const [docType, setDocType] = useState({docType: "juicioNulidad"});
+    const [visible, setVisible] = useState(false);
     
     // Get documents
     const [data, setData] = useState([]);
@@ -49,6 +54,16 @@ const Search = () => {
         setResult(process(data, event.dataState));
     }
 
+    function handleSubmit(event) {
+      event.preventDefault();
+      let formElem = document.querySelector("#changeStatusForm")
+      changeStatus(formElem)
+    }
+  
+    function submitForm(formId) {
+      document.getElementById(formId).requestSubmit();
+    }
+
     // Fields for nulidad
     const nulidadFields = [
       fields.expediente, 
@@ -57,8 +72,7 @@ const Search = () => {
       fields.domicilio,
       fields.lFisico,
       fields.acto,
-      fields.eJuridico,
-      fields.eProcesal,
+      fields.eGuarda,
       fields.materia,
       fields.demandado,
       fields.usuario
@@ -79,6 +93,7 @@ const Search = () => {
 
     // Define fields to use
     const [fieldsToUse, setFields] = useState(nulidadFields)
+    const [extra, setExtra] = useState({})
 
     // Define filter operators
     const filterOperators = {
@@ -176,6 +191,16 @@ const Search = () => {
                           </Link>
                         </td>}
                       />
+                    <GridColumn
+                        field = "_id" 
+                        title = "Cambiar Estado"
+                        cell = {(props) => 
+                        <td>
+                          <div className="text-center">
+                            <button type="button" className="btn btn-primary btn-sm" onClick={() => {setVisible(true); setExtra({ expId: props.dataItem[props.field], docType: docType.docType })}}>Cambiar</button>
+                          </div>
+                        </td>}
+                      />
                   {/* <GridColumn field="expediente" title="Expediente" width="auto"/>
                   <GridColumn field="tja" title="Sala del TJA" width="auto"/>
                   <GridColumn field="actor" title="Actor" width="auto"/>
@@ -194,6 +219,29 @@ const Search = () => {
             getData()}}>
             <button type="submit">Get Info</button>
           </form>  */}
+          <Popup 
+            visible = {visible}
+            setVisible = {setVisible}
+            popupTitle = {"Acpetar cambios ?"}
+            popupBody = {
+              <form onSubmit={handleSubmit} id="changeStatusForm">
+              <div className="mb-3">
+                <label htmlFor="eGuarda" className="form-label">Ingresa aqui el nuevo estado del documento:</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  id={"eGuarda"} 
+                  name={"eGuarda"} 
+                  placeholder={"Ingresa el estado que guarda aqui..."}
+                  required
+                />
+              </div>
+              <input type="hidden" name="_id" id="_id" value={extra.expId}/>
+              <input type="hidden" name="docType" id="docType" value={extra.docType}/>
+            </form>
+          }
+            okFunction = {()=>submitForm("changeStatusForm")}
+          />
         </div>
     )
 }
