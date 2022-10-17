@@ -355,12 +355,7 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
 })
 
 // Post for first folio
-<<<<<<< HEAD
-app.post("/api/addFirstFolio", uploads.single("file"), (req,res) => {
-  console.log("hello");
-=======
 app.put("/api/addFirstFolio", uploads.single("file"), (req,res) => {
->>>>>>> 143b0cfda95eac76d353b765174133bb6c562202
   if(req.session.usuario)
   {
     try {
@@ -386,12 +381,8 @@ app.put("/api/addFirstFolio", uploads.single("file"), (req,res) => {
           fs.readFile("testLab.key", (err, decryptKey)=>{
               let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
               let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
-<<<<<<< HEAD
-              uploadFirstFolio(req, key,iv);
-=======
               console.log("el iv", iv)
               return uploadFirstFolio(req, key,iv, res);
->>>>>>> 143b0cfda95eac76d353b765174133bb6c562202
           })
         })
       }

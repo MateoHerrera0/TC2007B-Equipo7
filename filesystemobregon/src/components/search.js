@@ -20,10 +20,6 @@ import "./search.css";
 
 // Search variable
 const Search = () => {
-<<<<<<< HEAD
-    // Determine docType --> start as nulidad
-=======
->>>>>>> 143b0cfda95eac76d353b765174133bb6c562202
     const [docType, setDocType] = useState({docType: "juicioNulidad"});
     
     // Get documents

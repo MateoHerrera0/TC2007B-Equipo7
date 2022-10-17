@@ -27,17 +27,9 @@ function reducer(state, event) {
 
 // Function for newfile
 export default function Newfile(props) {
-<<<<<<< HEAD
-  // User data
-  const [user, setUserData] = useState(
-    {usuario: "", email: "", userType: "", nulidad: false, investigacion: false}
-  )
-  // Set data to render in forms
-=======
   // const [user, setUserData] = useState(
   //   {usuario: "", email: "", userType: "", nulidad: false, investigacion: false}
   // )
->>>>>>> 143b0cfda95eac76d353b765174133bb6c562202
   const [formData, setFormData] = useReducer(reducer, {})
   const [visible, setVisible] = useState(false);
   
@@ -48,23 +40,6 @@ export default function Newfile(props) {
       value: ev.target.value
     })
   }
-<<<<<<< HEAD
-
-  // Get current profile --> fetch from backend
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('/api/profile')
-        const userData = await res.json()
-        setUserData(userData[0])
-      } catch (error) {
-        console.error('There was an error fetch auth', error)
-        return
-      }
-    }
-    fetchUser()
-  }, [])
-=======
   // useEffect(() => {
   //   const fetchUser = async () => {
   //     try {
@@ -78,7 +53,6 @@ export default function Newfile(props) {
   //   }
   //   fetchUser()
   // }, [])
->>>>>>> 143b0cfda95eac76d353b765174133bb6c562202
   
   // Handle submit
   function handleSubmit(event) {
@@ -93,7 +67,6 @@ export default function Newfile(props) {
     document.getElementById(formId).requestSubmit();
   }
   
-  // Fields to display in nulidad
   const nulidadFields = [
     fields.expediente, 
     fields.tja,
@@ -122,22 +95,11 @@ export default function Newfile(props) {
     fields.folio
   ]
 
-<<<<<<< HEAD
-  // Determine fields to use
-  const [fieldsToUse, setFields] = useState(user.nulidad ? nulidadFields : carpetaFields);
-
-  // Determine doctype
-  const [docType, setDocType] = useState(user.nulidad ? "juicioNulidad" : "carpetaInvestigacion");
-  
-  // Define current user
-  const usuario = user.email;
-=======
   const [fieldsToUse, setFields] = useState(props.usuario.nulidad ? nulidadFields : carpetaFields)
 
   const [docType, setDocType] = useState(props.usuario.nulidad ? "juicioNulidad" : "carpetaInvestigacion")
   
   const usuario = props.usuario.usuario
->>>>>>> 143b0cfda95eac76d353b765174133bb6c562202
 
   // Render forms
   return(

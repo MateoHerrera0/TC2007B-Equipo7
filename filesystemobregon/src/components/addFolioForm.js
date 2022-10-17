@@ -22,11 +22,7 @@ function reducer(state, event) {
   }
 }
 
-<<<<<<< HEAD
-// Function to put folio
-=======
 
->>>>>>> 143b0cfda95eac76d353b765174133bb6c562202
 export default function PutFolio(props) {
   // Determine doctype (nulidad/investigacion)
   const [docType, setDocType] = useState(props.docType)
