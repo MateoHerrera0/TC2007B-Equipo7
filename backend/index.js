@@ -345,7 +345,6 @@ app.post("/api/addpath", uploads.single("file"), (req, result) => {
         console.log("Expediente Guardado");
         result.json({'message': "Data inserted correctly."});
       })
-      res.json({"Message":"Data inserted correctly"})
       // Error
     } catch (error) {
       res.status(500);
