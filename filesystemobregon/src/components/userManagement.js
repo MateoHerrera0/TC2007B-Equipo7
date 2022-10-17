@@ -1,35 +1,43 @@
+/* Code used to define user management interface and allow admin to search for users
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Imports
 import React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect} from "react";
 import axios from "axios";
-import * as ReactDOM from "react-dom";
 import { Link } from 'react-router-dom';
-import Navbar from './navbar'
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
-//import { DropDownList } from "@progress/kendo-react-dropdowns";
-//import { GridPDFExport } from "@progress/kendo-react-pdf";
 import { process } from "@progress/kendo-data-query";
 import {IntlProvider, LocalizationProvider} from "@progress/kendo-react-intl";
 import '@progress/kendo-theme-default/dist/all.css';
 import "./search.css";
-import { UserContext } from '../app';
 import AdminNavbar from "./adminNavbar";
 import { deleteUser } from "../API/dbAPI";
+import "./userManagement.css"
 
+// Define button to edit users
 const userEditButton = (props) => {
-    console.log(props);
+    // Get data
     const { dataItem } = props;
+    // on button click, go to edit user interface
     return(
         <td>
             <Link to='/editUser' state={dataItem}>
-                <button className="btn btn-primary btn-sm rounded-3 fw-bold" onClick={ () => {console.log(dataItem)}}>Editar</button>
+                <button className="btn btn-primary btn-sm rounded-3 fw-bold">Editar</button>
             </Link>
         </td>
     );
 };
 
+// Define button to delete users
 const userDeleteButton = (props) => {
-    console.log(props);
+    // Get data
     const { dataItem } = props;
+    // on click, call delete user api
     return(
         <td>
         <button className="btn btn-primary btn-sm rounded-3 fw-bold" onClick={ () => {deleteUser(dataItem)}}>Borrar</button>
@@ -37,27 +45,31 @@ const userDeleteButton = (props) => {
     );
 };
 
+// Search users
 const SearchUsers = () => {
+    // Get data
     const [data, setData] = useState([]);
       useEffect( ()=> {
         getData();
       }, [])
-  
+    // Call backed to get all users
     const getData = async () => {
       const res = await axios.get('/api/getAllUsers')
       setData(res.data);
-      console.log(data);
     }
 
+    // Set results
     const [dataState, setDataState] = React.useState()
     const [res, setResult] = React.useState(data);
     useEffect(() => { setResult(data)}, [data] );
 
+    // Handle data state change
     const onDataStateChange = (event) => {
         setDataState(event.dataState);
         setResult(process(data, event.dataState));
     }
 
+    // Define filter operators
     const filterOperators = {
         text: [
             { text: 'grid.filterContainsOperator', operator: 'contains'},
@@ -95,9 +107,9 @@ const SearchUsers = () => {
           {text: "grid.filterEqOperator", operator: "eq"}
         ],
     };
+    // Render user search interface with buttons to edit and delete users
     return (
-        <div>
-          
+        <div className="management">
             <AdminNavbar />
             <br></br> <h2 id="Titulo"> Manejo de usuarios </h2> <br></br>
             <div className="row text-center p-5">
@@ -126,8 +138,8 @@ const SearchUsers = () => {
                   <GridColumn field="usuario" title="Usuario" width="auto"/>
                   <GridColumn field="email" title="Correo" width="auto"/>
                   <GridColumn field="userType" title="Tipo de Usuario" width="auto"/>
-                  <GridColumn field="nulidad" title="Nulidad" width="auto"/>
-                  <GridColumn field="investigacion" title="Investigación" width="auto"/>
+                  <GridColumn field="nulidad" title="Nulidad" width="auto" filterable={false}/>
+                  <GridColumn field="investigacion" title="Investigación" width="auto" filterable={false}/>
                   <GridColumn cell = {
                     userEditButton
                   } width="100px" filterable={false}/>

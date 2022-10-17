@@ -1,12 +1,23 @@
+/* Code used to initially create an admin (only used when app created)
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Imports
 import React from 'react'
 import { setupAdmin } from '../API/dbAPI';
 import { useState , useReducer} from "react";
 
+// Function for setup
 export default function Setup(props) {
+    // Admin info
     const [admin, setAdmin] = useState({
         email: "", password: ""
       })
-    
+      
+      // Handle inputs
       let name, value; 
       const handleInputs = (e) => {
         console.log(e);
@@ -14,14 +25,19 @@ export default function Setup(props) {
         value = e.target.value;
         setAdmin({...admin, [name]: value})
       }
+      // Delay function
       function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
+
+      // Handle submit --> call backend to create admin
       function handleSubmit(event) {
         event.preventDefault();
         setupAdmin(admin);
+        // Wait for admin to be created and reload page
         delay(1000).then(() => window.location.reload());
       }
+      // Render interface
   return (
     <div className="container">
       <div className="row">
