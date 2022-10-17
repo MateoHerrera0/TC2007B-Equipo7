@@ -152,6 +152,7 @@ async function addUser(userData){
       .then(response => response.json())
       .then(response => {
         console.log("UserInfo response " + response);
+        window.location.assign('/')
         return response;
       })
     // error
@@ -179,8 +180,9 @@ async function logUser(userData, setMessage){
     })
     // Response
       .then(response => response.json())
-      .then((data) => {
-        setMessage(data);
+      .then(response => {
+        console.log("LogUser response " + response);
+        return response;
       })
     // Error
   } catch (error) {

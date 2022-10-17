@@ -17,6 +17,7 @@ export default function Register(props){
   const [user, setUser] = useState({
     usuario: "", email: "", password: "", repPassword: "", userType: "Usuario", nulidad: false, investigacion: false
   })
+  
   // Handle inputs
   let name, value
   const handleInputs = (e) => {
@@ -24,10 +25,7 @@ export default function Register(props){
     value = e.target.value;
     setUser({...user, [name]: value})
   }
-  // Function to dealy
-  function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
   // Handle submit
   function handleSubmit(event) {
     event.preventDefault();
@@ -38,8 +36,6 @@ export default function Register(props){
     // Add user
     else {
       addUser(user);
-      // Reaload page 
-      delay(1000).then(() => window.location.reload());
     }
   }
   // Render register form

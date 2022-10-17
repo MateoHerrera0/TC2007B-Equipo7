@@ -144,7 +144,7 @@ const Search = () => {
               <br></br>
                 <IntlProvider locale="es">
                 <Grid
-                    data={data}
+                    data={res}
                     style={{
                     height: "auto",
                     }}

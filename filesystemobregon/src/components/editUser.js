@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useLocation, Link } from 'react-router-dom'
 import AdminNavbar from "./adminNavbar";
 import { editUser } from '../API/dbAPI';
+import Popup from './popup';
 
 // Function to edit user
 export default function EditUser(props) {
@@ -24,6 +25,13 @@ export default function EditUser(props) {
     const [OGuser, setOGUser] = useState({
         usuario: userId.usuario, email: userId.email, nulidad: userId.nulidad, investigacion: userId.investigacion
     })
+
+    // Code for popup
+    const [visible, setVisible] = useState(false);
+    function submitForm(formId) {
+      document.getElementById(formId).requestSubmit();
+    }
+
     // Handle inputs
     let name, value; 
     const handleInputs = (e) => {
@@ -34,8 +42,15 @@ export default function EditUser(props) {
     }
     // Handle submit
     function handleSubmit(event) {
-        event.preventDefault();
+      event.preventDefault();
+      // Don't allow users with no permits
+      if(user.nulidad == false && user.investigacion == false){
+        alert("Tienes que dar por lo menos un permiso al usuario");
+      }
+      // Add user
+      else {
         editUser(OGuser, user);
+      }
     }
         
     return (
@@ -54,7 +69,7 @@ export default function EditUser(props) {
     
                         <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Editar Usuario</p>
     
-                        <form className="mx-1 mx-md-4" id="newUser" onSubmit={handleSubmit}>
+                        <form className="mx-1 mx-md-4" id="editUser" onSubmit={handleSubmit}>
     
                             <div className="d-flex flex-row align-items-center mb-4">
                             <label htmlFor="usuario">
@@ -98,7 +113,7 @@ export default function EditUser(props) {
                                 </Link>
                             </div>
                             <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                <button type="submit" className="btn btn-primary btn-lg" >Aplicar Cambios</button>
+                                <button type="button" className="btn btn-primary btn-lg" onClick={() => setVisible(true)}>Aplicar Cambios</button>
                             </div>
                             <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                                 <Link to='/'>
@@ -106,7 +121,13 @@ export default function EditUser(props) {
                                 </Link>
                             </div>
                             </form>
-    
+                            <Popup 
+                              visible = {visible}
+                              setVisible = {setVisible}
+                              popupTitle = {"Favor de confirmar lo siguiente:"}
+                              popupBody = {<p>¿Estás seguro de que queires cambiar los datos del usuario?</p>}
+                              okFunction = {()=>submitForm("editUser")}
+                            />
                           </div>
                           <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
     

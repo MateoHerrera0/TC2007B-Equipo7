@@ -51,6 +51,7 @@ export default function GetButtons(props) {
         setFields= {props.setFields}
         setFormData = {props.setFormData}
         setDocType = {props.setDocType}
+        nulidadFields = {props.nulidadFields}
       />
       </div>
     )
@@ -62,6 +63,7 @@ export default function GetButtons(props) {
         setFields= {props.setFields}
         setFormData = {props.setFormData}
         setDocType = {props.setDocType}
+        carpetaFields = {props.carpetaFields}
       />
       </div>
     )

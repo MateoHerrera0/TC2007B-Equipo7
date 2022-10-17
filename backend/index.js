@@ -190,7 +190,7 @@ app.get("/api/getAllUsers", async (req, res) => {
   {
     try {
       // Get all info from users collection
-      const cursor = db.collection("usuarios").find(); 
+      const cursor = db.collection("usuarios").find({email: {$ne: req.session.usuario}}); 
       const data = await cursor.toArray();
       // Get results
       res.json(data);
@@ -425,6 +425,7 @@ app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
           })
         })
       }
+      res.json({"Message": "Folio uploaded"})
       // Error
     } catch (error) {
       res.status(500);

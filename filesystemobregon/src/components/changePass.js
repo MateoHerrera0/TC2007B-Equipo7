@@ -13,6 +13,7 @@ import * as ReactDOM from "react-dom";
 import { useLocation, Link } from 'react-router-dom'
 import AdminNavbar from "./adminNavbar";
 import { changePass } from '../API/dbAPI';
+import Popup from './popup';
 
 // Function to change password
 export default function ChangePass(props) {
@@ -23,6 +24,11 @@ export default function ChangePass(props) {
     const [userPass, setUserPass] = useState({
         usuario: userId.usuario, email: userId.email, ogPassword: "", newPassword: "", repPassword: ""
       })
+    // Code for popup
+    const [visible, setVisible] = useState(false);
+    function submitForm(formId) {
+      document.getElementById(formId).requestSubmit();
+    }
     // Handle inputs
     let name, value; 
     const handleInputs = (e) => {
@@ -54,7 +60,7 @@ export default function ChangePass(props) {
     
                             <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Editar Contraseña</p>
     
-                            <form className="mx-1 mx-md-4" id="newUser" onSubmit={handleSubmit}>
+                            <form className="mx-1 mx-md-4" id="newPassword" onSubmit={handleSubmit}>
     
                               <div className="d-flex flex-row align-items-center mb-4">
                                 <label htmlFor="usuario">
@@ -102,9 +108,16 @@ export default function ChangePass(props) {
                                 </Link>
                             </div>
                             <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                <button type="submit" className="btn btn-primary btn-lg" >Cambiar Contraseña</button>
+                                <button type="button" className="btn btn-primary btn-lg" onClick={() => setVisible(true)}>Cambiar Contraseña</button>
                             </div>
                             </form>
+                            <Popup 
+                              visible = {visible}
+                              setVisible = {setVisible}
+                              popupTitle = {"Favor de confirmar lo siguiente:"}
+                              popupBody = {<p>¿Estás seguro de que queires cambiar la contraseña del usuario?</p>}
+                              okFunction = {()=>submitForm("newPassword")}
+                            />
                           </div>
                           <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
     

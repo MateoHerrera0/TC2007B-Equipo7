@@ -138,8 +138,8 @@ const SearchUsers = () => {
                   <GridColumn field="usuario" title="Usuario" width="auto"/>
                   <GridColumn field="email" title="Correo" width="auto"/>
                   <GridColumn field="userType" title="Tipo de Usuario" width="auto"/>
-                  <GridColumn field="nulidad" title="Nulidad" width="auto"/>
-                  <GridColumn field="investigacion" title="Investigación" width="auto"/>
+                  <GridColumn field="nulidad" title="Nulidad" width="auto" filterable={false}/>
+                  <GridColumn field="investigacion" title="Investigación" width="auto" filterable={false}/>
                   <GridColumn cell = {
                     userEditButton
                   } width="100px" filterable={false}/>
