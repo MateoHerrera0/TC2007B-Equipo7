@@ -40,19 +40,6 @@ export default function Newfile(props) {
       value: ev.target.value
     })
   }
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const res = await fetch('/api/profile')
-  //       const userData = await res.json()
-  //       setUserData(userData[0])
-  //     } catch (error) {
-  //       console.error('There was an error fetch auth', error)
-  //       return
-  //     }
-  //   }
-  //   fetchUser()
-  // }, [])
   
   // Handle submit
   function handleSubmit(event) {
@@ -119,7 +106,6 @@ export default function Newfile(props) {
               carpetaFields = {carpetaFields}
             />
           <p className="text-center fs-1"><strong>Si el expediente o la capeta ya existe, simplemente selecciona el documento correspondiente y sube el nuevo folio.</strong></p>
-          <p className="text-center fs-5 pb-0 mb-0">Selecciona un documento existente.</p>
           <PutFolio 
             docType = {docType}
             submitForm = {submitForm}

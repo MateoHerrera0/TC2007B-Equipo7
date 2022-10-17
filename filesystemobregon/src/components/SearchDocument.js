@@ -50,6 +50,7 @@ export default function SearchDocument() {
         link.setAttribute('download', name  + ".pdf");
         document.body.appendChild(link);
         link.click();
+        link.remove();
     })
     }
 

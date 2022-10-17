@@ -103,9 +103,18 @@ export default function PutFolio(props) {
     fields.folio,
   ]
 
+  let Title = ""
+
+  if (docType == "juicioNulidad") {
+    Title = "Selecciona un Juicio de Nulidad Existente"
+  } else {
+    Title = "Selecciona una Carpeta de Investigacion Existente"
+  }
+
   return(
      <div className="section p-5">
       <div className="container p-5 shadow rounded-3">
+        <p className="text-center fs-2">{Title}</p> 
         <form onSubmit={handleSubmit} id="folioForm">
           <div className="mb-3">
             <label htmlFor="docID" className="form-label">Id del expediente o la carpeta</label>

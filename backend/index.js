@@ -338,12 +338,16 @@ app.post("/api/addpath", uploads.single("file"), (req, result) => {
       delete(body.folio)
       delete(body.docType)
       delete(body.nombre)
-  
+      
       // Insert into collection (nulidad or investigacion)
       db.collection(collection).insertOne(body, (err,res) => {
         if (err) throw err;
         console.log("Expediente Guardado");
-        result.json({'message': "Data inserted correctly."});
+        fs.unlink(__dirname + "/.temp/" +req.file.filename, (err) => {
+          if (err) throw err;
+          console.log("borrado");
+          result.json({'message': "Data inserted correctly."});
+        })
       })
       // Error
     } catch (error) {
@@ -485,15 +489,13 @@ async function uploadFirstFolio(req, key, iv, result)
       Folio.archivo = rutaDefinitiva;
       Folio.nombre = nombre;
       Folio.expedienteID = data[0]._id
-      fs.unlink(__dirname + "/.temp/" +req.file.filename, (err,res) => {
+      fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
+      console.log("temp borrado");
+      // Add folio to database
+      db.collection("folios").insertOne(Folio, (err,res) => {
         if (err) throw err;
-        console.log("temp borrado");
-        // Add folio to database
-        db.collection("folios").insertOne(Folio, (err,res) => {
-          if (err) throw err;
-          console.log("Folio Guardado");
-          result.json({'message': "Data inserted correctly."});
-        })
+        console.log("Folio Guardado");
+        result.json({'message': "Data inserted correctly."});
       })
     })
 }
