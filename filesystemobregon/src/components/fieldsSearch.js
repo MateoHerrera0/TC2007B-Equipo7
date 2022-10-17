@@ -1,3 +1,10 @@
+/* Code used to define fields used for search
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+// Define fields
 const fields = {
     expediente: {
       id: "docID",
@@ -18,6 +25,13 @@ const fields = {
       id: "domicilio",
       label: "Domicilio"
     },
+
+    lFisico: {
+      id: "lFisico",
+      label: "Lugar Físico",
+      placeholder: "Ingresa donde se encuentra guardado el documento en físico..."
+    },
+
 
     acto: {
       id: "acto",
@@ -100,4 +114,5 @@ const fields = {
     }
 }
 
+// Export function
 export {fields}

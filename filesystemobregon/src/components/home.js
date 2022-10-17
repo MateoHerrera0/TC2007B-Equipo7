@@ -1,3 +1,11 @@
+/* Code used to define users' home interface 
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Imports
 import { Link } from 'react-router-dom';
 import './home.css'
 import upload from '../Images/upload.png'
@@ -7,6 +15,7 @@ import instructions2 from '../Images/instruct2.png'
 import AOFisico from '../Images/AOFisico.png'
 import Navbar from "./navbar"
 
+// Render home page
 export default function Home() {
   return(
     <div className='home'>

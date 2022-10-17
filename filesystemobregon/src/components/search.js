@@ -1,3 +1,11 @@
+/* Code used to define search interface and allow user to search specific expediente
+Mateo Herrera Lavalle, A01751912
+Gerardo Gutiérrez Paniagua, A01029422
+Karla Mondragón Rosas, A01025108
+Ana Paula Katsuda Zalce, A01025303
+*/
+
+// Imports
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
@@ -19,11 +27,13 @@ const Search = (props) => {
     const [docType, setDocType] = useState({docType: "juicioNulidad"});
     const [visible, setVisible] = useState(false);
     
+    // Get documents
     const [data, setData] = useState([]);
       useEffect( ()=> {
         getData({docType: "juicioNulidad"});
       }, [])
 
+    // Call backend to get documents from area 
     const getData = async (docJson) => {
       console.log(docJson);
       await axios.post('/api/getDocs', {... docJson, query:{ }, projection: {}})
@@ -33,10 +43,12 @@ const Search = (props) => {
       })
     }
 
+    // Results
     const [dataState, setDataState] = React.useState()
     const [res, setResult] = React.useState(data);
     useEffect(() => { setResult(data)}, [data] );
 
+    // Handle data state changes
     const onDataStateChange = (event) => {
         setDataState(event.dataState);
         setResult(process(data, event.dataState));
@@ -52,11 +64,13 @@ const Search = (props) => {
       document.getElementById(formId).requestSubmit();
     }
 
+    // Fields for nulidad
     const nulidadFields = [
       fields.expediente, 
       fields.tja,
       fields.actor,
       fields.domicilio,
+      fields.lFisico,
       fields.acto,
       fields.eGuarda,
       fields.materia,
@@ -64,20 +78,24 @@ const Search = (props) => {
       fields.usuario
     ]
 
+    // Fields for carpeta investigacion
     const carpetaFields = [
       fields.eco,
       fields.denuciante,
       fields.imputado,
       fields.delito,
       fields.lugar,
+      fields.lFisico,
       fields.objeto,
       fields.eGuarda,
       fields.usuario
     ]
 
+    // Define fields to use
     const [fieldsToUse, setFields] = useState(nulidadFields)
     const [extra, setExtra] = useState({})
 
+    // Define filter operators
     const filterOperators = {
         text: [
             { text: 'grid.filterContainsOperator', operator: 'contains'},
@@ -115,6 +133,7 @@ const Search = (props) => {
           {text: "grid.filterEqOperator", operator: "eq"}
         ],
     };
+    // Show search interface
     return (
         <div className="searchClass">
             <Navbar />
@@ -134,7 +153,7 @@ const Search = (props) => {
               <br></br>
                 <IntlProvider locale="es">
                 <Grid
-                    data={data}
+                    data={res}
                     style={{
                     height: "auto",
                     }}
