@@ -115,7 +115,7 @@ export default function ChangePass(props) {
                               visible = {visible}
                               setVisible = {setVisible}
                               popupTitle = {"Favor de confirmar lo siguiente:"}
-                              popupBody = {<p>¿Estás seguro de que queires cambiar la contraseña del usuario?</p>}
+                              popupBody = {<p>¿Estás seguro de que quieres cambiar la contraseña del usuario?</p>}
                               okFunction = {()=>submitForm("newPassword")}
                             />
                           </div>
