@@ -355,7 +355,7 @@ app.post("/api/addpath", uploads.single("file"), (req, res) => {
 })
 
 // Post for first folio
-app.post("/api/addFirstFolio", uploads.single("file"), (req,res) => {
+app.put("/api/addFirstFolio", uploads.single("file"), (req,res) => {
   if(req.session.usuario)
   {
     try {
@@ -371,7 +371,7 @@ app.post("/api/addFirstFolio", uploads.single("file"), (req,res) => {
               console.log("el resultado",result.iv);
               let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
               let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
-              uploadFirstFolio(req, key,iv);
+              return uploadFirstFolio(req, key,iv, res);
           })
         })
       }
@@ -384,11 +384,10 @@ app.post("/api/addFirstFolio", uploads.single("file"), (req,res) => {
               let key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
               let iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
               console.log("el iv", iv)
-              uploadFirstFolio(req, key,iv);
+              return uploadFirstFolio(req, key,iv, res);
           })
         })
       }
-      res.json({'message': "Data inserted correctly."});
       // Error
     } catch (error) {
       res.status(500);
@@ -428,7 +427,6 @@ app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
           })
         })
       }
-      res.json({'message': "Data updated correctly"})
       // Error
     } catch (error) {
       res.status(500);
@@ -439,20 +437,21 @@ app.put("/api/addfolio", uploads.single("fileFolio"), (req, res) => {
 })
 
 // Function that uploads first folio
-async function uploadFirstFolio(req, key, iv)
+async function uploadFirstFolio(req, key, iv, result)
 {
     // Get req data
     let folio = req.body.folio;
+    let now = Math.floor(Date.now()/1000)
     let nombre = req.body.nombre;
     let docID = req.body.docID
-    let collection = req.body.docType;
+    let collection = req.body.docType
     console.log(collection);
     // Get doc id from database (depending on collection --> nulidad / investigacion)
     const cursor = db.collection(collection).find({docID: docID}, {projection: {"_id": 1}});
     const data = await cursor.toArray();
     console.log(data)
     // Define route, input and output
-    let rutaDefinitiva = "/.storage/" + folio;
+    let rutaDefinitiva = "/.storage/" + folio + now;
     let inputFS = fs.createReadStream(__dirname + "/.temp/" +req.file.filename)
     let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
     console.log("iv aqui",iv);
@@ -460,17 +459,21 @@ async function uploadFirstFolio(req, key, iv)
     let cipher = crypto.createCipheriv("aes-256-cbc", key, iv)
     inputFS.pipe(cipher).pipe(outputFS)
     // Add folio
-    outputFS.on("finish", () => {
+    outputFS.on("finish", function() {
       let Folio = {};
       Folio.folio = folio;
       Folio.archivo = rutaDefinitiva;
       Folio.nombre = nombre;
       Folio.expedienteID = data[0]._id
-      fs.unlinkSync(__dirname + "/.temp/" +req.file.filename)
-      // Add folio to database
-      db.collection("folios").insertOne(Folio, (err,res) => {
+      fs.unlink(__dirname + "/.temp/" +req.file.filename, (err,res) => {
         if (err) throw err;
-        console.log("Folio Guardado");
+        console.log("temp borrado");
+        // Add folio to database
+        db.collection("folios").insertOne(Folio, (err,res) => {
+          if (err) throw err;
+          console.log("Folio Guardado");
+          result.json({'message': "Data inserted correctly."});
+        })
       })
     })
 }
@@ -480,6 +483,7 @@ async function uploadFolio(req, key, iv)
 {
   // Define route, input and output
   let rutaDefinitiva = "/.storage/" + req.body.folio;
+  let now = Math.floor(Date.now()/1000)
   let inputFS = fs.createReadStream(__dirname + "/.temp/" + req.file.filename)
   let outputFS = fs.createWriteStream(__dirname + rutaDefinitiva)
   // Cipher
@@ -529,24 +533,25 @@ app.post("/api/getDocs", async (request, response) => {
 
 // Post to get folios
 app.post("/api/getFolios", async (request, response) => {
-  if(req.session.usuario)
-  {}
-  try {
-    // Save query
-    let searchValue = request.body.query
-    console.log(searchValue);
-    // {"docID" : {$regex : request.body.docID}
-    // Look for query value in the folios collection
-    const cursor = db.collection("folios").find({expedienteID: ObjectId(searchValue)});
-    const data = await cursor.toArray();
-    console.log(data);
-    // Get data
-    response.json(data);
-    // Error
-  } catch (error) {
-    response.status(500);
-    response.json(error);
-    console.log(error);
+  if(request.session.usuario)
+  {
+    try {
+      // Save query
+      let searchValue = request.body.query
+      console.log(searchValue);
+      // {"docID" : {$regex : request.body.docID}
+      // Look for query value in the folios collection
+      const cursor = db.collection("folios").find({expedienteID: ObjectId(searchValue)});
+      const data = await cursor.toArray();
+      console.log(data);
+      // Get data
+      response.json(data);
+      // Error
+    } catch (error) {
+      response.status(500);
+      response.json(error);
+      console.log(error);
+    }
   }
 })
 
@@ -593,7 +598,7 @@ app.post("/api/descargarFolio", (req, res) => {
             key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
             iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
              // Call download function
-            descargarArchivo(req, res, key, iv);
+            return descargarArchivo(req, res, key, iv);
           })
         })
       }
@@ -605,7 +610,7 @@ app.post("/api/descargarFolio", (req, res) => {
               key=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.llave, "hex")));
               iv=Buffer.from(crypto.privateDecrypt(decryptKey, Buffer.from(result.iv, "hex")));
               // Call download function
-              descargarArchivo(req, res, key, iv);
+              return descargarArchivo(req, res, key, iv);
           })
         })
       }

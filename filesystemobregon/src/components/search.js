@@ -13,7 +13,7 @@ import '@progress/kendo-theme-default/dist/all.css';
 import "./search.css";
 
 const Search = () => {
-    const [docType, setDocType] = useState({docType: "nulidad"});
+    const [docType, setDocType] = useState({docType: "juicioNulidad"});
     
     const [data, setData] = useState([]);
       useEffect( ()=> {

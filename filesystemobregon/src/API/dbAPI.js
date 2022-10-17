@@ -17,7 +17,7 @@ async function addDocument(formData, setFormData) {
       .then(response => response.json())
       .then( async () => {
         await fetch('/api/addFirstFolio', {
-          method: "POST",
+          method: "PUT",
           body: formBody
         })
           .then(response => response.json())
