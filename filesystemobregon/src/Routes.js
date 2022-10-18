@@ -28,7 +28,7 @@ function RoutesComp() {
   const userContext = useContext(UserContext)
   // User data
   const [user, setUserData] = useState(
-    {usuario: "", email: "", userType: "", nulidad: false, investigacion: false}
+    {_id: "", usuario: "", email: "", userType: "", nulidad: false, investigacion: false}
   )
   // Get user data from backend
   useEffect(() => {
