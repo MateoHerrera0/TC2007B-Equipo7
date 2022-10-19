@@ -10,8 +10,7 @@ Ana Paula Katsuda Zalce, A01025303
 import { render, screen, cleanup } from "@testing-library/react";
 // Importing the jest testing library
 import '@testing-library/jest-dom'
-import Login from './Login'
-import Register from './register'
+import Setup from './setup'
 
 // Reset DOM
 afterEach(() => {
@@ -19,20 +18,20 @@ afterEach(() => {
 });
 
 // Test for renderer
-describe('Login Form Rendering', () => {
+describe('Setup Form Rendering', () => {
     // Component render --> mock screen 
-    render(<Login />);
+    render(<Setup />);
     // save into variable
-    const loginForm = screen.getByTestId("loginForm");
+    const setupForm = screen.getByTestId("setupForm");
 
     // Test that table is in document
-    test('Login Form Render', () => {
-        expect(loginForm).toBeInTheDocument();
+    test('Setup Form Render', () => {
+        expect(setupForm).toBeInTheDocument();
     });
 
     // Test existence of texts within form
-    test('Login form Data', () => {
-        expect(loginForm).toHaveTextContent('Correo electrónico');
-        expect(loginForm).toHaveTextContent('Contraseña');
+    test('Setup form Data', () => {
+        expect(setupForm).toHaveTextContent('Inicializar admin');
+        expect(setupForm).toHaveTextContent('Registrar')
     })
 })
