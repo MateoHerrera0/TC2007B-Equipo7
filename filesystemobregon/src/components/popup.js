@@ -9,7 +9,7 @@ export default function Popup(props) {
   };
 
   return (
-    <div>
+    <div data-testid='popup'>
       {props.visible && (
         <Dialog title={props.popupTitle} onClose={toggleDialog}>
           <div

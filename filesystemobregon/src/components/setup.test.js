@@ -1,5 +1,5 @@
 /*
-Code to test rendering of login form
+Code to test rendering of setup form
 
 Mateo Herrera Lavalle, A01751912
 Gerardo Gutiérrez Paniagua, A01029422
@@ -11,6 +11,7 @@ import { render, screen, cleanup } from "@testing-library/react";
 // Importing the jest testing library
 import '@testing-library/jest-dom'
 import Login from './Login'
+import Register from './register'
 
 // Reset DOM
 afterEach(() => {
