@@ -54,7 +54,7 @@ export default function Login(props) {
                     <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                       <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Entrar</p>
 
-                      <form className="mx-1 mx-md-4" id= "logUser" onSubmit={handleSubmit} >
+                      <form data-testid='loginForm' className="mx-1 mx-md-4" id= "logUser" onSubmit={handleSubmit} >
 
                         <div className="d-flex flex-row align-items-center mb-4">
                           <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>

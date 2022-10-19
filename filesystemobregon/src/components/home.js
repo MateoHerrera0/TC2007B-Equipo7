@@ -18,7 +18,7 @@ import Navbar from "./navbar"
 // Render home page
 export default function Home() {
   return(
-    <div className='home'>
+    <div data-testid='homeTest' className='home'>
       <Navbar />
       <div className="section p-5">
         <div className="row align-items-center">
