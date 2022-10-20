@@ -18,6 +18,10 @@ export default function Login(props) {
     email: "", password: ""
   })
 
+  const [message, setMessage] = useState({
+    "Message": ""
+  })
+
   // Handle inputs
   let name, value;
   const handleInputs = (e) => {
@@ -33,7 +37,7 @@ export default function Login(props) {
   // Handle submit --> Call login api
   function handleSubmit(event) {
     event.preventDefault();
-    logUser(user);
+    logUser(user, setMessage);
     // reload page after login api was called (using delay)
     delay(1000).then(() => window.location.reload());
   }
@@ -78,6 +82,9 @@ export default function Login(props) {
                           <p>{message}</p>
                         </div> */}
                       </form> 
+                    <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4"> 
+                      {message.Message}
+                    </div>
                     </div>
                     <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
 
