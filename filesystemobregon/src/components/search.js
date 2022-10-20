@@ -35,11 +35,9 @@ const Search = (props) => {
 
     // Call backend to get documents from area 
     const getData = async (docJson) => {
-      console.log(docJson);
       await axios.post('/api/getDocs', {... docJson, query:{ }, projection: {}})
       .then(response => {
         setData(response.data);
-        console.log(response.data);
       })
     }
 

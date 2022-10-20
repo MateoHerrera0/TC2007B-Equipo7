@@ -27,7 +27,6 @@ export default function SearchDocument() {
   // Get data
   const [data, setData] = useState([]);
       useEffect( ()=> {
-        console.log(expId);
         getData(expId);
       }, [])
     // Function to call backend for data
@@ -35,7 +34,6 @@ export default function SearchDocument() {
       await axios.post('/api/getFolios', {query: query})
       .then(response => {
         setData(response.data);
-        console.log(response.data);
       })
     }
 
