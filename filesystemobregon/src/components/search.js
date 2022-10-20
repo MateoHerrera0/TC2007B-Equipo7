@@ -176,6 +176,7 @@ const Search = (props) => {
                     <GridColumn
                         field = "_id" 
                         title = "Folios"
+                        filterable={false}
                         cell = {(props) => 
                         <td>
                           <div className="text-center">
@@ -188,6 +189,7 @@ const Search = (props) => {
                     <GridColumn
                         field = "_id" 
                         title = "Cambiar Estado"
+                        filterable={false}
                         cell = {(props) => 
                         <td>
                           <div className="text-center">
