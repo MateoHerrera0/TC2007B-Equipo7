@@ -1,0 +1,14 @@
+info: Oct-20-2022 00:57:32: mat@gmail.com inicio sesion.
+info: Oct-20-2022 00:58:12: mat@gmail.comregistro al usuario mat2@gmail.com
+info: Oct-20-2022 00:58:41: mat@gmail.comedito el usuario mat2@gmail.com
+info: Oct-20-2022 00:59:21: mat@gmail.comcambio la contrasena del usuario mat2@gmail.com
+info: Oct-20-2022 00:59:46: mat@gmail.comborro el ususario mat2@gmail.com
+info: Oct-20-2022 01:00:10: mat@gmail.comregistro al usuario mat2@gmail.com
+info: Oct-20-2022 01:00:48: mat@gmail.comcerro la sesion.
+info: Oct-20-2022 01:00:59: mat2@gmail.com inicio sesion.
+info: Oct-20-2022 01:01:37: mat2@gmail.comcreo el expediente de tipo con el identificador 8
+info: Oct-20-2022 01:01:37: mat2@gmail.comsubio el folio 8
+info: Oct-20-2022 01:02:32: mat2@gmail.comsubio el folio wwww
+info: Oct-20-2022 01:03:01: mat2@gmail.comdescargo un folio (Mongo = _id: 6350e441361c695361de2f56)
+info: Oct-20-2022 01:03:40: mat2@gmail.comcambio el estado de un documento (mmongo= _id: 6350e441361c695361de2f55)
+info: Oct-20-2022 01:04:12: mat2@gmail.comcerro la sesion.
