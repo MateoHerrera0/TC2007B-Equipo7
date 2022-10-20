@@ -52,12 +52,10 @@ export default function PutFolio(props) {
           return resp.json();
         })
         .then((data) => {
-          console.log(data);
           const tempArray = [];
           if (data) {
             if (data.length) {
               data.forEach((element) => {
-                console.log(element);
                 tempArray.push({
                   label: `${element.docID}`,
                   value: element._id,
