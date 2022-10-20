@@ -12,7 +12,7 @@ import {addUser} from "../API/dbAPI";
 import AdminNavbar from "./adminNavbar";
 
 // Function for register
-export default function Register(props){
+export default function Register(){
   // New user data
   const [user, setUser] = useState({
     usuario: "", email: "", password: "", repPassword: "", userType: "Usuario", nulidad: false, investigacion: false
@@ -98,8 +98,8 @@ export default function Register(props){
                               <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                             </label>
                             <div className="custom-control custom-checkbox custom-control-inline">
-                              <input type="checkbox" className="custom-control-input" id="nulidad" name="nulidad" value={user.nulidad} onClick={()=>{setUser({...user, nulidad: !user.nulidad})}} checked={user.nulidad}/>
-                              <label className="custom-control-label" for="defaultChecked2">Nulidad</label>
+                              <input type="checkbox" className="custom-control-input" id="nulidad" name="nulidad" value={user.nulidad} onChange={()=>{setUser({...user, nulidad: !user.nulidad})}} checked={user.nulidad}/>
+                              <label className="custom-control-label" htmlFor="defaultChecked2"> Nulidad</label>
                             </div>
                           </div>
                           <div className="d-flex flex-row align-items-center mb-4">
@@ -107,8 +107,8 @@ export default function Register(props){
                               <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                             </label>
                             <div className="custom-control custom-checkbox custom-control-inline">
-                              <input type="checkbox" className="custom-control-input" id="investigacion" name="investigacion" value={user.investigacion} onClick={()=>{setUser({...user, investigacion: !user.investigacion})}} checked={user.investigacion}/>
-                              <label className="custom-control-label" for="defaultChecked2">Investigacion</label>
+                              <input type="checkbox" className="custom-control-input" id="investigacion" name="investigacion" value={user.investigacion} onChange={()=>{setUser({...user, investigacion: !user.investigacion})}} checked={user.investigacion}/>
+                              <label className="custom-control-label" htmlFor="defaultChecked2"> Investigacion</label>
                             </div>
                           </div>
                           </div>

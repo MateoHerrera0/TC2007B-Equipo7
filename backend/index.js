@@ -81,13 +81,13 @@ app.post("/api/login", (req, res) => {
               }
               // If password is incorrect
               else{
-                  res.json({"Message": "Error in login"});
+                  res.json({"Message": "Error in credentials"});
               }
           })
       }
       // If user doesn't exist
       else{
-          res.json({"Message" : "Error1 in login"});
+          res.json({"Message" : "Error in credentials"});
       }
   })
 })

@@ -202,7 +202,8 @@ async function logUser(userData, setMessage){
     // Response
       .then(response => response.json())
       .then(response => {
-        console.log("LogUser response " + response);
+        console.log("LogUser response ", response.email);
+        setMessage(response);
         return response;
       })
     // Error
