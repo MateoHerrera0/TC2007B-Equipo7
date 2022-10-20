@@ -30,7 +30,6 @@ export default function ChangePass(props) {
     // Handle inputs
     let name, value; 
     const handleInputs = (e) => {
-        console.log(e);
         name = e.target.name;
         value = e.target.value;
         setUserPass({...userPass, [name]: value})

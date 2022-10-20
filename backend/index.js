@@ -6,6 +6,7 @@ Ana Paula Katsuda Zalce, A01025303
 */
 
 // Imports
+const winston = require('winston');
 const express = require("express")
 const fs = require("fs")
 const bodyparser = require("body-parser")
@@ -50,6 +51,26 @@ app.use(session({
   }
 }))
 
+// Logger configuration
+const logConfiguration = {
+  'transports': [
+      new winston.transports.File({
+          level: 'info',
+          filename: '.logs/app.log'
+      })
+  ],
+  format: winston.format.combine(
+    winston.format.timestamp({
+       format: 'MMM-DD-YYYY HH:mm:ss'
+   }),
+    winston.format.printf(info => `${info.level}: ${[info.timestamp]}: ${info.message}`),
+)
+};
+
+const logger = winston.createLogger(logConfiguration);
+
+
+
 // Function to connect database
 async function connectToDB(){
   let client = new MongoClient("mongodb://127.0.0.1:27017/AOFILES")
@@ -76,6 +97,7 @@ app.post("/api/login", (req, res) => {
                   req.session.userType = result.userType;
                   req.session.nulidad = result.nulidad;
                   req.session.investigacion = result.investigacion;
+                  logger.info(req.session.usuario + " inicio sesion.")
                   // Send session
                   res.json({'email': req.session.usuario});
               }
@@ -128,6 +150,7 @@ app.post("/api/register", (req, res) => {
             db.collection("usuarios").insertOne(aAgregar, (err, result) => {
             // Evaluate for error
             if(err) throw err;
+            logger.info(req.session.usuario + " registro al usuario " + mail);
             res.json({"Message": "User registered"});
             })
           })
@@ -208,6 +231,7 @@ app.get("/api/getAllUsers", async (req, res) => {
 app.get("/api/logout", (req, res) => {
   if(req.session.usuario)
   {
+    logger.info(req.session.usuario + " cerro la sesion.")
     // Delete session to logout
     req.session.destroy();
     res.json({});
@@ -223,6 +247,7 @@ app.delete("/api/deleteUser", (req, res) => {
   {
     // Delete from database
     db.collection("usuarios").deleteOne({usuario: user, email: mail});
+    logger.info(req.session.usuario + " borro el ususario " + mail)
     res.json({"message": "User deleted"});
   }
 })
@@ -239,6 +264,7 @@ app.put("/api/editUser", (req, res) => {
   {
     // Update database
     db.collection("usuarios").updateOne({email: ogEmail}, {$set: {usuario: user, email: mail, nulidad: tNulidad, investigacion: tInvestigacion}});
+    logger.info(req.session.usuario + " edito el usuario " + ogEmail)
     res.json({"Message": "User edited"});
   }
 })
@@ -276,6 +302,7 @@ app.put("/api/changePass", (req, res) => {
                 // update password in database
                 db.collection("usuarios").updateOne({email: mail}, {$set: {password: hash}})
               })
+              logger.info(req.session.usuario + " cambio la contrasena del usuario " + mail)
               res.json({"Message": "Change Successful"})
             }
           }
@@ -345,7 +372,7 @@ app.post("/api/addpath", uploads.single("file"), (req, result) => {
         console.log("Expediente Guardado");
         fs.unlink(__dirname + "/.temp/" +req.file.filename, (err) => {
           if (err) throw err;
-          console.log("borrado");
+          logger.info(req.session.usuario + " creo el expediente de tipo con el identificador " + req.body.docID)
           result.json({'message': "Data inserted correctly."});
         })
       })
@@ -450,8 +477,10 @@ app.put("/api/changeStatus", uploads.single("fileFolio"), (req, res) => {
         if (err) throw err;
         console.log("updated");
       })
+      logger.info(req.session.usuario + " cambio el estado de un documento (mmongo= _id: " +req.body._id + ")")
       
       res.json({'message': "updated status"})
+
       // Error
     } catch (error) {
       res.status(500);
@@ -494,6 +523,7 @@ async function uploadFirstFolio(req, key, iv, result)
       // Add folio to database
       db.collection("folios").insertOne(Folio, (err,res) => {
         if (err) throw err;
+        logger.info(req.session.usuario + " subio el folio " + folio)
         console.log("Folio Guardado");
         result.json({'message': "Data inserted correctly."});
       })
@@ -522,6 +552,7 @@ async function uploadFolio(req, key, iv)
     // Add folio to database
     db.collection("folios").insertOne(Folio, (err,res) => {
       if (err) throw err;
+      logger.info(req.session.usuario + "subio el folio " + req.body.folio)
       console.log("Folio Guardado");
     })
   })
@@ -541,7 +572,6 @@ app.post("/api/getDocs", async (request, response) => {
       // Look in collection corresponding to document type (nulidad/investigacion)
       const cursor = db.collection(request.body.docType).find(searchValue, request.body.projection);
       const data = await cursor.toArray();
-      console.log(data);
       // Get data
       response.json(data);
       // Error
@@ -560,12 +590,10 @@ app.post("/api/getFolios", async (request, response) => {
     try {
       // Save query
       let searchValue = request.body.query
-      console.log(searchValue);
       // {"docID" : {$regex : request.body.docID}
       // Look for query value in the folios collection
       const cursor = db.collection("folios").find({expedienteID: ObjectId(searchValue)});
       const data = await cursor.toArray();
-      console.log(data);
       // Get data
       response.json(data);
       // Error
@@ -598,6 +626,7 @@ async function descargarArchivo(req, res, key, iv){
           if (err) throw err;
           console.log("Borrado despues de descarga");
         })
+        logger.info(req.session.usuario + " descargo un folio (Mongo = _id: " + req.body._id + ")")
       })
     })
   })

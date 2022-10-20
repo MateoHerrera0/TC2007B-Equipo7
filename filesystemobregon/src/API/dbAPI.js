@@ -36,7 +36,6 @@ async function addDocument(formData, setFormData) {
 // Send the data to Mongo using an API --> put document
 async function putDocument(formData, setFormData) {
   let formBody = new FormData(formData);
-  console.log(formBody);
   try {
     // Fetch backend --> add folio
     await fetch('/api/addfolio', {
@@ -60,7 +59,6 @@ async function putDocument(formData, setFormData) {
 // Change document status
 async function changeStatus(formData) {
   let formBody = new FormData(formData);
-  console.log(formBody);
 
   try {
     await fetch('/api/changeStatus', {
@@ -96,7 +94,6 @@ async function getDocs(reqBody, setData) {
       // Response
       .then(response => response.json())
       .then(response => {
-        console.log("GetDocInfo response: " + response);
         setData(response);
       })
     // Error
@@ -141,7 +138,6 @@ async function setupAdmin(adminData){
     // Response
       .then(response => response.json())
       .then(response => {
-        console.log("AdminSetup response " + response);
         return response;
       })
     // error
@@ -172,7 +168,6 @@ async function addUser(userData){
     // Response
       .then(response => response.json())
       .then(response => {
-        console.log("UserInfo response " + response);
         window.location.assign('/')
         return response;
       })
@@ -224,7 +219,6 @@ async function logout(){
     // Response
       .then(response => response.json())
       .then(response => {
-        console.log("Session deleted " + response);
         window.location.assign('/')
         return response;
       })

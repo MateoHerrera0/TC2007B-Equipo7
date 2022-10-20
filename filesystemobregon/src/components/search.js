@@ -35,11 +35,9 @@ const Search = (props) => {
 
     // Call backend to get documents from area 
     const getData = async (docJson) => {
-      console.log(docJson);
       await axios.post('/api/getDocs', {... docJson, query:{ }, projection: {}})
       .then(response => {
         setData(response.data);
-        console.log(response.data);
       })
     }
 
@@ -176,6 +174,7 @@ const Search = (props) => {
                     <GridColumn
                         field = "_id" 
                         title = "Folios"
+                        filterable={false}
                         cell = {(props) => 
                         <td>
                           <div className="text-center">
@@ -188,6 +187,7 @@ const Search = (props) => {
                     <GridColumn
                         field = "_id" 
                         title = "Cambiar Estado"
+                        filterable={false}
                         cell = {(props) => 
                         <td>
                           <div className="text-center">
